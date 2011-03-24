@@ -1,0 +1,3 @@
+relre:.*.pyc
+relre:.*.bak$
+glob:etc/dsce.json

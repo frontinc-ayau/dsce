@@ -1,0 +1,53 @@
+This is the README file of the DomainSharedContactsEditor (DSCE) application.
+
+DSCE is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+DSCE is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with DSCE.  If not, see <http://www.gnu.org/licenses/>.
+
+Copyright (c) 2010, 2011 Klaus Melcher (melcher.kla@gmail.com)
+
+This program uses and/or distributes the following software components 
+(depending on the package you've downloaded): 
+
+  gdata:     
+    Copyright (C) 2006-+ Google Inc.  
+    Apache License Version 2.0 
+    You may obtain a copy of the License and further dependencies 
+    at http://code.google.com/p/gdata-python-client
+
+ wxPython:
+    Copyright (c) 1998-2005 Julian Smart, Robert Roebling et al 
+    wxWindows Library Licence, Version 3.1 
+    You may obtain details at http://www.wxpython.org
+
+As this peace of software is written in python please start the python interpreter 
+and follow the instructions you can read on the screen for details on license and 
+copyright ;-).
+
+If there is any credit I've missed, please let me know.
+
+
+See the file ./INSTALL for installation instructions.
+
+Primary distribution point: http://code.google.com/p/dsce/
+
+Home page: http://code.google.com/p/dsce/
+
+Mailing list: dsce-discussion@googlegroups.com or
+              http://groups.google.com/group/dsce-discussion
+-  please use this list for all discussions: development, usage, etc.
+
+Bug reports and feature requests: http://code.google.com/p/dsce/issues/list
+- please use the bug tracker to report bugs and deposit feature requests or
+  enhancements.
+
+Any kind of support is most welcome!

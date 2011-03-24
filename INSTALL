@@ -1,0 +1,60 @@
+Installation of the DomainSharedContacts (dsce)
+***************************************************
+
+Basic Installation Information
+==============================
+
+  The DomainSharedContacts client program is a Python script that can be obtained 
+    A) as source package,
+    B) as full developer source package,
+    C) as windows executable or
+    D) as a local clone of the dsce mercurial repository.
+
+  The following table shows the relation between the type of package and filename 
+where [VERSION] must be replaced by the current version number like e.g. '0.0.0' 
+or '0.0.0dev'.
+
+          +---+-----------------------+-----------------------------+
+          |   | Package               | Filename                    |
+          +---+-----------------------+-----------------------------+
+          | A | source package        | dsce-[VERSION].tar.gz       |
+          | B | full developer source | dsce-dev-[VERSION].tar.gz   |
+          | C | windows executable    | dsce-[VERSION]-Win32bit.zip |
+          +---+-----------------------+-----------------------------+
+
+  Please follow the appropriate installation instructions according your package.
+
+
+Installation of A,B and D
+=========================
+
+  If you want to use one of the source package variants (A,B,D) your system has to 
+meet the following requirements.
+
+ - Python 2.6 has to be installed on your system.
+
+ - The script further requires the GData Python client library version 2.0.6 or higher 
+   which you can download from 
+        http://code.google.com/p/gdata-python-client/downloads/list
+   and install by following the Installation procedure described at
+        http://code.google.com/apis/gdata/articles/python_client_lib.html.
+
+ - Also the wxPython 2.8.11.0 or higher is required. To download and install the package 
+   please follow the instructions on 
+        http://www.wxpython.org/download.php
+
+ - As for the operating system any can be used as long as it can fulfill the requirements 
+   which means that BSD, Linux, MaxOS X, and MSW should work fine.
+
+
+  To install the package just extract the package in a preferred directory on your system and 
+run the program by calling the 'DomainSharedContactsEditor.py' script. 
+(e.g. python DomainSharedContactsEditor.py)
+
+
+Installation of C
+=================
+
+  If you want to use the windows executable package it is enough to extract the package to a 
+directory of your choice and start 'DomainSharedContactsEditor.exe'.
+
