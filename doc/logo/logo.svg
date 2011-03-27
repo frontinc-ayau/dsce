@@ -16,9 +16,9 @@
    version="1.1"
    inkscape:version="0.48.0 r9654"
    sodipodi:docname="logo.svg"
-   inkscape:export-filename="C:\Dati\WiP\dsce\doc\logo\logo153.png"
-   inkscape:export-xdpi="54.314541"
-   inkscape:export-ydpi="54.314541">
+   inkscape:export-filename="C:\Dati\WiP\dsce\doc\logo\ShinyLogo.png"
+   inkscape:export-xdpi="63.430267"
+   inkscape:export-ydpi="63.430267">
   <defs
      id="defs4">
     <linearGradient
@@ -737,14 +737,6 @@
       </feMerge>
     </filter>
     <filter
-       inkscape:collect="always"
-       id="filter3970">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="1.3902796"
-         id="feGaussianBlur3972" />
-    </filter>
-    <filter
        id="filter4028"
        inkscape:label="Drop shadow"
        width="1.5"
@@ -785,15 +777,15 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.7858411"
+     inkscape:zoom="2.492605"
      inkscape:cx="165.92188"
-     inkscape:cy="44.40182"
+     inkscape:cy="158.46875"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer2"
      showgrid="false"
      inkscape:window-width="1280"
-     inkscape:window-height="781"
-     inkscape:window-x="-4"
+     inkscape:window-height="1005"
+     inkscape:window-x="1276"
      inkscape:window-y="-4"
      inkscape:window-maximized="1"
      showguides="true"
@@ -811,7 +803,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -820,7 +812,7 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(5.75,-733.11218)"
-     style="display:inline">
+     style="display:none">
     <text
        xml:space="preserve"
        style="font-size:56px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#34466f;fill-opacity:1;stroke:none;filter:url(#filter4073);font-family:GillSans Condensed;-inkscape-font-specification:'GillSans Condensed,'"
@@ -925,7 +917,7 @@
          sodipodi:role="line">CONTACTS</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:56px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;opacity:0.5;fill:#e4e8ef;fill-opacity:1;stroke:none;filter:url(#filter4028);font-family:GillSans Condensed;-inkscape-font-specification:'GillSans Condensed, Bold'"
+       style="font-size:56px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;opacity:0.5;fill:#000000;fill-opacity:1;stroke:none;filter:url(#filter4028);font-family:GillSans Condensed;-inkscape-font-specification:'GillSans Condensed, Bold'"
        x="34.639423"
        y="919.19196"
        id="text4024"
@@ -940,7 +932,7 @@
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="Shiny Logo"
-     style="display:none"
+     style="display:inline"
      transform="translate(5.75,-0.75)">
     <rect
        style="fill:url(#linearGradient3945);fill-opacity:1;fill-rule:nonzero;stroke:url(#linearGradient3953);stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;filter:url(#filter4061)"
@@ -1047,5 +1039,29 @@
        d="M 11.494437,12.743775 C 47.970231,11.540097 108.90461,13.756152 70.559256,14.965819 16.722562,16.664185 5.8766778,47.406424 5.1994786,118.96099 l 4e-7,-96.26372 c 0,-4.163017 2.1319413,-9.953495 6.294958,-9.953495 z"
        style="opacity:0.5;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;filter:url(#filter4055)"
        transform="matrix(-1,0,0,-1,321.38456,319.49369)" />
+    <text
+       xml:space="preserve"
+       style="font-size:56px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;opacity:0.5;fill:#34466f;fill-opacity:1;stroke:none;display:inline;font-family:GillSans Condensed;-inkscape-font-specification:'GillSans Condensed, Bold'"
+       x="37.398586"
+       y="922.03302"
+       id="text4093"
+       sodipodi:linespacing="100%"
+       transform="matrix(1.0147275,0,0,0.98548625,0,-732.36218)"><tspan
+         sodipodi:role="line"
+         id="tspan4095"
+         x="37.398586"
+         y="922.03302">CONTACTS</tspan></text>
+    <text
+       transform="matrix(1.0147275,0,0,0.98548625,2.7998013,-729.56238)"
+       sodipodi:linespacing="100%"
+       id="text4097"
+       y="919.19196"
+       x="34.639423"
+       style="font-size:56px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;opacity:0.5;fill:#000000;fill-opacity:1;stroke:none;display:inline;filter:url(#filter4028);font-family:GillSans Condensed;-inkscape-font-specification:'GillSans Condensed, Bold'"
+       xml:space="preserve"><tspan
+         y="919.19196"
+         x="34.639423"
+         id="tspan4099"
+         sodipodi:role="line">CONTACTS</tspan></text>
   </g>
 </svg>

@@ -1,13 +1,22 @@
 Installation of the DomainSharedContacts (dsce)
 ***************************************************
 
+Abstract
+========
+
+  This guide contains the basic information about provided packages, how to install 
+and use them.
+
+  For more detailed information than provided by this document please refer to the
+getting starting page 'http://code.google.com/p/dsce/wiki/GettingStarted'.
+
 Basic Installation Information
 ==============================
 
   The DomainSharedContacts client program is a Python script that can be obtained 
-    A) as source package,
-    B) as full developer source package,
-    C) as windows executable or
+    A) as a source package,
+    B) as a full developer source package,
+    C) as a windows executable or
     D) as a local clone of the dsce mercurial repository.
 
   The following table shows the relation between the type of package and filename 
@@ -23,7 +32,6 @@ or '0.0.0dev'.
           +---+-----------------------+-----------------------------+
 
   Please follow the appropriate installation instructions according your package.
-
 
 Installation of A,B and D
 =========================
