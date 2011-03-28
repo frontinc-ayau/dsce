@@ -16,9 +16,9 @@
    version="1.1"
    inkscape:version="0.48.0 r9654"
    sodipodi:docname="logo.svg"
-   inkscape:export-filename="C:\Dati\WiP\dsce\doc\logo\ShinyLogo.png"
-   inkscape:export-xdpi="63.430267"
-   inkscape:export-ydpi="63.430267">
+   inkscape:export-filename="C:\Dati\WiP\dsce\doc\logo\Logo.png"
+   inkscape:export-xdpi="38.528053"
+   inkscape:export-ydpi="38.528053">
   <defs
      id="defs4">
     <linearGradient
@@ -777,17 +777,17 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.492605"
+     inkscape:zoom="2.1100962"
      inkscape:cx="165.92188"
      inkscape:cy="158.46875"
      inkscape:document-units="px"
-     inkscape:current-layer="layer2"
+     inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1280"
-     inkscape:window-height="1005"
-     inkscape:window-x="1276"
-     inkscape:window-y="-4"
-     inkscape:window-maximized="1"
+     inkscape:window-width="1193"
+     inkscape:window-height="885"
+     inkscape:window-x="1324"
+     inkscape:window-y="44"
+     inkscape:window-maximized="0"
      showguides="true"
      inkscape:guide-bbox="true"
      showborder="false"
@@ -812,7 +812,7 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(5.75,-733.11218)"
-     style="display:none">
+     style="display:inline">
     <text
        xml:space="preserve"
        style="font-size:56px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#34466f;fill-opacity:1;stroke:none;filter:url(#filter4073);font-family:GillSans Condensed;-inkscape-font-specification:'GillSans Condensed,'"
@@ -857,7 +857,7 @@
        style="fill:#9baac2;fill-opacity:1;fill-rule:nonzero;stroke:#34466f;stroke-width:15.51215172;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
     <path
        transform="matrix(6.6622702,0,0,6.6622702,-1528.3963,-870.0028)"
-       d="m 272.49071,253.7599 c 0,5.33807 -4.32736,9.66543 -9.66542,9.66543 -5.33807,0 -9.66543,-4.32736 -9.66543,-9.66543 0,-5.33807 4.32736,-9.66542 9.66543,-9.66542 5.33806,0 9.66542,4.32735 9.66542,9.66542 z"
+       d="m 272.49071,253.7599 a 9.6654272,9.6654272 0 1 1 -19.33085,0 9.6654272,9.6654272 0 1 1 19.33085,0 z"
        sodipodi:ry="9.6654272"
        sodipodi:rx="9.6654272"
        sodipodi:cy="253.7599"
@@ -879,7 +879,7 @@
        sodipodi:cy="253.7599"
        sodipodi:rx="9.6654272"
        sodipodi:ry="9.6654272"
-       d="m 272.49071,253.7599 c 0,5.33807 -4.32736,9.66543 -9.66542,9.66543 -5.33807,0 -9.66543,-4.32736 -9.66543,-9.66543 0,-5.33807 4.32736,-9.66542 9.66543,-9.66542 5.33806,0 9.66542,4.32735 9.66542,9.66542 z"
+       d="m 272.49071,253.7599 a 9.6654272,9.6654272 0 1 1 -19.33085,0 9.6654272,9.6654272 0 1 1 19.33085,0 z"
        transform="matrix(6.6622702,0,0,6.6622702,-1655.7846,-806.6529)" />
     <text
        transform="scale(1.0147275,0.98548625)"
@@ -917,7 +917,7 @@
          sodipodi:role="line">CONTACTS</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:56px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;opacity:0.5;fill:#000000;fill-opacity:1;stroke:none;filter:url(#filter4028);font-family:GillSans Condensed;-inkscape-font-specification:'GillSans Condensed, Bold'"
+       style="font-size:56px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;opacity:0.6;fill:#000000;fill-opacity:1;stroke:none;filter:url(#filter4028);font-family:GillSans Condensed;-inkscape-font-specification:'GillSans Condensed, Bold'"
        x="34.639423"
        y="919.19196"
        id="text4024"
@@ -932,7 +932,7 @@
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="Shiny Logo"
-     style="display:inline"
+     style="display:none"
      transform="translate(5.75,-0.75)">
     <rect
        style="fill:url(#linearGradient3945);fill-opacity:1;fill-rule:nonzero;stroke:url(#linearGradient3953);stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;filter:url(#filter4061)"
@@ -989,7 +989,7 @@
          style="fill:#9baac2;fill-opacity:1;fill-rule:nonzero;stroke:#34466f;stroke-width:15.51215172;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
       <path
          transform="matrix(6.6622702,0,0,6.6622702,-1528.3963,-870.0028)"
-         d="m 272.49071,253.7599 c 0,5.33807 -4.32736,9.66543 -9.66542,9.66543 -5.33807,0 -9.66543,-4.32736 -9.66543,-9.66543 0,-5.33807 4.32736,-9.66542 9.66543,-9.66542 5.33806,0 9.66542,4.32735 9.66542,9.66542 z"
+         d="m 272.49071,253.7599 a 9.6654272,9.6654272 0 1 1 -19.33085,0 9.6654272,9.6654272 0 1 1 19.33085,0 z"
          sodipodi:ry="9.6654272"
          sodipodi:rx="9.6654272"
          sodipodi:cy="253.7599"
@@ -1011,7 +1011,7 @@
          sodipodi:cy="253.7599"
          sodipodi:rx="9.6654272"
          sodipodi:ry="9.6654272"
-         d="m 272.49071,253.7599 c 0,5.33807 -4.32736,9.66543 -9.66542,9.66543 -5.33807,0 -9.66543,-4.32736 -9.66543,-9.66543 0,-5.33807 4.32736,-9.66542 9.66543,-9.66542 5.33806,0 9.66542,4.32735 9.66542,9.66542 z"
+         d="m 272.49071,253.7599 a 9.6654272,9.6654272 0 1 1 -19.33085,0 9.6654272,9.6654272 0 1 1 19.33085,0 z"
          transform="matrix(6.6622702,0,0,6.6622702,-1655.7846,-806.6529)" />
       <text
          transform="scale(1.0147275,0.98548625)"
@@ -1057,7 +1057,7 @@
        id="text4097"
        y="919.19196"
        x="34.639423"
-       style="font-size:56px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;opacity:0.5;fill:#000000;fill-opacity:1;stroke:none;display:inline;filter:url(#filter4028);font-family:GillSans Condensed;-inkscape-font-specification:'GillSans Condensed, Bold'"
+       style="font-size:56px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;opacity:0.6;fill:#000000;fill-opacity:1;stroke:none;display:inline;filter:url(#filter4028);font-family:GillSans Condensed;-inkscape-font-specification:'GillSans Condensed, Bold'"
        xml:space="preserve"><tspan
          y="919.19196"
          x="34.639423"
