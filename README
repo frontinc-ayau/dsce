@@ -61,16 +61,22 @@ copyright ;-).
 
   Development home page: http://code.google.com/p/dsce/
 
-As the project is hosted at google code, all needed information about contribution, 
+ As the project is hosted at google code, all needed information about contribution, 
 the sources and packages can be found on there.
  
 
   Mailing list: dsce-discussion@googlegroups.com or
-              http://groups.google.com/group/dsce-discussion
-    -  please use this list for all discussions: development, usage, etc.
+                http://groups.google.com/group/dsce-discussion
+    - please use this list for all discussions: development, usage, etc.
+    - please use this list to submit patches
 
   Bug reports and feature requests: http://code.google.com/p/dsce/issues/list
     - please use the bug tracker to report bugs and deposit feature requests or
       enhancements.
+
+  Contribute bug fixes: 
+    - Use the 'hg export' command to generate the diffs for one or more changesets 
+      and send it to the mailing list. 
+    - As an alternative you can submit the changed files or a simple a diff patch.
 
 Any kind of support is most welcome!
