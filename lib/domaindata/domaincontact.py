@@ -30,17 +30,6 @@ ACTION.ADD = "add"
 ACTION.UPDATE = "update"
 ACTION.DELETE = "delete"
 
-CONTACT_ATTRIBUTES = [
-                        "prefix",
-                        "family_name",
-                        "given_name",
-                        "additional_name",
-                        "suffix",
-                        "email",
-                        "phone",
-                        "action",
-                        "uid"
-                     ]
 
 class UID(object):
     """Implements a unique id for each contact.
@@ -61,10 +50,6 @@ class DomainContact(object):
     and all its related attributes. Therefore it is the core data source of this
     application.
 
-    Implementation notes:
-      Any supported contact attribute must be implemented in this class by
-    adding a add, delete, set and update (just if it cannot be done by set)
-    method. Also it has to be added to CONTACT_ATTRIBUTES.
     """
     
     def __init__(self, entry=None):
