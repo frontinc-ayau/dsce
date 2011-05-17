@@ -24,6 +24,7 @@ from domaindata import metadata
 
 from emaileditor import EmailEditDialog
 from emailcellrenderer import EmailCellRenderer
+from addresseditor import AddressEditDialog
 
 import logging
 
@@ -36,6 +37,7 @@ class GridView(wx.grid.Grid):
         self.table = ContactDataTable(self) # just for convenience
         self.SetTable(self.table, True)
         self.setRenderer()
+        self.setEditors()
         self.bind()
 
 
@@ -45,8 +47,12 @@ class GridView(wx.grid.Grid):
     def gridEditorRequest(self, evt):
         """Used when others than PyGridCellEditors have to be used.
         """
-        if evt.GetCol() == metadata.get_col_idx("email"):
-            EmailEditDialog(self, -1, self.table, evt.GetRow(), evt.GetCol())
+        c = evt.GetCol()
+        if c == metadata.get_col_idx("email"):
+            EmailEditDialog(self, -1, self.table, evt.GetRow(), c)
+            evt.Veto()
+        elif c == metadata.get_col_idx("postal_address"):
+            AddressEditDialog(self, -1, self.table, evt.GetRow(), c)
             evt.Veto()
         evt.Skip()
 
@@ -58,4 +64,9 @@ class GridView(wx.grid.Grid):
         attr = wx.grid.GridCellAttr()
         attr.SetRenderer(EmailCellRenderer())
         self.SetColAttr(metadata.get_col_idx("email"), attr)
+
+    def setEditors(self):
+        attr = wx.grid.GridCellAttr()
+        # attr.SetEditor(wx.grid.GridCellAutoWrapStringEditor())
+        # self.SetColAttr(metadata.get_col_idx("postal_address"), attr)
 

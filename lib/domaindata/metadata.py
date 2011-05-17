@@ -150,3 +150,24 @@ REL_LABEL[WORK_REL]="work"
 REL_LABEL[HOME_REL]="home"
 REL_LABEL[OTHER_REL]="other"
 
+
+from gdata.data import MAIL_BOTH
+from gdata.data import MAIL_LETTERS
+from gdata.data import MAIL_NEITHER
+from gdata.data import MAIL_PARCELS
+
+MAIL_CLASS = _DICT()
+MAIL_CLASS[MAIL_BOTH]="both"
+MAIL_CLASS[MAIL_LETTERS]="letters"
+MAIL_CLASS[MAIL_PARCELS]="parcels"
+MAIL_CLASS[MAIL_NEITHER]="neither"
+
+
+from gdata.data import GENERAL_ADDRESS
+from gdata.data import LOCAL_ADDRESS
+
+MAIL_USAGE = _DICT()
+MAIL_USAGE[GENERAL_ADDRESS]="genral"
+MAIL_USAGE[LOCAL_ADDRESS]="local"
+
+
