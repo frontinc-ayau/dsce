@@ -55,6 +55,13 @@ class AddressMetaList(list):
             if a.id == id:
                 return a.label
         raise BaseException("Unknown id %s" % id)
+    def getHelp(self, id):
+        """Returns the label of passed id, else a BaseExceptio will be raised.
+        """
+        for a in self:
+            if a.id == id:
+                return a.help
+        raise BaseException("Unknown id %s" % id)
 
 metaInfo=AddressMetaList()
 
@@ -291,40 +298,67 @@ class AddressEditor(wx.Panel):
         
         pa = wx.StaticText(self, -1, metaInfo.getLabel("PA"))
         self.pa = wx.TextCtrl(self, -1, size=(200, -1), style=wx.TE_MULTILINE|wx.TE_PROCESS_ENTER) 
+        self.pa.SetToolTipString(metaInfo.getHelp("PA"))
+
         ty = wx.StaticText(self, -1, metaInfo.getLabel("TY"))
         self.ty = wx.Choice(self, -1, (-1, -1), choices = self.types)
+        self.ty.SetToolTipString(metaInfo.getHelp("TY"))
+
         pr = wx.StaticText(self, -1, metaInfo.getLabel("PR"))
         self.pr = wx.CheckBox(self, -1 )
+        self.pr.SetToolTipString(metaInfo.getHelp("PR"))
+
         ag = wx.StaticText(self, -1, metaInfo.getLabel("AG"))
         self.ag = wx.TextCtrl(self, -1, address, size=(170, -1))
+        self.ag.SetToolTipString(metaInfo.getHelp("AG"))
 
         st = wx.StaticText(self, -1, metaInfo.getLabel("ST"))
         self.st = wx.TextCtrl(self, -1, address, size=(-1, -1))
+        self.st.SetToolTipString(metaInfo.getHelp("ST"))
+
         po = wx.StaticText(self, -1, metaInfo.getLabel("PO"))
         self.po = wx.TextCtrl(self, -1, address, size=(-1, -1))
+        self.po.SetToolTipString(metaInfo.getHelp("PO"))
+
         mc = wx.StaticText(self, -1, metaInfo.getLabel("MC"))
         self.mc = wx.Choice(self, -1, (-1, -1), choices = self.mailClasses)
+        self.mc.SetToolTipString(metaInfo.getHelp("MC"))
 
         hn = wx.StaticText(self, -1, metaInfo.getLabel("HN"))
         self.hn = wx.TextCtrl(self, -1, address, size=(170, -1))
+        self.hn.SetToolTipString(metaInfo.getHelp("HN"))
+
         nh = wx.StaticText(self, -1, metaInfo.getLabel("NH"))
         self.nh = wx.TextCtrl(self, -1, address, size=(170, -1))
+        self.nh.SetToolTipString(metaInfo.getHelp("NH"))
+
         re = wx.StaticText(self, -1, metaInfo.getLabel("RE"))
         self.re = wx.TextCtrl(self, -1, address, size=(170, -1))
+        self.re.SetToolTipString(metaInfo.getHelp("RE"))
 
         pc = wx.StaticText(self, -1, metaInfo.getLabel("PC"))
         self.pc = wx.TextCtrl(self, -1, address, size=(-1, -1))
+        self.pc.SetToolTipString(metaInfo.getHelp("PC"))
+
         ci = wx.StaticText(self, -1, metaInfo.getLabel("CI"))
         self.ci = wx.TextCtrl(self, -1, address, size=(170, -1))
+        self.ci.SetToolTipString(metaInfo.getHelp("CI"))
+
         sr = wx.StaticText(self, -1, metaInfo.getLabel("SR"))
         self.sr = wx.TextCtrl(self, -1, address, size=(170, -1))
+        self.sr.SetToolTipString(metaInfo.getHelp("SR"))
 
         co = wx.StaticText(self, -1, metaInfo.getLabel("CO"))
         self.co = wx.TextCtrl(self, -1, address, size=(170, -1))
+        self.co.SetToolTipString(metaInfo.getHelp("CO"))
+
         la = wx.StaticText(self, -1, metaInfo.getLabel("LA"))
         self.la = wx.TextCtrl(self, -1, address, size=(200, -1))
+        self.la.SetToolTipString(metaInfo.getHelp("LA"))
+
         us = wx.StaticText(self, -1, metaInfo.getLabel("US"))
         self.us = wx.Choice(self, -1, (-1, -1), choices = self.mailUsage)
+        self.us.SetToolTipString(metaInfo.getHelp("US"))
 
         self.updateB = wx.Button(self, 10, self.updateLabel["add"], (50, -1))
         # self._setButtonLabel()
