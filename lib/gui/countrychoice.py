@@ -17,8 +17,8 @@
 
 import wx
 
-from domaindata import countries
+from domaindata import countrycodes
 
 class CountryChoice(wx.Choice):
     def __init__(self, parent, id=1, size=(-1, -1)):
-       wx.Choice.__init__(self, parent, id, size, choices = countries.get_country_list())
+       wx.Choice.__init__(self, parent, id, size, choices = countrycodes.get_country_list())
