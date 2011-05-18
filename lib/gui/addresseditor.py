@@ -36,149 +36,11 @@ from domaindata.metadata import GENERAL_ADDRESS
 from domaindata.metadata import LOCAL_ADDRESS
 from domaindata.metadata import MAIL_USAGE
 
+from domaindata.metadata import AMI
+
 from gui.countrychoice import CountryChoice
 
 
-class AddressMeta(object):
-    def __init__(self, id, label, help):
-        """id ... unique identifier to be used throughout this dialogue
-        label ... label to be displayed
-        help  ... description of the label
-        """
-        self.id = id
-        self.label = label
-        self.help = help
-
-class AddressMetaList(list):
-    def getLabel(self, id):
-        """Returns the label of passed id, else a BaseExceptio will be raised.
-        """
-        for a in self:
-            if a.id == id:
-                return a.label
-        raise BaseException("Unknown id %s" % id)
-    def getHelp(self, id):
-        """Returns the label of passed id, else a BaseExceptio will be raised.
-        """
-        for a in self:
-            if a.id == id:
-                return a.help
-        raise BaseException("Unknown id %s" % id)
-
-metaInfo=AddressMetaList()
-
-# as id a two character abbreviation is used
-metaInfo.append(AddressMeta(
-                        "PA",
-                        "Postal Address",
-                        """The full, unstructured postal address."""
-                        ))
-
-metaInfo.append(AddressMeta(
-                        "PR",
-                        "Primary",
-                        """Specifies the address as primary. Default value is false."""
-                        ))
-
-metaInfo.append(AddressMeta(
-                        "ST",
-                        "Street",
-                        """Can be street, avenue, road, etc. This element also includes the
-house number and room/apartment/flat/floor number."""
-                        ))
-
-metaInfo.append(AddressMeta(
-                        "PC",
-                        "Postal Code",
-                        """Postal code. Usually country-wide, but sometimes specific to the
-city (e.g. "2" in "Dublin 2, Ireland" addresses)."""
-                        ))
-
-metaInfo.append(AddressMeta(
-                        "CI",
-                        "City",
-                        """Can be city, village, town, borough, etc. This is the postal town and
-not necessarily the place of residence or place of business."""
-                        ))
-
-metaInfo.append(AddressMeta(
-                        "CO",
-                        "Country",
-                        """The name or code of the country."""
-                        ))
-
-metaInfo.append(AddressMeta(
-                        "TY",
-                        "Type",
-                        """Type of the address. Unless specified work type is assumed."""
-                        ))
-
-metaInfo.append(AddressMeta(
-                        "LA",
-                        "Label",
-                        """Label"""
-                        ))
-
-metaInfo.append(AddressMeta(
-                        "AG",
-                        "Agent",
-                        """The agent who actually receives the mail. Used in work addresses. 
-Also for 'in care of' or 'c/o'."""
-                        ))
-
-metaInfo.append(AddressMeta(
-                        "HN",
-                        "House Name",
-                        """Used in places where houses or buildings have names (and not
-necessarily numbers), eg. "The Pillars"."""
-                        ))
-
-
-metaInfo.append(AddressMeta(
-                        "MC",
-                        "Mail Class",
-                        """Classes of mail (letters, parcels) accepted at the address. Unless specified both is assumed."""
-                        ))
-
-metaInfo.append(AddressMeta(
-                        "NH",
-                        "Neighbourhood",
-                        """This is used to disambiguate a street address when a city contains more
-than one street with the same name, or to specify a small place whose
-mail is routed through a larger postal town. In China it could be a
-county or a minor city."""
-                        ))
-
-metaInfo.append(AddressMeta(
-                        "PO",
-                        "P.O. Box",
-                        """Covers actual P.O. boxes, drawers, locked bags, etc. This is usually
-but not always mutually exclusive with street."""
-                        ))
-
-metaInfo.append(AddressMeta(
-                        "RE",
-                        "Region",
-                        """A state, province, county (in Ireland), Land (in Germany),
-departement (in France), etc."""
-                        ))
-
-metaInfo.append(AddressMeta(
-                        "SR",
-                        "Subregion",
-                        """Handles administrative districts such as U.S. or U.K. counties that are
-not used for mail addressing purposes. Subregion is not intended for
-delivery addresses."""
-                        ))
-
-metaInfo.append(AddressMeta(
-                        "US",
-                        "Usage",
-                        """The context in which this address can be used. Local addresses may differ in 
-layout from general addresses, and frequently use local script (as opposed to Latin script) 
-as well, though local script is allowed in general addresses. Unless specified general usage is 
-assumed."""
-                        ))
 
 class AddressListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
     def __init__(self, parent, ID, pos=wx.DefaultPosition,
@@ -189,7 +51,7 @@ class AddressListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         
     def _insertHeader(self):
         idx=0
-        for ai in metaInfo:
+        for ai in AMI:
             self.InsertColumn(idx, ai.label)
             idx+=1
 
@@ -298,69 +160,69 @@ class AddressEditor(wx.Panel):
 
     def addAddressForm(self, address="", type="other", label="", primary=False):
         
-        pa = wx.StaticText(self, -1, metaInfo.getLabel("PA"))
+        pa = wx.StaticText(self, -1, AMI.getLabel("PA"))
         self.pa = wx.TextCtrl(self, -1, size=(200, -1), style=wx.TE_MULTILINE|wx.TE_PROCESS_ENTER) 
-        self.pa.SetToolTipString(metaInfo.getHelp("PA"))
+        self.pa.SetToolTipString(AMI.getHelp("PA"))
 
-        ty = wx.StaticText(self, -1, metaInfo.getLabel("TY"))
+        ty = wx.StaticText(self, -1, AMI.getLabel("TY"))
         self.ty = wx.Choice(self, -1, (-1, -1), choices = self.types)
-        self.ty.SetToolTipString(metaInfo.getHelp("TY"))
+        self.ty.SetToolTipString(AMI.getHelp("TY"))
 
-        pr = wx.StaticText(self, -1, metaInfo.getLabel("PR"))
+        pr = wx.StaticText(self, -1, AMI.getLabel("PR"))
         self.pr = wx.CheckBox(self, -1 )
-        self.pr.SetToolTipString(metaInfo.getHelp("PR"))
+        self.pr.SetToolTipString(AMI.getHelp("PR"))
 
-        ag = wx.StaticText(self, -1, metaInfo.getLabel("AG"))
+        ag = wx.StaticText(self, -1, AMI.getLabel("AG"))
         self.ag = wx.TextCtrl(self, -1, address, size=(170, -1))
-        self.ag.SetToolTipString(metaInfo.getHelp("AG"))
+        self.ag.SetToolTipString(AMI.getHelp("AG"))
 
-        st = wx.StaticText(self, -1, metaInfo.getLabel("ST"))
+        st = wx.StaticText(self, -1, AMI.getLabel("ST"))
         self.st = wx.TextCtrl(self, -1, address, size=(-1, -1))
-        self.st.SetToolTipString(metaInfo.getHelp("ST"))
+        self.st.SetToolTipString(AMI.getHelp("ST"))
 
-        po = wx.StaticText(self, -1, metaInfo.getLabel("PO"))
+        po = wx.StaticText(self, -1, AMI.getLabel("PO"))
         self.po = wx.TextCtrl(self, -1, address, size=(-1, -1))
-        self.po.SetToolTipString(metaInfo.getHelp("PO"))
+        self.po.SetToolTipString(AMI.getHelp("PO"))
 
-        mc = wx.StaticText(self, -1, metaInfo.getLabel("MC"))
+        mc = wx.StaticText(self, -1, AMI.getLabel("MC"))
         self.mc = wx.Choice(self, -1, (-1, -1), choices = self.mailClasses)
-        self.mc.SetToolTipString(metaInfo.getHelp("MC"))
+        self.mc.SetToolTipString(AMI.getHelp("MC"))
 
-        hn = wx.StaticText(self, -1, metaInfo.getLabel("HN"))
+        hn = wx.StaticText(self, -1, AMI.getLabel("HN"))
         self.hn = wx.TextCtrl(self, -1, address, size=(170, -1))
-        self.hn.SetToolTipString(metaInfo.getHelp("HN"))
+        self.hn.SetToolTipString(AMI.getHelp("HN"))
 
-        nh = wx.StaticText(self, -1, metaInfo.getLabel("NH"))
+        nh = wx.StaticText(self, -1, AMI.getLabel("NH"))
         self.nh = wx.TextCtrl(self, -1, address, size=(170, -1))
-        self.nh.SetToolTipString(metaInfo.getHelp("NH"))
+        self.nh.SetToolTipString(AMI.getHelp("NH"))
 
-        re = wx.StaticText(self, -1, metaInfo.getLabel("RE"))
+        re = wx.StaticText(self, -1, AMI.getLabel("RE"))
         self.re = wx.TextCtrl(self, -1, address, size=(170, -1))
-        self.re.SetToolTipString(metaInfo.getHelp("RE"))
+        self.re.SetToolTipString(AMI.getHelp("RE"))
 
-        pc = wx.StaticText(self, -1, metaInfo.getLabel("PC"))
+        pc = wx.StaticText(self, -1, AMI.getLabel("PC"))
         self.pc = wx.TextCtrl(self, -1, address, size=(-1, -1))
-        self.pc.SetToolTipString(metaInfo.getHelp("PC"))
+        self.pc.SetToolTipString(AMI.getHelp("PC"))
 
-        ci = wx.StaticText(self, -1, metaInfo.getLabel("CI"))
-        self.ci = wx.TextCtrl(self, -1, address, size=(170, -1))
-        self.ci.SetToolTipString(metaInfo.getHelp("CI"))
+        ci = wx.StaticText(self, -1, AMI.getLabel("CI"))
+        self.ci = wx.TextCtrl(self, -1, address, size=(-1, -1))
+        self.ci.SetToolTipString(AMI.getHelp("CI"))
 
-        sr = wx.StaticText(self, -1, metaInfo.getLabel("SR"))
+        sr = wx.StaticText(self, -1, AMI.getLabel("SR"))
         self.sr = wx.TextCtrl(self, -1, address, size=(170, -1))
-        self.sr.SetToolTipString(metaInfo.getHelp("SR"))
+        self.sr.SetToolTipString(AMI.getHelp("SR"))
 
-        co = wx.StaticText(self, -1, metaInfo.getLabel("CO"))
+        co = wx.StaticText(self, -1, AMI.getLabel("CO"))
         self.co = CountryChoice(self)
-        self.co.SetToolTipString(metaInfo.getHelp("CO"))
+        self.co.SetToolTipString(AMI.getHelp("CO"))
 
-        la = wx.StaticText(self, -1, metaInfo.getLabel("LA"))
+        la = wx.StaticText(self, -1, AMI.getLabel("LA"))
         self.la = wx.TextCtrl(self, -1, address, size=(200, -1))
-        self.la.SetToolTipString(metaInfo.getHelp("LA"))
+        self.la.SetToolTipString(AMI.getHelp("LA"))
 
-        us = wx.StaticText(self, -1, metaInfo.getLabel("US"))
+        us = wx.StaticText(self, -1, AMI.getLabel("US"))
         self.us = wx.Choice(self, -1, (-1, -1), choices = self.mailUsage)
-        self.us.SetToolTipString(metaInfo.getHelp("US"))
+        self.us.SetToolTipString(AMI.getHelp("US"))
 
         self.updateB = wx.Button(self, 10, self.updateLabel["add"], (50, -1))
         # self._setButtonLabel()
@@ -404,7 +266,7 @@ class AddressEditor(wx.Panel):
 
         formSizer.AddSpacer(6,6, row=2, col=10)
 
-        formSizer.Add(self.ci,   row=1, col=11, flag=wx.ALIGN_LEFT)
+        formSizer.Add(self.ci,   row=1, col=11, flag=wx.EXPAND)
         formSizer.Add(self.co,   row=2, col=11, flag=wx.ALIGN_LEFT)
         formSizer.Add(self.us,   row=3, col=11, flag=wx.ALIGN_LEFT)
         formSizer.Add(self.pr,   row=4, col=11, flag=wx.ALIGN_LEFT)

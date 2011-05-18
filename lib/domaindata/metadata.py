@@ -171,3 +171,146 @@ MAIL_USAGE[GENERAL_ADDRESS]="genral"
 MAIL_USAGE[LOCAL_ADDRESS]="local"
 
 
+# Postal address meta information
+
+
+class AddressMeta(object):
+    def __init__(self, id, label, help):
+        """id ... unique identifier to be used throughout this dialogue
+        label ... label to be displayed
+        help  ... description of the label
+        """
+        self.id = id
+        self.label = label
+        self.help = help
+
+class AddressMetaList(list):
+    def getLabel(self, id):
+        """Returns the label of passed id, else a BaseExceptio will be raised.
+        """
+        for a in self:
+            if a.id == id:
+                return a.label
+        raise BaseException("Unknown id %s" % id)
+    def getHelp(self, id):
+        """Returns the label of passed id, else a BaseExceptio will be raised.
+        """
+        for a in self:
+            if a.id == id:
+                return a.help
+        raise BaseException("Unknown id %s" % id)
+
+AMI=AddressMetaList()
+
+# as an id a two character abbreviation is used
+AMI.append(AddressMeta(
+                        "PA",
+                        "Postal Address",
+                        """The full, unstructured postal address."""
+                        ))
+
+AMI.append(AddressMeta(
+                        "PR",
+                        "Primary",
+                        """Specifies the address as primary. Default value is false."""
+                        ))
+
+AMI.append(AddressMeta(
+                        "ST",
+                        "Street",
+                        """Can be street, avenue, road, etc. This element also includes the
+house number and room/apartment/flat/floor number."""
+                        ))
+
+AMI.append(AddressMeta(
+                        "PC",
+                        "Postal Code",
+                        """Postal code. Usually country-wide, but sometimes specific to the
+city (e.g. "2" in "Dublin 2, Ireland" addresses)."""
+                        ))
+
+AMI.append(AddressMeta(
+                        "CI",
+                        "City",
+                        """Can be city, village, town, borough, etc. This is the postal town and
+not necessarily the place of residence or place of business."""
+                        ))
+
+AMI.append(AddressMeta(
+                        "CO",
+                        "Country",
+                        """The name or code of the country."""
+                        ))
+
+AMI.append(AddressMeta(
+                        "TY",
+                        "Type",
+                        """Type of the address. Unless specified work type is assumed."""
+                        ))
+
+AMI.append(AddressMeta(
+                        "LA",
+                        "Label",
+                        """Label"""
+                        ))
+
+AMI.append(AddressMeta(
+                        "AG",
+                        "Agent",
+                        """The agent who actually receives the mail. Used in work addresses. 
+Also for 'in care of' or 'c/o'."""
+                        ))
+
+AMI.append(AddressMeta(
+                        "HN",
+                        "House Name",
+                        """Used in places where houses or buildings have names (and not
+necessarily numbers), eg. "The Pillars"."""
+                        ))
+
+
+AMI.append(AddressMeta(
+                        "MC",
+                        "Mail Class",
+                        """Classes of mail (letters, parcels) accepted at the address. Unless specified both is assumed."""
+                        ))
+
+AMI.append(AddressMeta(
+                        "NH",
+                        "Neighbourhood",
+                        """This is used to disambiguate a street address when a city contains more
+than one street with the same name, or to specify a small place whose
+mail is routed through a larger postal town. In China it could be a
+county or a minor city."""
+                        ))
+
+AMI.append(AddressMeta(
+                        "PO",
+                        "P.O. Box",
+                        """Covers actual P.O. boxes, drawers, locked bags, etc. This is usually
+but not always mutually exclusive with street."""
+                        ))
+
+AMI.append(AddressMeta(
+                        "RE",
+                        "Region",
+                        """A state, province, county (in Ireland), Land (in Germany),
+departement (in France), etc."""
+                        ))
+
+AMI.append(AddressMeta(
+                        "SR",
+                        "Subregion",
+                        """Handles administrative districts such as U.S. or U.K. counties that are
+not used for mail addressing purposes. Subregion is not intended for
+delivery addresses."""
+                        ))
+
+AMI.append(AddressMeta(
+                        "US",
+                        "Usage",
+                        """The context in which this address can be used. Local addresses may differ in 
+layout from general addresses, and frequently use local script (as opposed to Latin script) 
+as well, though local script is allowed in general addresses. Unless specified general usage is 
+assumed."""
+                        ))
