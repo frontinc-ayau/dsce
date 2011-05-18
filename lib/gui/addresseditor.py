@@ -36,6 +36,8 @@ from domaindata.metadata import GENERAL_ADDRESS
 from domaindata.metadata import LOCAL_ADDRESS
 from domaindata.metadata import MAIL_USAGE
 
+from gui.countrychoice import CountryChoice
+
 
 class AddressMeta(object):
     def __init__(self, id, label, help):
@@ -349,7 +351,7 @@ class AddressEditor(wx.Panel):
         self.sr.SetToolTipString(metaInfo.getHelp("SR"))
 
         co = wx.StaticText(self, -1, metaInfo.getLabel("CO"))
-        self.co = wx.TextCtrl(self, -1, address, size=(170, -1))
+        self.co = CountryChoice(self)
         self.co.SetToolTipString(metaInfo.getHelp("CO"))
 
         la = wx.StaticText(self, -1, metaInfo.getLabel("LA"))
