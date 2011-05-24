@@ -36,10 +36,7 @@ class EmailCellRenderer(wx.grid.PyGridCellRenderer):
     def Draw(self, grid, attr, dc, rect, row, col, isSelected):
         dc.SetClippingRect(rect)
 
-
         emails = self.getValueAsString(grid, row, col)
-        logging.debug(emails)
-
         
         hAlign, vAlign = attr.GetAlignment()
         dc.SetFont ( attr.GetFont() )
@@ -89,8 +86,6 @@ class EmailCellRenderer(wx.grid.PyGridCellRenderer):
             if e.primary and e.primary == "true": 
                 emails += u"primary"
             emails += self._DELIMITER
-
-        logging.debug("Email srting %s" % emails)
 
         return emails
 
