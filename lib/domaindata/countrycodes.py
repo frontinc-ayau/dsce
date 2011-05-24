@@ -266,6 +266,8 @@ _countries_ = (
     ("ZW", "Zimbabwe")
 )
 
+_DEF_FORMAT_="%s  %s" # e.g. "AT  Austria"
+
 def get_country_name_list():
     """Returns a list of all supported country names.
     """
@@ -274,11 +276,40 @@ def get_country_name_list():
         cn.append(c[1])
     return cn
 
+
 def get_country_list():
     """Returns a list of strings of the format
     Country Code Name, e.g. "AT Austria"
     """
     cn = []
     for c in _countries_:
-        cn.append("%s  %s" % (c[0], c[1]))
+        cn.append(_DEF_FORMAT_ % (c[0], c[1]))
     return cn
+
+def get_by_code(code):
+    for c in _countries_:
+        if c[0] == code:
+            return _DEF_FORMAT_ % (c[0], c[1])
+    return None
+
+def get_by_name(name):
+    for c in _countries_:
+        if c[1] == name:
+            return _DEF_FORMAT_ % (c[0], c[1])
+    return None
+
+def get_country(code=None, name=None):
+    """Retrieves the country either by code or by name and returns
+    the country string of the format of get_country_list()."""
+
+    if (code and name) or (not code and not name):
+        raise BaseException("Either code or name has to be stated to select a country")
+    
+    if code: 
+        return get_by_code(code)
+    elif name: 
+        return get_by_name(name)
+    else:
+        raise BaseException("Unhandled error in countrycodes.get_country()")
+
+

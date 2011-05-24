@@ -31,7 +31,7 @@ _META_DATA_=[ ( "uid", "UID", "getUid()", None, False, False),
               ( "full_name", "Full Name", "c.getFullName()", "c.setFullName(value)", True, True),
               ( "email", "Email", "c.getEmail()", "c.setEmails(value)", True, True),
               ( "phone", "Phone", "c.getPhoneNumber(0)", "c.updatePhoneNumber(value)", True, False),
-              ( "postal_address", "Address", "c.getPostalAddress(0)", "c.setPostalAddress(value)", True, True),
+              ( "postal_address", "Address", "c.getPostalAddress()", "c.setPostalAddress(value)", True, True),
               ( "action", "Action", "c.getAction()", "c.setActionUpdate()", False, False)
             ]
               
@@ -176,29 +176,46 @@ MAIL_USAGE[LOCAL_ADDRESS]="local"
 
 class AddressMeta(object):
     def __init__(self, id, label, help):
-        """id ... unique identifier to be used throughout this dialogue
-        label ... label to be displayed
-        help  ... description of the label
+        """id  ... unique identifier to be used throughout this dialogue
+        label  ... label to be displayed
+        help   ... description of the label
         """
         self.id = id
         self.label = label
         self.help = help
 
 class AddressMetaList(list):
+    def get(self, id):
+        """Returns the AddressMeta object of passed id, else a BaseException
+        will be raised.
+        """
+        for a in self:
+            if a.id == id:
+                return a
+        raise BaseException("Unknown id %s" % id)
+
     def getLabel(self, id):
         """Returns the label of passed id, else a BaseExceptio will be raised.
         """
-        for a in self:
-            if a.id == id:
-                return a.label
-        raise BaseException("Unknown id %s" % id)
+        return self.get(id).label
+
+    def getGetter(self, id):
+        """Returns the getter of passed id, else a BaseExceptio will be raised.
+        """
+        return self.get(id).getter
+
     def getHelp(self, id):
         """Returns the label of passed id, else a BaseExceptio will be raised.
         """
+        return self.get(id).help
+
+    def getIDs(self):
+        """Returns all address ids.
+        """
+        ids = []
         for a in self:
-            if a.id == id:
-                return a.help
-        raise BaseException("Unknown id %s" % id)
+            ids.append(a.id)
+        return ids
 
 AMI=AddressMetaList()
 

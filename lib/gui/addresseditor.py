@@ -21,6 +21,7 @@ import wx.lib.rcsizer  as rcsizer
 import logging as log
 import sys 
 
+from domaindata import spaf
 from domaindata.metadata import WORK_REL
 from domaindata.metadata import HOME_REL
 from domaindata.metadata import OTHER_REL
@@ -38,6 +39,7 @@ from domaindata.metadata import MAIL_USAGE
 
 from domaindata.metadata import AMI
 
+
 from gui.countrychoice import CountryChoice
 
 
@@ -47,13 +49,28 @@ class AddressListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
                  size=wx.DefaultSize, style=wx.LIST_AUTOSIZE):
         wx.ListCtrl.__init__(self, parent, ID, pos, size, style)
         listmix.ListCtrlAutoWidthMixin.__init__(self)
+
+        # Attribute index is used to keep track of what column holds what 
+        # postal address information.
+        # key = AddressMeta.id, value = column index
+        self.attridx={} # key = AddressMeta.id, value = column index
+
         self._insertHeader()
         
     def _insertHeader(self):
         idx=0
         for ai in AMI:
             self.InsertColumn(idx, ai.label)
+            self.attridx[ai.id] = idx
             idx+=1
+
+    def getColId(self, ci):
+        """Returns the id of the column on position ci (column index).
+        """
+        for id , i in self.attridx.iteritems():
+            if i == ci:
+                return id
+        raise BaseException("Columng indes %d does not exist!" % ci)
 
     def _setPrimary(self, idx, primary):
         """This method takes also care that only one primary address
@@ -77,8 +94,25 @@ class AddressListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         else:
             self.SetStringItem(idx, COLIDX_PRIMARY, "No")
 
-    def appendRow(self, address=""):
-        idx = self.InsertStringItem(sys.maxint, address)
+    def _getAddressMeataId(self, colidx):
+        """Gets the AddressMeta.id on passed column index. 
+        If the colidx is not found and BaseException is raised"""
+        for id, idx in self.attridx.iteritems():
+            if idx == colidx:
+                return id
+        raise BaseException("Unable to find index %d in address list control" % colidx)
+
+
+    def appendRow(self, address):
+        """address is one gdata.data.StructuredPostalAddress.
+        """
+        id0 = self._getAddressMeataId(0)
+
+        address= spaf.getSPAdict(address)
+
+        idx = self.InsertStringItem(sys.maxint,"" )
+        for i, v in address.iteritems():
+            self.SetStringItem(idx, self.attridx[i], address[i])
 
 
     def updateRow(self, idx, address):
@@ -92,74 +126,23 @@ class AddressListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         item = self.GetItem(idx, col)
         return item.GetText()
 
+class AddressForm(wx.Panel):
+    def __init__(self, *args, **kwargs):
 
-class AddressEditor(wx.Panel):
-    def __init__(self, parent, id, table, row, col, style=0 ):
-        wx.Panel.__init__(self, parent, id, style=style)
-
-        self.types = [ REL_LABEL[OTHER_REL], 
-                       REL_LABEL[HOME_REL], 
-                       REL_LABEL[WORK_REL]
-                     ]
-
-        self.mailClasses = [ MAIL_CLASS[MAIL_BOTH],
-                             MAIL_CLASS[MAIL_LETTERS],
-                             MAIL_CLASS[MAIL_PARCELS],
-                             MAIL_CLASS[MAIL_NEITHER]
-                        ]
-
-        self.mailUsage = [ MAIL_USAGE[GENERAL_ADDRESS],
-                           MAIL_USAGE[LOCAL_ADDRESS]
-                        ] 
-
-        self.updateLabel = {"add":"Add", "update":"Update"}
-
-        self.gridTable = table
-        self.row = row
-        self.col = col
+        wx.Panel.__init__(self, *args, **kwargs)
 
         # Safes the index of the current selected list item or -1 if
         # none is selected
         self.idx = -1 
+        self.types = REL_LABEL.values()
+        self.mailClasses = MAIL_CLASS.values()
+        self.mailUsage = MAIL_USAGE.values()
+        self.updateLabel = {"add":"Add", "update":"Update"}
 
-        self.sizer = wx.FlexGridSizer(rows = 2, vgap=6, hgap=6)
-
-        self.addAddressListCtrl()
-        # self.populate()
-        self.addAddressForm()
-
-        self.sizer.AddGrowableRow(0)
-        self.sizer.AddGrowableCol(0)
-        self.SetSizer(self.sizer)
-
-        # self.binEvents()
+        self.addCtrls()
 
 
-    def binEvents(self):
-        pass
-        self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.onItemSelected, self.emailListCtrl)
-        self.Bind(wx.EVT_LIST_ITEM_DESELECTED, self.onItemDeselected, self.emailListCtrl)
-        self.Bind(wx.EVT_BUTTON, self.onAddOrUpdate, self.updateB)
-        self.Bind(wx.EVT_BUTTON, self.onDelete, self.deleteB)
-
-    def addAddressListCtrl(self, id=-1):
-        self.addressListCtrl = AddressListCtrl(self, id,
-                                 style=wx.LC_REPORT 
-                                 | wx.BORDER_SUNKEN
-                                 # | wx.BORDER_NONE
-                                 # | wx.LC_EDIT_LABELS
-                                 | wx.LC_SORT_ASCENDING
-                                 #| wx.LC_NO_HEADER
-                                 #| wx.LC_VRULES
-                                 #| wx.LC_HRULES
-                                 | wx.LC_SINGLE_SEL
-                                 )
-        self.sizer.Add(self.addressListCtrl, 1, wx.EXPAND)
-
-        
-
-    def addAddressForm(self, address="", type="other", label="", primary=False):
-        
+    def addCtrls(self, type=REL_LABEL[OTHER_REL], label="", primary=False):
         pa = wx.StaticText(self, -1, AMI.getLabel("PA"))
         self.pa = wx.TextCtrl(self, -1, size=(200, -1), style=wx.TE_MULTILINE|wx.TE_PROCESS_ENTER) 
         self.pa.SetToolTipString(AMI.getHelp("PA"))
@@ -173,15 +156,15 @@ class AddressEditor(wx.Panel):
         self.pr.SetToolTipString(AMI.getHelp("PR"))
 
         ag = wx.StaticText(self, -1, AMI.getLabel("AG"))
-        self.ag = wx.TextCtrl(self, -1, address, size=(170, -1))
+        self.ag = wx.TextCtrl(self, -1, "", size=(170, -1))
         self.ag.SetToolTipString(AMI.getHelp("AG"))
 
         st = wx.StaticText(self, -1, AMI.getLabel("ST"))
-        self.st = wx.TextCtrl(self, -1, address, size=(-1, -1))
+        self.st = wx.TextCtrl(self, -1, "", size=(-1, -1))
         self.st.SetToolTipString(AMI.getHelp("ST"))
 
         po = wx.StaticText(self, -1, AMI.getLabel("PO"))
-        self.po = wx.TextCtrl(self, -1, address, size=(-1, -1))
+        self.po = wx.TextCtrl(self, -1, "", size=(-1, -1))
         self.po.SetToolTipString(AMI.getHelp("PO"))
 
         mc = wx.StaticText(self, -1, AMI.getLabel("MC"))
@@ -189,27 +172,27 @@ class AddressEditor(wx.Panel):
         self.mc.SetToolTipString(AMI.getHelp("MC"))
 
         hn = wx.StaticText(self, -1, AMI.getLabel("HN"))
-        self.hn = wx.TextCtrl(self, -1, address, size=(170, -1))
+        self.hn = wx.TextCtrl(self, -1, "", size=(170, -1))
         self.hn.SetToolTipString(AMI.getHelp("HN"))
 
         nh = wx.StaticText(self, -1, AMI.getLabel("NH"))
-        self.nh = wx.TextCtrl(self, -1, address, size=(170, -1))
+        self.nh = wx.TextCtrl(self, -1, "", size=(170, -1))
         self.nh.SetToolTipString(AMI.getHelp("NH"))
 
         re = wx.StaticText(self, -1, AMI.getLabel("RE"))
-        self.re = wx.TextCtrl(self, -1, address, size=(170, -1))
+        self.re = wx.TextCtrl(self, -1, "", size=(170, -1))
         self.re.SetToolTipString(AMI.getHelp("RE"))
 
         pc = wx.StaticText(self, -1, AMI.getLabel("PC"))
-        self.pc = wx.TextCtrl(self, -1, address, size=(-1, -1))
+        self.pc = wx.TextCtrl(self, -1, "", size=(-1, -1))
         self.pc.SetToolTipString(AMI.getHelp("PC"))
 
         ci = wx.StaticText(self, -1, AMI.getLabel("CI"))
-        self.ci = wx.TextCtrl(self, -1, address, size=(-1, -1))
+        self.ci = wx.TextCtrl(self, -1, "", size=(-1, -1))
         self.ci.SetToolTipString(AMI.getHelp("CI"))
 
         sr = wx.StaticText(self, -1, AMI.getLabel("SR"))
-        self.sr = wx.TextCtrl(self, -1, address, size=(170, -1))
+        self.sr = wx.TextCtrl(self, -1, "", size=(170, -1))
         self.sr.SetToolTipString(AMI.getHelp("SR"))
 
         co = wx.StaticText(self, -1, AMI.getLabel("CO"))
@@ -217,7 +200,7 @@ class AddressEditor(wx.Panel):
         self.co.SetToolTipString(AMI.getHelp("CO"))
 
         la = wx.StaticText(self, -1, AMI.getLabel("LA"))
-        self.la = wx.TextCtrl(self, -1, address, size=(200, -1))
+        self.la = wx.TextCtrl(self, -1, "", size=(200, -1))
         self.la.SetToolTipString(AMI.getHelp("LA"))
 
         us = wx.StaticText(self, -1, AMI.getLabel("US"))
@@ -225,9 +208,8 @@ class AddressEditor(wx.Panel):
         self.us.SetToolTipString(AMI.getHelp("US"))
 
         self.updateB = wx.Button(self, 10, self.updateLabel["add"], (50, -1))
-        # self._setButtonLabel()
         self.deleteB = wx.Button(self, 20, "Delete", (50, -1))
-        # self._setDeleteButton()
+        self.disableDeleteButton()
 
         # On my system the GridBagSizer did not run stable so I switched to 
         # the RowColSizer.
@@ -292,73 +274,64 @@ class AddressEditor(wx.Panel):
         bBox.Add(self.updateB)
 
         formSizer.Add(bBox, row=5, col=15, flag=wx.ALL | wx.EXPAND)
+        self.SetSizer(formSizer)
 
-        self.sizer.Add(formSizer, 1, wx.ALIGN_LEFT)
+
+    def setValue(self, id, v):
+        """Sets the gui control identified by id (metadata.AddressMeta.id)
+        to the passed value v.
+        """
+        if id == "PA": self.pa.SetValue(unicode(v))
+        elif id == "ST": self.st.SetValue(unicode(v))
+        elif id == "PC": self.pc.SetValue(unicode(v))
+        elif id == "CI": self.ci.SetValue(unicode(v))
+        elif id == "LA": self.la.SetValue(unicode(v))
+        elif id == "AG": self.ag.SetValue(unicode(v))
+        elif id == "HN": self.hn.SetValue(unicode(v))
+        elif id == "NH": self.nh.SetValue(unicode(v))
+        elif id == "PO": self.po.SetValue(unicode(v))
+        elif id == "RE": self.re.SetValue(unicode(v))
+        elif id == "SR": self.sr.SetValue(unicode(v))
+        elif id == "CO": self.co.setValue(v)
+        elif id == "PR":
+            if (v and v == "true"):
+                self.pr.SetValue(True)
+            else:
+                self.pr.SetValue(False)
+        elif id == "TY": 
+            try:
+                self.ty.SetSelection(self.types.index(v))
+            except:
+                self.ty.SetSelection(-1)
+        elif id == "MC":
+            try:
+                self.mc.SetSelection(self.mailClasses.index(v))
+            except:
+                self.mc.SetSelection(-1)
+        elif id == "US": 
+            try:
+                self.us.SetSelection(self.mailUsage.index(v))
+            except:
+                self.us.SetSelection(-1)
+        else: 
+            raise BaseException("Id %s unknown!" % id)
 
 
-    def setFormType(self, type):
-        try:
-            self.tc.SetSelection(self.types.index(type))
-        except:
-            self.tc.SetSelection(-1)
-
-    def setFormEmail(self, email):
-        self.ec.SetValue(email)
-
-    def setFormLabel(self, label):
-        self.lc.SetValue(label)
-
-    def setFormPrimary(self, primary):
-        if primary == "Yes" or primary == True:
-            self.cc.SetValue(True)
-        else:
-            self.cc.SetValue(False)
-
-    def populate(self):
-        log.debug("In populate()")
-        for e in self.gridTable.GetValue(self.row, self.col):
-            a = unicode(e.address) if e.address else u""
-            t = unicode(REL_LABEL[e.rel]) if e.rel else u""
-            l = unicode(e.label) if e.label else u""
-            p = True if (e.primary and e.primary == "true") else False
-            log.debug("a: %s  t: %s  l: %s  p: %s" % (a,t,l,p))
-            self.emailListCtrl.appendRow( address=a, 
-                                          type=t, 
-                                          label=l, 
-                                          primary=p)
- 
-    def _setButtonLabel(self):
+    def setButtonLabelAdd(self):
         """Sets the label if idx refers to an existing entry or not
         """
-        if self.idx < 0:
-            self.updateB.SetLabel(self.updateLabel["add"])
-        else:
-            self.updateB.SetLabel(self.updateLabel["update"])
+        self.updateB.SetLabel(self.updateLabel["add"])
 
+    def setButtonLabelUpdate(self):
+        """Sets the label if idx refers to an existing entry or not
+        """
+        self.updateB.SetLabel(self.updateLabel["update"])
 
-    def _setDeleteButton(self):
-        if self.idx < 0:
+    def enableDeleteButton(self):
+        self.deleteB.Enable()
+
+    def disableDeleteButton(self):
             self.deleteB.Disable()
-        else:
-            self.deleteB.Enable()
-
-    def onItemSelected(self, event):
-        self.idx = event.GetIndex()
-        self.setFormEmail(self.emailListCtrl.getColumnText(self.idx, COLIDX_EMAIL))
-        self.setFormType(self.emailListCtrl.getColumnText(self.idx, COLIDX_TYPE))
-        self.setFormLabel(self.emailListCtrl.getColumnText(self.idx, COLIDX_LABEL))
-        self.setFormPrimary(self.emailListCtrl.getColumnText(self.idx, COLIDX_PRIMARY))
-        self._setButtonLabel()
-        self._setDeleteButton()
-
-    def onItemDeselected(self, event):
-        self.idx = -1
-        self.setFormEmail("")
-        self.setFormType(-1)
-        self.setFormLabel("")
-        self.setFormPrimary("No")
-        self._setButtonLabel()
-        self._setDeleteButton()
 
     def getTypeString(self, idx):
         if idx < 0:
@@ -366,6 +339,12 @@ class AddressEditor(wx.Panel):
         else:
             return unicode(self.types[idx])
 
+
+    def reset(self):
+        """Just to make it more readable or understandable
+        """
+        for id in AMI.getIDs():
+            self.setValue(id, "")
 
     def addEntry(self):
         self.emailListCtrl.appendRow( address = self.ec.GetValue(), 
@@ -380,11 +359,6 @@ class AddressEditor(wx.Panel):
                                       label = self.lc.GetValue(), 
                                       primary = self.cc.GetValue()
                                     )
-    def resetForm(self):
-        """Just to make it more readable or understandable
-        """
-        self.onItemDeselected(None) 
-        
 
     def onAddOrUpdate(self, event):
         """Adds a new entry or updates an existing one
@@ -393,7 +367,7 @@ class AddressEditor(wx.Panel):
         if self.idx < 0:
             log.debug("Add new entry")
             self.addEntry()
-            self.resetForm()
+            self.reset()
         else:
             log.debug("Update existing entry")
             self.updateEntry()
@@ -401,7 +375,97 @@ class AddressEditor(wx.Panel):
     def onDelete(self, event):
         if self.idx >= 0:
             self.emailListCtrl.deleteRow(self.idx)
-            self.resetForm()
+            self.reset()
+        
+
+class AddressEditor(wx.Panel):
+    """Responsible to initialize and display the forms UI components and manages
+    the work flow and control of the dialog (what to display when and what to call
+    when etc.). 
+    """
+    def __init__(self, parent, id, table, row, col, style=0 ):
+        wx.Panel.__init__(self, parent, id, style=style)
+
+
+
+        self.gridTable = table
+        self.row = row
+        self.col = col
+
+        # Safes the index of the current selected list item or -1 if
+        # none is selected
+
+        self.sizer = wx.FlexGridSizer(rows = 2, vgap=6, hgap=6)
+
+        self.addressListCtrl = None
+        self.addressForm = None
+
+        self.addAddressListCtrl()
+        self.populate()
+        self.addAddressForm()
+
+        self.sizer.AddGrowableRow(0)
+        self.sizer.AddGrowableCol(0)
+        self.SetSizer(self.sizer)
+
+        self.bindEvents()
+
+
+    def bindEvents(self):
+        self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.onItemSelected, self.addressListCtrl)
+        self.Bind(wx.EVT_LIST_ITEM_DESELECTED, self.onItemDeselected, self.addressListCtrl)
+        # self.Bind(wx.EVT_BUTTON, self.onAddOrUpdate, self.updateB)
+        # self.Bind(wx.EVT_BUTTON, self.onDelete, self.deleteB)
+
+
+    def addAddressListCtrl(self, id=-1):
+        self.addressListCtrl = AddressListCtrl(self, id,
+                                 style=wx.LC_REPORT 
+                                 | wx.BORDER_SUNKEN
+                                 # | wx.BORDER_NONE
+                                 # | wx.LC_EDIT_LABELS
+                                 | wx.LC_SORT_ASCENDING
+                                 #| wx.LC_NO_HEADER
+                                 #| wx.LC_VRULES
+                                 #| wx.LC_HRULES
+                                 | wx.LC_SINGLE_SEL
+                                 )
+        self.sizer.Add(self.addressListCtrl, 1, wx.EXPAND)
+
+        
+
+    def addAddressForm(self, address="", type="other", label="", primary=False):
+        self.addressForm = AddressForm(self, -1)
+        self.sizer.Add( self.addressForm , 1, wx.ALIGN_LEFT)
+
+
+
+    def populate(self):
+        log.debug("In populate()")
+        for e in self.gridTable.GetValue(self.row, self.col):
+            self.addressListCtrl.appendRow( address=e )
+ 
+    def onItemSelected(self, event):
+        item = event.GetItem()
+        idx = event.GetIndex()
+        log.debug("Selected Item  - %s" % item.GetText())
+        log.debug("Item Attribute - %s" % item.GetAttributes())
+        log.debug("Number of cols - %d" % self.addressListCtrl.GetColumnCount())
+        for ci in range( 0, (self.addressListCtrl.GetColumnCount()) ):
+            log.debug("Select %s - %s " % (
+                            self.addressListCtrl.getColId(ci), 
+                            self.addressListCtrl.getColumnText(idx, ci)))
+            self.addressForm.setValue( self.addressListCtrl.getColId(ci), 
+                                       self.addressListCtrl.getColumnText(idx, ci))
+
+        self.addressForm.setButtonLabelUpdate()
+        self.addressForm.enableDeleteButton()
+
+    def onItemDeselected(self, event):
+        self.addressForm.reset()
+        self.addressForm.setButtonLabelAdd()
+        self.addressForm.disableDeleteButton()
+
 
     def saveChanges(self):
         """Saves changes made to emails.

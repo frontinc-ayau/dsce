@@ -181,7 +181,7 @@ class DomainContact(object):
         """
         if idx >= 0:
             try:
-                return self.entry.structured_postal_address[idx].formatted_address.text
+                return self.entry.structured_postal_address[idx]
             except:
                 return None
         else:

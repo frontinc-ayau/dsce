@@ -20,5 +20,20 @@ import wx
 from domaindata import countrycodes
 
 class CountryChoice(wx.Choice):
-    def __init__(self, parent, id=1, size=(-1, -1)):
-       wx.Choice.__init__(self, parent, id, size, choices = countrycodes.get_country_list())
+    def __init__(self, parent, id=1, size=(-1, -1), choices = countrycodes.get_country_list()):
+        wx.Choice.__init__(self, parent, id, size, choices=choices)
+        self.choices = choices
+        
+    def setValue(self, value):
+        """Searches the value in a more or less intelligent way and sets the selection to this
+        Value"""
+        # XXX Needs of course a better algorithm...
+        cs = None
+        if len(value) == 2: # might be a country code
+            cs = countrycodes.get_country(code=value)
+        elif len(value) > 2: # might be a country
+            cs = countrycodes.get_country(name=value)
+
+        if cs:
+            self.SetSelection(self.choices.index(unicode(cs)))
+
