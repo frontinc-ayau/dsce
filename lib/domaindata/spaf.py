@@ -183,7 +183,6 @@ def getValue( spa, id ):
     """
     return eval("get%s(spa)" % id)
 
-
 def getSPAdict( spa ):
     """Returns the StructuredPostalAddress as dictionary where the 
     keys are the metadata.AddressMeta.id with the corresponding value
@@ -199,3 +198,14 @@ def getSPAdict( spa ):
     return d
 
 
+def getFirstString( spa ):
+    """Returns either formatted address or street.
+    This string is ment to be displayed in the grid.
+    If neither nor exists we return an empty string
+    """
+    # XXX Street and postal code etc would also be nice...
+    if getPA(spa):  
+        return getPA(spa)
+    else:
+        return getST()
+    
