@@ -108,6 +108,69 @@ def getUS(spa):
         return MAIL_USAGE[spa.usage.text] # Do not change
     return None
 
+def setPA(spa, v):
+    """spa = StructuredPostalAddress(), v = value"""
+    spa.formatted_address.text = v
+
+def setPR(spa, v):
+    """spa = StructuredPostalAddress(), v = value"""
+    spa.primary=v
+
+def setST(spa, v):
+    """spa = StructuredPostalAddress(), v = value"""
+    spa.street.text=v
+
+def setPC(spa, v):
+    """spa = StructuredPostalAddress(), v = value"""
+    spa.postcode.text=v
+
+def setCI(spa, v):
+    """spa = StructuredPostalAddress(), v = value"""
+    spa.city.text=v
+
+def setCO(spa, v):
+    """spa = StructuredPostalAddress(), v = value"""
+    spa.country.text=v
+
+def setTY(spa, v):
+    """spa = StructuredPostalAddress(), v = value"""
+    spa.rel=REL_LABEL.getKey(v)
+
+def setLA(spa, v):
+    """spa = StructuredPostalAddress(), v = value"""
+    spa.label=v
+
+def setAG(spa, v):
+    """spa = StructuredPostalAddress(), v = value"""
+    spa.agent.text=v
+
+def setHN(spa, v):
+    """spa = StructuredPostalAddress(), v = value"""
+    spa.house_name.text=v
+
+def setMC(spa, v):
+    """spa = StructuredPostalAddress(), v = value"""
+    spa.mail_class = MAIL_CLASS.getKey(v)
+
+def setNH(spa, v):
+    """spa = StructuredPostalAddress(), v = value"""
+    spa.neighborhood.text=v
+
+def setPO(spa, v):
+    """spa = StructuredPostalAddress(), v = value"""
+    spa.po_box.text=v
+
+def setRE(spa, v):
+    """spa = StructuredPostalAddress(), v = value"""
+    spa.region.text=v
+
+def setSR(spa, v):
+    """spa = StructuredPostalAddress(), v = value"""
+    spa.subregion.text=v
+
+def setUS(spa, v):
+    """spa = StructuredPostalAddress(), v = value"""
+    spa.usage = MAIL_USAGE.getKey(v)
 
 def getValue( spa, id ):
     """Returns the value of the spa attribute that corresponds to id.
@@ -115,7 +178,7 @@ def getValue( spa, id ):
     It does not return the value of the city attribute but its real
     value like Vienna, Milano, London...
     
-    Implementation note: It is assumed that for each AddressMeta.id (ID) and 
+    Implementation note: It is assumed that for each AddressMeta.id (ID) an 
     getID(spa) function exists!
     """
     return eval("get%s(spa)" % id)

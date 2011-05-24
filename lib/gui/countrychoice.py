@@ -37,3 +37,7 @@ class CountryChoice(wx.Choice):
         if cs:
             self.SetSelection(self.choices.index(unicode(cs)))
 
+    def getValue(self, i):
+        """Returns the value on position i"""
+        return self.choices[i]
+

@@ -114,9 +114,15 @@ class AddressListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         for i, v in address.iteritems():
             self.SetStringItem(idx, self.attridx[i], address[i])
 
+    def updateRow(self, idx, ad):
+        """idx ... row index
+        ad  ... address dictionary {ID:VAL}"""
+        for i, v in ad.iteritems():
+            self.SetStringItem(idx, self.attridx[i], v)
 
-    def updateRow(self, idx, address):
-        self.SetStringItem(idx, COLIDX_ADDRESS, address)
+    def addRow(self, ad):
+        idx = self.InsertStringItem(sys.maxint, "")
+        self.updateRow(idx, ad)
 
 
     def deleteRow(self, idx):
@@ -126,14 +132,12 @@ class AddressListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         item = self.GetItem(idx, col)
         return item.GetText()
 
+
 class AddressForm(wx.Panel):
     def __init__(self, *args, **kwargs):
 
         wx.Panel.__init__(self, *args, **kwargs)
 
-        # Safes the index of the current selected list item or -1 if
-        # none is selected
-        self.idx = -1 
         self.types = REL_LABEL.values()
         self.mailClasses = MAIL_CLASS.values()
         self.mailUsage = MAIL_USAGE.values()
@@ -316,6 +320,34 @@ class AddressForm(wx.Panel):
         else: 
             raise BaseException("Id %s unknown!" % id)
 
+    def getValues(self):
+        """Returns its values as dict {ID:VAL, ...}. Unset Values will not be 
+        included in the dictionary"""
+        d = {}
+        d["PA"] = self.pa.GetValue()
+        d["ST"] = self.st.GetValue()
+        d["PC"] = self.pc.GetValue()
+        d["CI"] = self.ci.GetValue()
+        d["LA"] = self.la.GetValue()
+        d["AG"] = self.ag.GetValue()
+        d["HN"] = self.hn.GetValue()
+        d["NH"] = self.nh.GetValue()
+        d["PO"] = self.po.GetValue()
+        d["RE"] = self.re.GetValue()
+        d["SR"] = self.sr.GetValue()
+        if self.co.GetCurrentSelection() >= 0:
+            d["CO"] = self.co.getValue(self.co.GetCurrentSelection())
+        if self.ty.GetCurrentSelection() >= 0:
+            d["TY"] = self.types[self.ty.GetCurrentSelection()]
+        if self.pr.GetValue():
+            d["PR"] = "true"
+        else:
+            d["PR"] = "false"
+        if self.mc.GetCurrentSelection() >= 0:
+            d["MC"] = self.mailClasses[self.mc.GetCurrentSelection()]
+        if self.us.GetCurrentSelection() >= 0:
+            d["US"] = self.mailUsage[self.us.GetCurrentSelection()]
+        return d
 
     def setButtonLabelAdd(self):
         """Sets the label if idx refers to an existing entry or not
@@ -331,7 +363,7 @@ class AddressForm(wx.Panel):
         self.deleteB.Enable()
 
     def disableDeleteButton(self):
-            self.deleteB.Disable()
+        self.deleteB.Disable()
 
     def getTypeString(self, idx):
         if idx < 0:
@@ -339,43 +371,12 @@ class AddressForm(wx.Panel):
         else:
             return unicode(self.types[idx])
 
-
     def reset(self):
         """Just to make it more readable or understandable
         """
         for id in AMI.getIDs():
             self.setValue(id, "")
 
-    def addEntry(self):
-        self.emailListCtrl.appendRow( address = self.ec.GetValue(), 
-                                      type = self.getTypeString(self.tc.GetSelection()),
-                                      label = self.lc.GetValue(), 
-                                      primary = self.cc.GetValue()
-                                    )
-    def updateEntry(self):
-        self.emailListCtrl.updateRow( idx = self.idx, 
-                                      address = self.ec.GetValue(),  
-                                      type = self.getTypeString(self.tc.GetSelection()),
-                                      label = self.lc.GetValue(), 
-                                      primary = self.cc.GetValue()
-                                    )
-
-    def onAddOrUpdate(self, event):
-        """Adds a new entry or updates an existing one
-        """
-
-        if self.idx < 0:
-            log.debug("Add new entry")
-            self.addEntry()
-            self.reset()
-        else:
-            log.debug("Update existing entry")
-            self.updateEntry()
-
-    def onDelete(self, event):
-        if self.idx >= 0:
-            self.emailListCtrl.deleteRow(self.idx)
-            self.reset()
         
 
 class AddressEditor(wx.Panel):
@@ -394,6 +395,7 @@ class AddressEditor(wx.Panel):
 
         # Safes the index of the current selected list item or -1 if
         # none is selected
+        self.idx = -1 
 
         self.sizer = wx.FlexGridSizer(rows = 2, vgap=6, hgap=6)
 
@@ -414,8 +416,8 @@ class AddressEditor(wx.Panel):
     def bindEvents(self):
         self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.onItemSelected, self.addressListCtrl)
         self.Bind(wx.EVT_LIST_ITEM_DESELECTED, self.onItemDeselected, self.addressListCtrl)
-        # self.Bind(wx.EVT_BUTTON, self.onAddOrUpdate, self.updateB)
-        # self.Bind(wx.EVT_BUTTON, self.onDelete, self.deleteB)
+        self.Bind(wx.EVT_BUTTON, self.onAddOrUpdate, self.addressForm.updateB)
+        self.Bind(wx.EVT_BUTTON, self.onDelete, self.addressForm.deleteB)
 
 
     def addAddressListCtrl(self, id=-1):
@@ -446,32 +448,45 @@ class AddressEditor(wx.Panel):
             self.addressListCtrl.appendRow( address=e )
  
     def onItemSelected(self, event):
-        item = event.GetItem()
-        idx = event.GetIndex()
-        log.debug("Selected Item  - %s" % item.GetText())
-        log.debug("Item Attribute - %s" % item.GetAttributes())
-        log.debug("Number of cols - %d" % self.addressListCtrl.GetColumnCount())
+        self.idx = event.GetIndex()
         for ci in range( 0, (self.addressListCtrl.GetColumnCount()) ):
-            log.debug("Select %s - %s " % (
-                            self.addressListCtrl.getColId(ci), 
-                            self.addressListCtrl.getColumnText(idx, ci)))
             self.addressForm.setValue( self.addressListCtrl.getColId(ci), 
-                                       self.addressListCtrl.getColumnText(idx, ci))
+                                       self.addressListCtrl.getColumnText(self.idx, ci))
 
         self.addressForm.setButtonLabelUpdate()
         self.addressForm.enableDeleteButton()
 
+    def onAddOrUpdate(self, event):
+        """Adds a new entry or updates an existing one
+        """
+        d = self.addressForm.getValues()
+        log.debug("form: %s" % str(d))
+
+        if self.idx < 0:
+            log.debug("Add new entry")
+            self.addressListCtrl.addRow(d)
+            self.addressForm.reset()
+        else:
+            log.debug("Update existing entry")
+            self.addressListCtrl.updateRow(self.idx, d)
+
     def onItemDeselected(self, event):
+        self.idx=-1
         self.addressForm.reset()
         self.addressForm.setButtonLabelAdd()
         self.addressForm.disableDeleteButton()
+
+    def onDelete(self, event):
+        self.addressListCtrl.deleteRow(self.idx)
+        self.addressForm.reset()
+        self.idx=-1
 
 
     def saveChanges(self):
         """Saves changes made to emails.
         """
         emails = []
-        idx = -1
+        self.idx = -1
         while True:
             idx = self.emailListCtrl.GetNextItem(idx, wx.LIST_NEXT_ALL)
             if idx != -1:
