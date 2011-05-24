@@ -37,11 +37,11 @@ _PREFIX_ = "%s-" % _PNAME_
 # the format of the json should be a list of tuples where each tuple
 # has the following format:
 # (filename, src, exe)
-# path/to/file relative to the the package base directory
+# path/to/file relative to the package base directory
 # src = true/false depending, if it should be included to the src package
 # exe = true/false depending, if it should be included to the executable package
 #
-# Mapping of indeces
+# Mapping of indices
 I_FN=0
 I_SRC=1
 I_EXE=2
