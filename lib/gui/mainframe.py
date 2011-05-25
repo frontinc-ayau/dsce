@@ -37,7 +37,7 @@ from simplesearchctrl import SimpleSearchCtrl
 class MainFrame(wx.Frame):
     def __init__(self, parent, id=-1, title="Domain Shared Contacts Editor", ico=None,
                 pos = wx.DefaultPosition,
-                size= (700,500),
+                size= (950,500),
                 style = wx.DEFAULT_FRAME_STYLE | wx.SUNKEN_BORDER | wx.CLIP_CHILDREN):
         """Setup and configure the main UI
         """
@@ -48,7 +48,7 @@ class MainFrame(wx.Frame):
         self._mgr = wx.aui.AuiManager()
         self._mgr.SetManagedWindow(self)
 
-        self.SetMinSize(wx.Size(700, 500))
+        self.SetMinSize(wx.Size(900, 500))
 
         if ico:
             self.SetIcon(ico)
