@@ -25,6 +25,7 @@ from domaindata.metadata import AMI
 from domaindata.metadata import REL_LABEL
 from domaindata.metadata import MAIL_CLASS
 from domaindata.metadata import MAIL_USAGE
+import country
 
 
 
@@ -35,7 +36,7 @@ def getPA(spa):
 
 def getPR(spa):
     if spa.primary:
-        return primary
+        return spa.primary
     return None
 
 def getST(spa):
@@ -105,32 +106,38 @@ def getSR(spa):
 
 def getUS(spa):
     if spa.usage:
-        return MAIL_USAGE[spa.usage.text] # Do not change
+        return MAIL_USAGE[spa.usage] # Do not change
     return None
 
 def setPA(spa, v):
     """spa = StructuredPostalAddress(), v = value"""
-    spa.formatted_address.text = v
+    spa.formatted_address = gdata.data.FormattedAddress(text=v)
 
 def setPR(spa, v):
     """spa = StructuredPostalAddress(), v = value"""
-    spa.primary=v
+    if v == True or v == "true" or v == "yes":
+        spa.primary = "true"
 
 def setST(spa, v):
     """spa = StructuredPostalAddress(), v = value"""
-    spa.street.text=v
+    spa.street = gdata.data.Street(text=v)
 
 def setPC(spa, v):
     """spa = StructuredPostalAddress(), v = value"""
-    spa.postcode.text=v
+    spa.postcode = gdata.data.Postcode(text=v)
 
 def setCI(spa, v):
     """spa = StructuredPostalAddress(), v = value"""
-    spa.city.text=v
+    spa.city = gdata.data.City(text=v)
 
 def setCO(spa, v):
     """spa = StructuredPostalAddress(), v = value"""
-    spa.country.text=v
+    v = v.split()
+    if len(v) == 2:
+        spa.country = country.Country(text=v[1])
+        spa.country.code = v[0]
+    else:
+        spa.country = country.Country(text=v[0])
 
 def setTY(spa, v):
     """spa = StructuredPostalAddress(), v = value"""
@@ -142,11 +149,11 @@ def setLA(spa, v):
 
 def setAG(spa, v):
     """spa = StructuredPostalAddress(), v = value"""
-    spa.agent.text=v
+    spa.agent = gdata.data.Agent(text=v)
 
 def setHN(spa, v):
     """spa = StructuredPostalAddress(), v = value"""
-    spa.house_name.text=v
+    spa.house_name = gdata.data.HouseName(text=v)
 
 def setMC(spa, v):
     """spa = StructuredPostalAddress(), v = value"""
@@ -154,19 +161,19 @@ def setMC(spa, v):
 
 def setNH(spa, v):
     """spa = StructuredPostalAddress(), v = value"""
-    spa.neighborhood.text=v
+    spa.neighborhood = gdata.data.Neighborhood(text=v)
 
 def setPO(spa, v):
     """spa = StructuredPostalAddress(), v = value"""
-    spa.po_box.text=v
+    spa.po_box = gdata.data.PoBox(text=v)
 
 def setRE(spa, v):
     """spa = StructuredPostalAddress(), v = value"""
-    spa.region.text=v
+    spa.region = gdata.data.Region(text=v)
 
 def setSR(spa, v):
     """spa = StructuredPostalAddress(), v = value"""
-    spa.subregion.text=v
+    spa.subregion = gdata.data.Subregion(text=v)
 
 def setUS(spa, v):
     """spa = StructuredPostalAddress(), v = value"""
@@ -183,6 +190,10 @@ def getValue( spa, id ):
     """
     return eval("get%s(spa)" % id)
 
+def setValue( spa, id, v):
+    """The sets the value of the passed id to the StructuredPostalAddress"""
+    eval("set%s(spa, v)" % id)
+
 def getSPAdict( spa ):
     """Returns the StructuredPostalAddress as dictionary where the 
     keys are the metadata.AddressMeta.id with the corresponding value
@@ -197,6 +208,12 @@ def getSPAdict( spa ):
             d[a.id] = unicode(v)
     return d
 
+def getSPAfromDict(d):
+    spa = gdata.data.StructuredPostalAddress()
+    for id, v in d.iteritems():
+        setValue(spa, id, v)
+    return spa
+
 
 def getFirstString( spa ):
     """Returns either formatted address or street.
@@ -207,5 +224,5 @@ def getFirstString( spa ):
     if getPA(spa):  
         return getPA(spa)
     else:
-        return getST()
+        return getST(spa)
     

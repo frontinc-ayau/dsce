@@ -42,6 +42,8 @@ from domaindata.metadata import AMI
 
 from gui.countrychoice import CountryChoice
 
+import gdata.data
+
 
 
 class AddressListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
@@ -131,6 +133,16 @@ class AddressListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
     def getColumnText(self, idx, col):
         item = self.GetItem(idx, col)
         return item.GetText()
+
+    def getAsDict(self, idx):
+        """Returns the list control row as a dictionary {ID:Value}.
+        Zero values are not included."""
+        d = {}
+        for id, i in self.attridx.iteritems():
+            v = self.getColumnText(idx, i)
+            if len(v) >0:
+                d[id] = v
+        return d
 
 
 class AddressForm(wx.Panel):
@@ -392,6 +404,7 @@ class AddressEditor(wx.Panel):
         self.gridTable = table
         self.row = row
         self.col = col
+        self.hasChanged = False # set to true if add, update or delete has been invoked
 
         # Safes the index of the current selected list item or -1 if
         # none is selected
@@ -469,6 +482,7 @@ class AddressEditor(wx.Panel):
         else:
             log.debug("Update existing entry")
             self.addressListCtrl.updateRow(self.idx, d)
+        self.hasChanged = True
 
     def onItemDeselected(self, event):
         self.idx=-1
@@ -480,28 +494,33 @@ class AddressEditor(wx.Panel):
         self.addressListCtrl.deleteRow(self.idx)
         self.addressForm.reset()
         self.idx=-1
+        self.hasChanged = True
 
+    def getSPAfromListItem(self, item):
+        """Converts a address list item into a StructurePostalAddress object
+        and returns it."""
+        log.debug("Item passed %s" % str(item))
+        self.addressListCtrl.getAsDict(item)
+        return spaf.getSPAfromDict( self.addressListCtrl.getAsDict(item) )
 
     def saveChanges(self):
-        """Saves changes made to emails.
+        """Saves changes made to postal_addresses.
         """
-        emails = []
-        self.idx = -1
-        while True:
-            idx = self.emailListCtrl.GetNextItem(idx, wx.LIST_NEXT_ALL)
-            if idx != -1:
+        addresses = []
+        item = -1
 
-                e = self.emailListCtrl.getColumnText(idx, COLIDX_EMAIL)
-                t = REL_LABEL.getKey(self.emailListCtrl.getColumnText(idx, COLIDX_TYPE))
-                l = self.emailListCtrl.getColumnText(idx, COLIDX_LABEL)
-                p = "true" if (self.emailListCtrl.getColumnText(idx, COLIDX_PRIMARY) == "Yes") else "false"
+        if self.hasChanged:
 
-                emails.append([e,t,l,p])
-            else:
-                break
+            while True:
+                item = self.addressListCtrl.GetNextItem(item, wx.LIST_NEXT_ALL)
+                if item != -1:
+                    addresses.append( self.getSPAfromListItem(item) )
+                else:
+                    break
 
-        self.gridTable.SetValue(self.row, self.col, emails)
+            self.gridTable.SetValue(self.row, self.col, addresses)
             
+
 
 class AddressEditDialog(wx.Dialog):
 
@@ -541,7 +560,7 @@ class AddressEditDialog(wx.Dialog):
 
 
     def onOk(self, event):
-        # self.addressEd.saveChanges()
+        self.addressEd.saveChanges()
         self.Destroy()
 
        

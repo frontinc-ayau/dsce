@@ -167,17 +167,16 @@ class DomainContact(object):
 
         return n
 
-    def setPostalAddress(self, text, idx=0):
-        if len(self.entry.postal_address) == 0:
-            pa = gdata.data.StructuredPostalAddress(text)
-            self.entry.structured_postal_address.append(pa)
+    def setPostalAddress(self, value, idx=-1):
+        if idx >= 0:
+            self.entry.structured_postal_address[idx]=value
         else:
-            self.entry.postal_address[idx].structured_postal_address.formatted_address.text = text
-            self.setActionUpdate()
+            self.entry.structured_postal_address = value
+        self.setActionUpdate()
  
     def getPostalAddress(self, idx=-1):
-        """Returns either the email at the position of idx or 
-        default the entry.email array.
+        """Returns either the address at the position of idx or 
+        default the entry.structured_postal_address array.
         """
         if idx >= 0:
             try:
