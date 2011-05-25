@@ -20,6 +20,7 @@
 
 import gdata.contacts.data
 import gdata.data
+import logging
 
 class _GOBAL_(object):
     pass
@@ -174,6 +175,7 @@ class DomainContact(object):
             self.entry.structured_postal_address = value
         self.setActionUpdate()
  
+
     def getPostalAddress(self, idx=-1):
         """Returns either the address at the position of idx or 
         default the entry.structured_postal_address array.

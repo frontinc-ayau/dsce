@@ -36,7 +36,10 @@ def getPA(spa):
 
 def getPR(spa):
     if spa.primary:
-        return spa.primary
+        if spa.primary == "true":
+            return "yes"
+        else:
+            return "no"
     return None
 
 def getST(spa):
@@ -178,6 +181,7 @@ def setSR(spa, v):
 def setUS(spa, v):
     """spa = StructuredPostalAddress(), v = value"""
     spa.usage = MAIL_USAGE.getKey(v)
+    logging.debug("Set Mail usage: %s" % str(spa.usage))
 
 def getValue( spa, id ):
     """Returns the value of the spa attribute that corresponds to id.

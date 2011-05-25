@@ -55,7 +55,7 @@ class AddressListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         # Attribute index is used to keep track of what column holds what 
         # postal address information.
         # key = AddressMeta.id, value = column index
-        self.attridx={} # key = AddressMeta.id, value = column index
+        self.attridx={} 
 
         self._insertHeader()
         
@@ -74,27 +74,6 @@ class AddressListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
                 return id
         raise BaseException("Columng indes %d does not exist!" % ci)
 
-    def _setPrimary(self, idx, primary):
-        """This method takes also care that only one primary address
-        address exists. If this behaviour is not wanted, change it 
-        here.
-        """
-        if primary=="Yes" or primary == True:
-            i = -1
-            while True:
-                i = self.GetNextItem(i, wx.LIST_NEXT_ALL)
-                if i != -1:
-                    if i == idx:
-                        log.debug("In set primary idx %d - i %d" % (idx, i))
-                        log.debug("SET YES")
-                        self.SetStringItem(i, COLIDX_PRIMARY, "Yes")
-                    else:
-                        log.debug("SET NO")
-                        self.SetStringItem(i, COLIDX_PRIMARY, "No")
-                else:
-                    break
-        else:
-            self.SetStringItem(idx, COLIDX_PRIMARY, "No")
 
     def _getAddressMeataId(self, colidx):
         """Gets the AddressMeta.id on passed column index. 
@@ -310,7 +289,7 @@ class AddressForm(wx.Panel):
         elif id == "SR": self.sr.SetValue(unicode(v))
         elif id == "CO": self.co.setValue(v)
         elif id == "PR":
-            if (v and v == "true"):
+            if (v and (v == "true" or v == "yes") ):
                 self.pr.SetValue(True)
             else:
                 self.pr.SetValue(False)
@@ -352,9 +331,9 @@ class AddressForm(wx.Panel):
         if self.ty.GetCurrentSelection() >= 0:
             d["TY"] = self.types[self.ty.GetCurrentSelection()]
         if self.pr.GetValue():
-            d["PR"] = "true"
+            d["PR"] = "yes"
         else:
-            d["PR"] = "false"
+            d["PR"] = "no"
         if self.mc.GetCurrentSelection() >= 0:
             d["MC"] = self.mailClasses[self.mc.GetCurrentSelection()]
         if self.us.GetCurrentSelection() >= 0:
