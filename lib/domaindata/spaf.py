@@ -39,7 +39,7 @@ def getPR(spa):
         if spa.primary == "true":
             return "yes"
         else:
-            return "no"
+            return ""
     return None
 
 def getST(spa):

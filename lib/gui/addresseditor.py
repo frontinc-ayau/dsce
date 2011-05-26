@@ -123,6 +123,14 @@ class AddressListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
                 d[id] = v
         return d
 
+    def setColumnValue(self, idx, id, val):
+        """Set the column referenced by id to the value in the row
+        with the index idx.
+        """
+        self.SetStringItem(idx, self.attridx[id], val)
+        
+        
+
 
 class AddressForm(wx.Panel):
     def __init__(self, *args, **kwargs):
@@ -333,7 +341,7 @@ class AddressForm(wx.Panel):
         if self.pr.GetValue():
             d["PR"] = "yes"
         else:
-            d["PR"] = "no"
+            d["PR"] = ""
         if self.mc.GetCurrentSelection() >= 0:
             d["MC"] = self.mailClasses[self.mc.GetCurrentSelection()]
         if self.us.GetCurrentSelection() >= 0:
@@ -448,11 +456,26 @@ class AddressEditor(wx.Panel):
         self.addressForm.setButtonLabelUpdate()
         self.addressForm.enableDeleteButton()
 
+    def applyEditRules(self, d):
+        """Check and apply rules that needs to be followed before updating or adding
+        an entry"""
+        item = -1
+        if d.has_key("PR"):
+            if d["PR"] == 'yes':
+                while True:
+                    item = self.addressListCtrl.GetNextItem(item, wx.LIST_NEXT_ALL)
+                    if item != -1:
+                        self.addressListCtrl.setColumnValue(item, "PR", "")
+                    else:
+                        break
+
     def onAddOrUpdate(self, event):
         """Adds a new entry or updates an existing one
         """
         d = self.addressForm.getValues()
         log.debug("form: %s" % str(d))
+
+        self.applyEditRules(d)
 
         if self.idx < 0:
             log.debug("Add new entry")
