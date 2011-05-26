@@ -45,7 +45,6 @@ from gui.countrychoice import CountryChoice
 import gdata.data
 
 
-
 class AddressListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
     def __init__(self, parent, ID, pos=wx.DefaultPosition,
                  size=wx.DefaultSize, style=wx.LIST_AUTOSIZE):
