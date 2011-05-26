@@ -37,7 +37,7 @@ from simplesearchctrl import SimpleSearchCtrl
 class MainFrame(wx.Frame):
     def __init__(self, parent, id=-1, title="Domain Shared Contacts Editor", ico=None,
                 pos = wx.DefaultPosition,
-                size= (950,500),
+                size= (950,600),
                 style = wx.DEFAULT_FRAME_STYLE | wx.SUNKEN_BORDER | wx.CLIP_CHILDREN):
         """Setup and configure the main UI
         """
