@@ -44,7 +44,6 @@
     ["lib/gui/inprogress.py", true, false],
     ["lib/gui/loginview.py", true, false],
     ["lib/gui/mainframe.py", true, false],
-    ["lib/gui/multilinecelleditor.py", true, false],
     ["lib/gui/proxysettings.py", true, false],
     ["lib/gui/simplesearchctrl.py", true, false],
     ["lib/gui/__init__.py", true, false],
