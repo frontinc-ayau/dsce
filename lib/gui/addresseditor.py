@@ -268,7 +268,7 @@ class AddressForm(wx.Panel):
         bBox.Add(self.deleteB)
         bBox.Add(self.updateB)
 
-        formSizer.Add(bBox, row=5, col=15, flag=wx.ALL | wx.EXPAND)
+        formSizer.Add(bBox, row=5, col=15, flag=wx.ALL | wx.ALIGN_RIGHT)
         self.SetSizer(formSizer)
 
 
