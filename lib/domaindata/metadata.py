@@ -136,6 +136,25 @@ def get_col_idx(attname):
 from gdata.data import WORK_REL
 from gdata.data import HOME_REL
 from gdata.data import OTHER_REL
+# phone number rels
+from gdata.data import ASSISTANT_REL
+from gdata.data import CALLBACK_REL
+from gdata.data import CAR_REL
+from gdata.data import COMPANY_MAIN_REL
+from gdata.data import FAX_REL
+from gdata.data import HOME_FAX_REL
+from gdata.data import ISDN_REL
+from gdata.data import MAIN_REL
+from gdata.data import MOBILE_REL
+from gdata.data import OTHER_FAX_REL
+from gdata.data import PAGER_REL
+from gdata.data import RADIO_REL
+from gdata.data import TELEX_REL
+from gdata.data import TTL_TDD_REL
+from gdata.data import WORK_FAX_REL
+from gdata.data import WORK_MOBILE_REL
+from gdata.data import WORK_PAGER_REL
+
 
 class _DICT(dict):
     def __init__(self, *args, **kwargs):
@@ -171,10 +190,11 @@ MAIL_USAGE[GENERAL_ADDRESS]="genral"
 MAIL_USAGE[LOCAL_ADDRESS]="local"
 
 
+# ##########################################################################
 # Postal address meta information
 
 
-class AddressMeta(object):
+class MetaInfo(object):
     def __init__(self, id, label, help):
         """id  ... unique identifier to be used throughout this dialogue
         label  ... label to be displayed
@@ -184,9 +204,9 @@ class AddressMeta(object):
         self.label = label
         self.help = help
 
-class AddressMetaList(list):
+class MetaInfoList(list):
     def get(self, id):
-        """Returns the AddressMeta object of passed id, else a BaseException
+        """Returns the MetaInfo object of passed id, else a BaseException
         will be raised.
         """
         for a in self:
@@ -198,11 +218,6 @@ class AddressMetaList(list):
         """Returns the label of passed id, else a BaseExceptio will be raised.
         """
         return self.get(id).label
-
-    def getGetter(self, id):
-        """Returns the getter of passed id, else a BaseExceptio will be raised.
-        """
-        return self.get(id).getter
 
     def getHelp(self, id):
         """Returns the label of passed id, else a BaseExceptio will be raised.
@@ -217,68 +232,68 @@ class AddressMetaList(list):
             ids.append(a.id)
         return ids
 
-AMI=AddressMetaList()
+AMI=MetaInfoList()
 
 # as an id a two character abbreviation is used
-AMI.append(AddressMeta(
+AMI.append(MetaInfo(
                         "PA",
                         "Postal Address",
                         """The full, unstructured postal address."""
                         ))
 
-AMI.append(AddressMeta(
+AMI.append(MetaInfo(
                         "PR",
                         "Primary",
                         """Specifies the address as primary. Default value is false."""
                         ))
 
-AMI.append(AddressMeta(
+AMI.append(MetaInfo(
                         "ST",
                         "Street",
                         """Can be street, avenue, road, etc. This element also includes the
 house number and room/apartment/flat/floor number."""
                         ))
 
-AMI.append(AddressMeta(
+AMI.append(MetaInfo(
                         "PC",
                         "Postal Code",
                         """Postal code. Usually country-wide, but sometimes specific to the
 city (e.g. "2" in "Dublin 2, Ireland" addresses)."""
                         ))
 
-AMI.append(AddressMeta(
+AMI.append(MetaInfo(
                         "CI",
                         "City",
                         """Can be city, village, town, borough, etc. This is the postal town and
 not necessarily the place of residence or place of business."""
                         ))
 
-AMI.append(AddressMeta(
+AMI.append(MetaInfo(
                         "CO",
                         "Country",
                         """The name or code of the country."""
                         ))
 
-AMI.append(AddressMeta(
+AMI.append(MetaInfo(
                         "TY",
                         "Type",
                         """Type of the address. Unless specified work type is assumed."""
                         ))
 
-AMI.append(AddressMeta(
+AMI.append(MetaInfo(
                         "LA",
                         "Label",
                         """Label"""
                         ))
 
-AMI.append(AddressMeta(
+AMI.append(MetaInfo(
                         "AG",
                         "Agent",
                         """The agent who actually receives the mail. Used in work addresses. 
 Also for 'in care of' or 'c/o'."""
                         ))
 
-AMI.append(AddressMeta(
+AMI.append(MetaInfo(
                         "HN",
                         "House Name",
                         """Used in places where houses or buildings have names (and not
@@ -286,13 +301,13 @@ necessarily numbers), eg. "The Pillars"."""
                         ))
 
 
-AMI.append(AddressMeta(
+AMI.append(MetaInfo(
                         "MC",
                         "Mail Class",
                         """Classes of mail (letters, parcels) accepted at the address. Unless specified both is assumed."""
                         ))
 
-AMI.append(AddressMeta(
+AMI.append(MetaInfo(
                         "NH",
                         "Neighbourhood",
                         """This is used to disambiguate a street address when a city contains more
@@ -301,21 +316,21 @@ mail is routed through a larger postal town. In China it could be a
 county or a minor city."""
                         ))
 
-AMI.append(AddressMeta(
+AMI.append(MetaInfo(
                         "PO",
                         "P.O. Box",
                         """Covers actual P.O. boxes, drawers, locked bags, etc. This is usually
 but not always mutually exclusive with street."""
                         ))
 
-AMI.append(AddressMeta(
+AMI.append(MetaInfo(
                         "RE",
                         "Region",
                         """A state, province, county (in Ireland), Land (in Germany),
 departement (in France), etc."""
                         ))
 
-AMI.append(AddressMeta(
+AMI.append(MetaInfo(
                         "SR",
                         "Subregion",
                         """Handles administrative districts such as U.S. or U.K. counties that are
@@ -323,7 +338,7 @@ not used for mail addressing purposes. Subregion is not intended for
 delivery addresses."""
                         ))
 
-AMI.append(AddressMeta(
+AMI.append(MetaInfo(
                         "US",
                         "Usage",
                         """The context in which this address can be used. Local addresses may differ in 
@@ -331,3 +346,59 @@ layout from general addresses, and frequently use local script (as opposed to La
 as well, though local script is allowed in general addresses. Unless specified general usage is 
 assumed."""
                         ))
+
+
+# ##########################################################################
+# Phone number meta information
+
+# Mapping of REL and name to be displayed.
+PHONE_TYPE = _DICT()
+PHONE_TYPE[ASSISTANT_REL]    = "assistant"
+PHONE_TYPE[CAR_REL]          = "car"
+PHONE_TYPE[COMPANY_MAIN_REL] = "company main"
+PHONE_TYPE[FAX_REL]          = "fax"
+PHONE_TYPE[HOME_REL]         = "home"
+PHONE_TYPE[HOME_FAX_REL]     = "fax home"
+PHONE_TYPE[ISDN_REL]         = "isdn"
+PHONE_TYPE[MAIN_REL]         = "main"
+PHONE_TYPE[MOBILE_REL]       = "mobile"
+PHONE_TYPE[OTHER_REL]        = "other"
+PHONE_TYPE[OTHER_FAX_REL]    = "fax other"
+PHONE_TYPE[PAGER_REL]        = "pager"
+PHONE_TYPE[RADIO_REL]        = "radio"
+PHONE_TYPE[TELEX_REL]        = "telex"
+PHONE_TYPE[TTL_TDD_REL]      = "tty/ttd"
+PHONE_TYPE[WORK_REL]         = "work"
+PHONE_TYPE[WORK_FAX_REL]     = "fax work"
+PHONE_TYPE[WORK_MOBILE_REL]  = "mobile work"
+PHONE_TYPE[WORK_PAGER_REL]   = "pager work"
+
+# Phone number attributes ids
+PID_NUMBER  = 0
+PID_TYPE    = 2
+PID_LABEL   = 3
+PID_PRIMARY = 4
+PID_URI     = 5
+
+PMI = MetaInfoList()
+PMI.append(MetaInfo( PID_NUMBER, 
+                     "Phone Number", 
+                     """Human-readable phone number; may be in any telephone number format."""
+                    ))
+PMI.append(MetaInfo( PID_TYPE, 
+                     "Type", 
+                     """A value that identifies the type of phone number."""
+                    ))
+PMI.append(MetaInfo( PID_LABEL, 
+                     "Label", 
+                     """A simple string value used to name this phone number. In most cases it is not necessary as type uniquely identifies a number."""
+                    ))
+PMI.append(MetaInfo( PID_PRIMARY, 
+                     "Primary", 
+                     """When multiple phone number extensions appear in a contact kind, indicates which is primary."""
+                    ))
+PMI.append(MetaInfo( PID_URI, 
+                     "URI", 
+                     """An optional "tel URI" used to represent the number in a formal way, useful for programmatic access, such as a VoIP/PSTN bridge.""" 
+                    ))
+
