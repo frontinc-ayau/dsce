@@ -26,6 +26,7 @@ from emaileditor import EmailEditDialog
 from emailcellrenderer import EmailCellRenderer
 from addresseditor import AddressEditDialog
 from addressrenderer import AddressCellRenderer
+from phonerenderer import PhoneCellRenderer
 
 import logging
 
@@ -70,6 +71,9 @@ class GridView(wx.grid.Grid):
         attr.SetRenderer(AddressCellRenderer())
         self.SetColAttr(metadata.get_col_idx("postal_address"), attr)
         
+        attr = wx.grid.GridCellAttr()
+        attr.SetRenderer(PhoneCellRenderer())
+        self.SetColAttr(metadata.get_col_idx("phone"), attr)
 
     def setEditors(self):
         attr = wx.grid.GridCellAttr()

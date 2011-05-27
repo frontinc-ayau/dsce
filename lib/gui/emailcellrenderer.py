@@ -80,11 +80,11 @@ class EmailCellRenderer(wx.grid.PyGridCellRenderer):
             if e.address:   
                 emails +=  unicode(e.address)+u" "
             if e.rel:       
-                emails += unicode(REL_LABEL[e.rel])+u" "
+                emails += u"("+unicode(REL_LABEL[e.rel])+u") "
             if e.label:     
-                emails += unicode(e.label)+u" "
+                emails += u"("+unicode(e.label)+u") "
             if e.primary and e.primary == "true": 
-                emails += u"primary"
+                emails += u"(primary)"
             emails += self._DELIMITER
 
         return emails
