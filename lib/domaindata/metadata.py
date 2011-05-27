@@ -30,7 +30,7 @@ _META_DATA_=[ ( "uid", "UID", "getUid()", None, False, False),
               ( "suffix", "Suffix", "c.getNameSuffix()", "c.setNameSuffix(value)", True, True),
               ( "full_name", "Full Name", "c.getFullName()", "c.setFullName(value)", True, True),
               ( "email", "Email", "c.getEmail()", "c.setEmails(value)", True, True),
-              ( "phone", "Phone", "c.getPhoneNumber(0)", "c.updatePhoneNumber(value)", True, False),
+              ( "phone", "Phone", "c.getPhoneNumber()", "c.setPhoneNumber(value)", True, True),
               ( "postal_address", "Address", "c.getPostalAddress()", "c.setPostalAddress(value)", True, True),
               ( "action", "Action", "c.getAction()", "c.setActionUpdate()", False, False)
             ]

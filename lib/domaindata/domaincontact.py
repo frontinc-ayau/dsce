@@ -307,12 +307,6 @@ class DomainContact(object):
         self.setActionUpdate()
 
 
-    def addPhoneNumber(self, number, primary="false", rel=gdata.data.WORK_REL):
-        self.entry.phone_number.append(gdata.data.PhoneNumber(text=number.strip(),
-                                                              primary=primary, 
-                                                              rel=rel))
-        self.setActionUpdate()
-
 
     def getPhoneNumber(self,idx=-1):
         """Returns either the email at the position of idx or default
@@ -320,54 +314,18 @@ class DomainContact(object):
         """
         if idx >= 0:
             try:
-                return self.entry.phone_number[idx].text
+                return self.entry.phone_number[idx]
             except:
                 return None
         else:
             return self.entry.phone_number
 
-    def deletePhoneNumber(self, number):
-        """Deletes any phone number entry that is associated with the passed 
-        phone number. 
-        It returns the number of deleted entries.
-        """
-        deleteCount=0
-        p_numbers = self.entry.phone_number[:]
-        p_number = number.strip()
-
-        for p in p_numbers:
-            if p.text == p_number:
-                self.entry.phone_number.remove(p)
-                deleteCount += 1
-        
-        self.setActionUpdate()
-        return deleteCount
-
-    def updatePhoneNumber(self, old, new):
-        """Replaces the old PhoneNumber.text string with the new phone string. If 'old' does not
-        exist, an BaseException will be raised.
-        """
-        nrOfPhoneNumbers = len(self.entry.phone_number)
-        updateCount = 0
-        old = old.strip()
-        new = new.strip()
-        
-
-        if nrOfPhoneNumbers == 0:
-            raise BaseException("There are no phone numbers that can be updated")
-
-        i=0
-        while i < nrOfPhoneNumbers:
-            if self.entry.phone_number[i].text == old:
-                self.entry.phone_number[i].text = new
-                updateCount += 1
-            i += 1
-
-        if updateCount == 0:
-            raise BaseException("Phone number %s does not exist" % old)
+    def setPhoneNumber(self, value, idx=-1):
+        if idx >= 0:
+            self.entry.phone_number[idx]=value
         else:
-            self.setActionUpdate()
-            return updateCount
+            self.entry.phone_number = value
+        self.setActionUpdate()
 
 
 # Tests
