@@ -74,7 +74,7 @@ class DSCEConfiguation(Configuration):
         """
 
         if not os.path.isfile(filename):
-            raise IOError("File %s does not exist or is not a regular file!")
+            raise IOError("File %s does not exist or is not a regular file!" % os.path.abspath(filename))
 
         co = None
 
