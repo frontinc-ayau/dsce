@@ -27,6 +27,7 @@ from emailcellrenderer import EmailCellRenderer
 from addresseditor import AddressEditDialog
 from addressrenderer import AddressCellRenderer
 from phonerenderer import PhoneCellRenderer
+from phoneeditor import PhoneEditDialog
 
 import logging
 
@@ -55,6 +56,9 @@ class GridView(wx.grid.Grid):
             evt.Veto()
         elif c == metadata.get_col_idx("postal_address"):
             AddressEditDialog(self, -1, self.table, evt.GetRow(), c)
+            evt.Veto()
+        elif c == metadata.get_col_idx("phone"):
+            PhoneEditDialog(self, -1, self.table, evt.GetRow(), c)
             evt.Veto()
         evt.Skip()
 
