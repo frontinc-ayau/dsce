@@ -33,6 +33,7 @@
     ["lib/domaindata/loginuser.py", true, false],
     ["lib/domaindata/metadata.py", true, false],
     ["lib/domaindata/proxysettings.py", true, false],
+    ["lib/domaindata/pnf.py", true, false],
     ["lib/domaindata/spaf.py", true, false],
     ["lib/domaindata/__init__.py", true, false],
     ["lib/gui/addresseditor.py", true, false],
