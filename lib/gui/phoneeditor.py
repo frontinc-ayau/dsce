@@ -31,6 +31,8 @@ from domaindata.metadata import PID_URI
 from domaindata.metadata import PMI
 from domaindata.metadata import PHONE_TYPE
 
+from domaindata import pnf
+
 
 import gdata.data
 
@@ -69,13 +71,14 @@ class PhoneListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         d  ... phone number as dictionary {PID,VAL} wher PID is one of the
         PID_* defined in domaindata.metadata.py.
         """
-        pass
+        for i, v in d.iteritems():
+            self.SetStringItem(idx, self.attridx[i], v)
         
 
     def addRow(self, p):
         """p ... gdata.data.PhoneNumber object"""
         idx = self.InsertStringItem(sys.maxint, "")
-        self.updateRow(idx, p)
+        self.updateRow(idx, pnf.getAsDict(p))
 
 
     def deleteRow(self, idx):
