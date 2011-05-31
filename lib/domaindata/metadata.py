@@ -375,10 +375,10 @@ PHONE_TYPE[WORK_PAGER_REL]   = "pager work"
 
 # Phone number attributes ids
 PID_NUMBER  = 0
-PID_TYPE    = 2
-PID_LABEL   = 3
-PID_PRIMARY = 4
-PID_URI     = 5
+PID_TYPE    = 1
+PID_LABEL   = 2
+PID_PRIMARY = 3
+PID_URI     = 4
 
 PMI = MetaInfoList()
 PMI.append(MetaInfo( PID_NUMBER, 

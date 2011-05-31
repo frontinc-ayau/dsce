@@ -73,26 +73,12 @@ class AddressListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
                 return id
         raise BaseException("Columng indes %d does not exist!" % ci)
 
-
-    def _getAddressMeataId(self, colidx):
-        """Gets the AddressMeta.id on passed column index. 
-        If the colidx is not found and BaseException is raised"""
-        for id, idx in self.attridx.iteritems():
-            if idx == colidx:
-                return id
-        raise BaseException("Unable to find index %d in address list control" % colidx)
-
-
+    # XXX Get rid of either appendRow or addRow
     def appendRow(self, address):
         """address is one gdata.data.StructuredPostalAddress.
         """
-        id0 = self._getAddressMeataId(0)
-
         address= spaf.getSPAdict(address)
-
-        idx = self.InsertStringItem(sys.maxint,"" )
-        for i, v in address.iteritems():
-            self.SetStringItem(idx, self.attridx[i], address[i])
+        self.addRow(address)
 
     def updateRow(self, idx, ad):
         """idx ... row index

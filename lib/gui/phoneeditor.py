@@ -64,25 +64,18 @@ class PhoneListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         raise BaseException("Columng indes %d does not exist!" % ci)
 
 
-    def _getPhoneMeataId(self, colidx):
-        """Gets the PhoneMeta.id on passed column index. 
-        If the colidx is not found and BaseException is raised"""
-        for id, idx in self.attridx.iteritems():
-            if idx == colidx:
-                return id
-        raise BaseException("Unable to find index %d in address list control" % colidx)
-
-
-    def appendRow(self, address):
-        pass
-
-    def updateRow(self, idx, ad):
+    def updateRow(self, idx, d):
         """idx ... row index
-        ad  ... address dictionary {ID:VAL}"""
+        d  ... phone number as dictionary {PID,VAL} wher PID is one of the
+        PID_* defined in domaindata.metadata.py.
+        """
         pass
+        
 
-    def addRow(self, ad):
-        pass
+    def addRow(self, p):
+        """p ... gdata.data.PhoneNumber object"""
+        idx = self.InsertStringItem(sys.maxint, "")
+        self.updateRow(idx, p)
 
 
     def deleteRow(self, idx):
@@ -138,22 +131,28 @@ class PhoneForm(wx.Panel):
         # formSizer = wx.FlexGridSizer(rows=3, cols=5, vgap=6, hgap=6)
         formSizer = rcsizer.RowColSizer()
         formSizer.Add(nr,           row=0, col=0, flag=wx.ALIGN_LEFT)
-        formSizer.Add(self.nr,      row=0, col=1, flag=wx.EXPAND)
-        formSizer.Add(ty,           row=0, col=2, flag=wx.ALIGN_LEFT)
-        formSizer.Add(self.ty,      row=0, col=3)
-        formSizer.Add(self.updateB, row=0, col=4, flag= wx.ALIGN_RIGHT)
+        formSizer.AddSpacer(6,6,    row=0, col=1)
+        formSizer.Add(self.nr,      row=0, col=2, flag=wx.EXPAND)
+        formSizer.AddSpacer(6,6,    row=0, col=3)
+        formSizer.Add(ty,           row=0, col=4, flag=wx.ALIGN_LEFT)
+        formSizer.AddSpacer(6,6,    row=0, col=5)
+        formSizer.Add(self.ty,      row=0, col=6)
+        formSizer.AddSpacer(6,6,    row=0, col=7)
+        formSizer.Add(self.updateB, row=0, col=8, flag= wx.ALIGN_RIGHT)
 
         formSizer.Add(la,           row=1, col=0, flag=wx.ALIGN_LEFT)
-        formSizer.Add(self.la,      row=1, col=1, flag=wx.EXPAND)
-        formSizer.Add(pr,           row=1, col=2, flag=wx.ALIGN_LEFT)
-        formSizer.Add(self.pr,      row=1, col=3, flag=wx.ALIGN_LEFT)
-        formSizer.Add(self.deleteB, row=1, col=4, flag= wx.ALIGN_LEFT)
+        formSizer.AddSpacer(6,6,    row=1, col=1)
+        formSizer.Add(self.la,      row=1, col=2, flag=wx.EXPAND)
+        formSizer.AddSpacer(6,6,    row=1, col=3)
+        formSizer.Add(pr,           row=1, col=4, flag=wx.ALIGN_LEFT)
+        formSizer.AddSpacer(6,6,    row=1, col=5)
+        formSizer.Add(self.pr,      row=1, col=6, flag=wx.ALIGN_LEFT)
+        formSizer.AddSpacer(6,6,    row=1, col=7)
+        formSizer.Add(self.deleteB, row=1, col=8, flag= wx.ALIGN_LEFT)
 
         formSizer.Add(ur,           row=2, col=0, flag=wx.ALIGN_LEFT)
-        formSizer.Add(self.ur,      row=2, col=1, flag=wx.EXPAND)
-        formSizer.AddSpacer(6,6,    row=2, col=2)
-        formSizer.AddSpacer(6,6,    row=2, col=3)
-        formSizer.AddSpacer(6,6,    row=2, col=4)
+        formSizer.AddSpacer(6,6,    row=2, col=1)
+        formSizer.Add(self.ur,      row=2, col=2, flag=wx.EXPAND)
 
         self.SetSizer(formSizer)
 
@@ -272,7 +271,7 @@ class PhoneEditor(wx.Panel):
 
         self.listCtrl = None
         self.addListCtrl()
-        # self.populate()
+        self.populate()
 
         self.form = None
         self.addForm()
@@ -316,7 +315,7 @@ class PhoneEditor(wx.Panel):
     def populate(self):
         log.debug("In populate()")
         for e in self.gridTable.GetValue(self.row, self.col):
-            self.listCtrl.appendRow( address=e )
+            self.listCtrl.addRow( e )
  
     def onItemSelected(self, event):
         self.idx = event.GetIndex()
