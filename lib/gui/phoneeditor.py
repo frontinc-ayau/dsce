@@ -45,7 +45,7 @@ class PhoneListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
 
         # Attribute index is used to keep track of what column holds what 
         # postal address information.
-        # key = AddressMeta.id, value = column index
+        # key = Meta.id, value = column index
         self.attridx={} 
 
         self._insertHeader()
@@ -76,16 +76,24 @@ class PhoneListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         
 
     def addRow(self, p):
-        """p ... gdata.data.PhoneNumber object"""
+        """p ... gdata.data.PhoneNumber object or a dict"""
+        if type(p) == gdata.data.PhoneNumber:
+            d = pnf.getAsDict(p)
+        elif type(p) == dict:
+            d = p
+        else:
+            raise BaseException("%s not supported!" % type(p))
+
         idx = self.InsertStringItem(sys.maxint, "")
-        self.updateRow(idx, pnf.getAsDict(p))
+        self.updateRow(idx, d)
 
 
     def deleteRow(self, idx):
-        pass
+        self.DeleteItem(idx)
 
     def getColumnText(self, idx, col):
-        pass
+        item = self.GetItem(idx, col)
+        return item.GetText()
 
     def getAsDict(self, idx):
         pass
@@ -161,66 +169,39 @@ class PhoneForm(wx.Panel):
 
 
     def setValue(self, id, v):
-        """Sets the gui control identified by id (metadata.AddressMeta.id)
+        """Sets the gui control identified by PID
         to the passed value v.
         """
-        pass
-        if id == "PA": self.pa.SetValue(unicode(v))
-        # elif id == "ST": self.st.SetValue(unicode(v))
-        # elif id == "PC": self.pc.SetValue(unicode(v))
-        # elif id == "CI": self.ci.SetValue(unicode(v))
-        # elif id == "PR":
-        #     if (v and (v == "true" or v == "yes") ):
-        #         self.pr.SetValue(True)
-        #     else:
-        #         self.pr.SetValue(False)
-        # elif id == "TY": 
-        #     try:
-        #         self.ty.SetSelection(self.types.index(v))
-        #     except:
-        #         self.ty.SetSelection(-1)
-        # elif id == "MC":
-        #     try:
-        #         self.mc.SetSelection(self.mailClasses.index(v))
-        #     except:
-        #         self.mc.SetSelection(-1)
-        # elif id == "US": 
-        #     try:
-        #         self.us.SetSelection(self.mailUsage.index(v))
-        #     except:
-        #         self.us.SetSelection(-1)
-        # else: 
-        #     raise BaseException("Id %s unknown!" % id)
+        if id == PID_NUMBER: self.nr.SetValue(unicode(v))
+        elif id == PID_LABEL: self.la.SetValue(unicode(v))
+        elif id == PID_URI: self.ur.SetValue(unicode(v))
+        elif id == PID_PRIMARY:
+            if (v and (v == "true" or v == "yes") ):
+                self.pr.SetValue(True)
+            else:
+                self.pr.SetValue(False)
+        elif id == PID_TYPE: 
+            try:
+                self.ty.SetSelection(self.types.index(v))
+            except:
+                self.ty.SetSelection(-1)
+        else: 
+            raise BaseException("Id %s unknown!" % id)
 
     def getValues(self):
         """Returns its values as dict {ID:VAL, ...}. Unset Values will not be 
         included in the dictionary"""
-        # d = {}
-        # d["PA"] = self.pa.GetValue()
-        # d["ST"] = self.st.GetValue()
-        # d["PC"] = self.pc.GetValue()
-        # d["CI"] = self.ci.GetValue()
-        # d["LA"] = self.la.GetValue()
-        # d["AG"] = self.ag.GetValue()
-        # d["HN"] = self.hn.GetValue()
-        # d["NH"] = self.nh.GetValue()
-        # d["PO"] = self.po.GetValue()
-        # d["RE"] = self.re.GetValue()
-        # d["SR"] = self.sr.GetValue()
-        # if self.co.GetCurrentSelection() >= 0:
-        #     d["CO"] = self.co.getValue(self.co.GetCurrentSelection())
-        # if self.ty.GetCurrentSelection() >= 0:
-        #     d["TY"] = self.types[self.ty.GetCurrentSelection()]
-        # if self.pr.GetValue():
-        #     d["PR"] = "yes"
-        # else:
-        #     d["PR"] = ""
-        # if self.mc.GetCurrentSelection() >= 0:
-        #     d["MC"] = self.mailClasses[self.mc.GetCurrentSelection()]
-        # if self.us.GetCurrentSelection() >= 0:
-        #     d["US"] = self.mailUsage[self.us.GetCurrentSelection()]
-        # return d
-        pass
+        d = {}
+        d[PID_NUMBER] = self.nr.GetValue()
+        d[PID_LABEL] = self.la.GetValue()
+        d[PID_URI] = self.ur.GetValue()
+        if self.pr.GetValue():
+            d[PID_PRIMARY] = "yes"
+        else:
+            d[PID_PRIMARY] = ""
+        if self.ty.GetCurrentSelection() >= 0:
+            d[PID_TYPE] = self.types[self.ty.GetCurrentSelection()]
+        return d
 
     def setButtonLabelAdd(self):
         """Sets the label if idx refers to an existing entry or not
@@ -247,9 +228,9 @@ class PhoneForm(wx.Panel):
     def reset(self):
         """Just to make it more readable or understandable
         """
-        pass
+        for id in PMI.getIDs():
+            self.setValue(id, "")
 
-        
 
 class PhoneEditor(wx.Panel):
     """Responsible to initialize and display the forms UI components and manages
@@ -283,7 +264,7 @@ class PhoneEditor(wx.Panel):
         self.sizer.AddGrowableCol(0)
         self.SetSizer(self.sizer)
 
-        # self.bindEvents()
+        self.bindEvents()
 
 
     def bindEvents(self):
@@ -333,12 +314,12 @@ class PhoneEditor(wx.Panel):
         """Check and apply rules that needs to be followed before updating or adding
         an entry"""
         item = -1
-        if d.has_key("PR"):
-            if d["PR"] == 'yes':
+        if d.has_key(PID_PRIMARY):
+            if d[PID_PRIMARY] == 'yes':
                 while True:
                     item = self.listCtrl.GetNextItem(item, wx.LIST_NEXT_ALL)
                     if item != -1:
-                        self.listCtrl.setColumnValue(item, "PR", "")
+                        self.listCtrl.setColumnValue(item, PID_PRIMARY, "")
                     else:
                         break
 
@@ -372,14 +353,14 @@ class PhoneEditor(wx.Panel):
         self.hasChanged = True
 
     def getSPAfromListItem(self, item):
-        """Converts a address list item into a StructurePostalAddress object
+        """Converts a list item into a PhoneNumber object
         and returns it."""
         log.debug("Item passed %s" % str(item))
         self.listCtrl.getAsDict(item)
         return spaf.getSPAfromDict( self.listCtrl.getAsDict(item) )
 
     def saveChanges(self):
-        """Saves changes made to postal_addresses.
+        """Saves changes made.
         """
         addresses = []
         item = -1
@@ -399,7 +380,7 @@ class PhoneEditor(wx.Panel):
 
 class PhoneEditDialog(wx.Dialog):
 
-    def __init__(self, parent, ID, table, row, col, title="Edit Postal Addresses"):
+    def __init__(self, parent, ID, table, row, col, title="Edit Phone Numbers"):
 
             wx.Dialog.__init__(self, parent, ID, title, 
                                style=wx.DEFAULT_DIALOG_STYLE
