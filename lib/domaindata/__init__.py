@@ -108,6 +108,11 @@ def download_contacts():
                 break
             else:
                 feedUrl = next_link.href
+          
+        # import pickle
+        # db = open("dsce.db","w+")
+        # pickle.dump(_domainContacts, db)
+        # db.close()
 
 def get_contacts():
     """Used to return the current DomainContacts list.

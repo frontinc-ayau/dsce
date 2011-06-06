@@ -3,12 +3,17 @@
     "logging" : {
         "debugLevel"    : "INFO",
         "logFormat"     : "%(asctime)s %(levelname)s - %(message)s",
-        "logDateFormat" : "%Y-%%m-%%d %H:%M:%S" 
+        "logDateFormat" : "%Y-%m-%d %H:%M:%S" 
     },
 
     "proxysettings" : { },
 
     "resources" : {
         "wxImageDir"    : null
+    },
+
+    "storage" : {
+        "varDir"        : null,
+        "contactsDB"    : null
     }
 }

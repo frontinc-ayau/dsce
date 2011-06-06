@@ -33,9 +33,9 @@ class DomainContacts(list):
             if contact.getUid() == uid:
                 return contact
         
-        of = open("dump.txt","w+")
-        for contact in self:
-            of.write("Search uid = %d vs. getUid = %d\n " % (uid, contact.getUid()))
+        # of = open("dump.txt","w+")
+        # for contact in self:
+            # of.write("Search uid = %d vs. getUid = %d\n " % (uid, contact.getUid()))
             
             
         logging.debug("No contact match at uid-1.getUid()=%d and uid=%d" % (self[uid-1].getUid(), uid))

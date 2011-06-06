@@ -68,6 +68,10 @@ class DSCEConfiguation(Configuration):
         else:
             self.set("debugLevel", logging.INFO)
         
+        if (not self.hasKey("varDir")) or (self.hasKey("varDir") and self.varDir == None):
+            self.set("varDir", os.path.join(self.installDir, "data", "var"))
+        if (not self.hasKey("contactsDB")) or (self.hasKey("contactsDB") and self.contactsDB == None):
+            self.set("contactsDB", os.path.join(self.varDir, "dsce_contacts.db"))
 
     def loadConfigFile(self, filename):
         """Depending on the file extention the settings are loaded by
