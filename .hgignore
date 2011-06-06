@@ -1,4 +1,5 @@
 relre:.*.pyc
 relre:.*.bak$
+relre:.*.db$
 glob:etc/dsce.json
 glob:etc/private.dsce.json
