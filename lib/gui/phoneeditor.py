@@ -96,10 +96,17 @@ class PhoneListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         return item.GetText()
 
     def getAsDict(self, idx):
-        pass
+        """Returns the list control row as a dictionary {ID:Value}.
+        Zero values are not included."""
+        d = {}
+        for id, i in self.attridx.iteritems():
+            v = self.getColumnText(idx, i)
+            if len(v) >0:
+                d[id] = v
+        return d
 
     def setColumnValue(self, idx, id, val):
-        pass
+        self.SetStringItem(idx, self.attridx[id], val)
         
 
 
@@ -355,8 +362,7 @@ class PhoneEditor(wx.Panel):
     def getPNfromListItem(self, item):
         """Converts a list item into a PhoneNumber object
         and returns it."""
-        log.debug("Item passed %s" % str(item))
-        return spaf.getPAfromDict( self.listCtrl.getAsDict(item) )
+        return pnf.getPNfromDict( self.listCtrl.getAsDict(item) )
 
     def saveChanges(self):
         """Saves changes made.
@@ -415,6 +421,7 @@ class PhoneEditDialog(wx.Dialog):
 
 
     def onOk(self, event):
+        log.debug("In onOK()")
         self.editor.saveChanges()
         self.Destroy()
 

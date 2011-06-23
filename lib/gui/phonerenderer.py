@@ -65,7 +65,6 @@ class PhoneCellRenderer(wx.grid.PyGridCellRenderer):
         dc.DestroyClippingRegion()
 
     def convertPhoneToString(self, p):
-        logging.debug(str(p))
         nr = ty = ""
         if p.text: nr=p.text
         if p.rel: ty = PHONE_TYPE[p.rel]

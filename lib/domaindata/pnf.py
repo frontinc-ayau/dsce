@@ -117,4 +117,8 @@ def getAsDict(p):
             d[id] = v
     return d
 
-
+def getPNfromDict(d):
+    pn = gdata.data.PhoneNumber()
+    for id, v in d.iteritems():
+        setValue(pn, id, v)
+    return pn
