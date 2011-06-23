@@ -111,8 +111,7 @@ def download_contacts():
             else:
                 feedUrl = next_link.href
           
-        # XXX at the moment just for testing. But place here as storage.* after 
-        # downloading...
+        # XXX at the moment just for testing
         # import pickle
         # db = open("dsce.db","w+")
         # pickle.dump(_domainContacts, db)
