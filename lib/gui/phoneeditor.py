@@ -352,17 +352,16 @@ class PhoneEditor(wx.Panel):
         self.idx=-1
         self.hasChanged = True
 
-    def getSPAfromListItem(self, item):
+    def getPNfromListItem(self, item):
         """Converts a list item into a PhoneNumber object
         and returns it."""
         log.debug("Item passed %s" % str(item))
-        self.listCtrl.getAsDict(item)
-        return spaf.getSPAfromDict( self.listCtrl.getAsDict(item) )
+        return spaf.getPAfromDict( self.listCtrl.getAsDict(item) )
 
     def saveChanges(self):
         """Saves changes made.
         """
-        addresses = []
+        items = []
         item = -1
 
         if self.hasChanged:
@@ -370,11 +369,11 @@ class PhoneEditor(wx.Panel):
             while True:
                 item = self.listCtrl.GetNextItem(item, wx.LIST_NEXT_ALL)
                 if item != -1:
-                    addresses.append( self.getSPAfromListItem(item) )
+                    items.append( self.getPNfromListItem(item) )
                 else:
                     break
 
-            self.gridTable.SetValue(self.row, self.col, addresses)
+            self.gridTable.SetValue(self.row, self.col, items)
             
 
 

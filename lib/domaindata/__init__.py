@@ -35,6 +35,8 @@ from domaincontact import ACTION
 from domaincontacts import DomainContacts
 from contactdatatable import *
 
+import storage
+
 """The following objects will be initialized by init()
 """
 
@@ -109,10 +111,23 @@ def download_contacts():
             else:
                 feedUrl = next_link.href
           
+        # XXX at the moment just for testing. But place here as storage.* after 
+        # downloading...
         # import pickle
         # db = open("dsce.db","w+")
         # pickle.dump(_domainContacts, db)
         # db.close()
+
+def load_contacts_store(): 
+    _domainContacts = DomainContacts()
+    for e in storage.get(storage.SID_CONTACTS):
+        logging.debug(str(e))
+        _domainContacts.append(e)
+    logging.debug("Local loaded %d contacts" % len(_domainContacts))
+    if _domainContacts == None:
+        log.debug("Reset Contacts")
+        _domainContacts = DomainContacts()
+    
 
 def get_contacts():
     """Used to return the current DomainContacts list.

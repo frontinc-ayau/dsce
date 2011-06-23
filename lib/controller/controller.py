@@ -55,6 +55,8 @@ class Controller(object):
                 self.login() # start over on error
         else: 
             logging.debug("Login canceled")
+            # domaindata.load_contacts_store()
+            # observer.send_message(pmsg.DATA_DOWNLOADED)
 
         dlg.Destroy()
 
@@ -115,6 +117,22 @@ class Controller(object):
         except Exception, e:
             dlg.Destroy()
             self.alert(str(e), title="Login Error")
+            return False
+
+        return True
+
+    def loadLocalContacts(self):
+        logging.debug("Try to load local stored contacts")
+        dlg = None
+        try:
+            dlg = self.app.inProgressDialog("Try to load local stored contacts")
+
+            domaindata.load_contacts_store()
+            
+            dlg.Destroy() 
+        except Exception, e:
+            dlg.Destroy()
+            self.alert(str(e), title="Local loading error.")
             return False
 
         return True
