@@ -151,13 +151,9 @@ def create_src_tar(pr):
 def configure_pkg(pr):
     """In principle this ensures that the application is executable
     without additional configuration after extracting. 
+    Has been used but at the moment unused. (Remains till further...)
     """
     log.info("Configure package")
-    defcfg = os.path.abspath(os.path.join(pr,"etc/dsce.json"))
-    srccfg = os.path.abspath(os.path.join(pr,"etc/noproxy.dsce.json.example"))
-    log.info("Generate %s" % defcfg)
-    log.info("Use %s" % srccfg)
-    shutil.copy2(srccfg,defcfg)
     
     
 

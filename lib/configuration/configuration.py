@@ -48,7 +48,8 @@ class DSCEConfiguation(Configuration):
     """DSCE specific configuration. The main purpose is to load 
     INSTALLDIR/etc/dsce.json where INSTALLDIR is __file__/../../.
     Also, per accident ;-), INSTALLDIR will be provided as installDir option.
-    If the configuration file does not exist, an IOError will be raised.
+    If the configuration file does not exist, a default configuration file will
+    be created (Issue 19)
     """
     def __init__(self):
         Configuration.__init__(self)
@@ -73,12 +74,20 @@ class DSCEConfiguation(Configuration):
         if (not self.hasKey("contactsDB")) or (self.hasKey("contactsDB") and self.contactsDB == None):
             self.set("contactsDB", os.path.join(self.varDir, "dsce_contacts.db"))
 
+    def _createDeafaultConfigFile(self, filename):
+        srcfile = os.path.join(os.path.dirname(filename), "noproxy.dsce.json.example")
+        if not os.path.isfile(srcfile):
+            raise IOError("File %s does not exist or is not a regular file!" % os.path.abspath(srcfile))
+
+        import shutil
+        shutil.copyfile(srcfile, filename)
+
+
     def loadConfigFile(self, filename):
         """Depending on the file extention the settings are loaded by
         """
-
         if not os.path.isfile(filename):
-            raise IOError("File %s does not exist or is not a regular file!" % os.path.abspath(filename))
+            self._createDeafaultConfigFile(filename)
 
         co = None
 

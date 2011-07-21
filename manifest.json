@@ -52,6 +52,7 @@
     ["lib/gui/__init__.py", true, false],
     ["lib/observer/__init__.py", true, false],
     ["lib/resources/__init__.py", true, false],
+    ["lib/storage/__init__.py", true, false],
     ["manifest.json", false, false],
     ["README", true, true],
     ["INSTALL", true, true],
