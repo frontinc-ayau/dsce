@@ -93,8 +93,10 @@ class ContactDataTable(wx.grid.PyGridTableBase):
     def GetRowLabelValue(self, row):
         return self.rowLabels[row]
 
-    def AppendRows(self, numRows=1):
-        return True
+    def appendRow(self, c):
+            """c ... DomainContact object"""
+            self.rowLabels.append(c.getUid())
+            return True
 
     def _populateTable(self, event):
         """Fills all necessary attributes by using the information 

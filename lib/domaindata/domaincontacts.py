@@ -18,6 +18,7 @@
 import logging, sys
 
 from domaincontact import ACTION
+from domaincontact import DomainContact
 
 class DomainContacts(list):
     """Container for all downloaded domain contacts.
@@ -65,7 +66,6 @@ class DomainContacts(list):
                 cc.append(c)
 
         return cc
-
 
 
 # Tests

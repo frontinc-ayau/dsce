@@ -54,6 +54,8 @@ class MainFrame(wx.Frame):
             self.SetIcon(ico)
 
         self.createToolbar()
+        # make messages available for subscribers
+        self.registerMessages()
 
         # Each supported pane has to be put here
         self._mgr.AddPane(GridView(self), wx.aui.AuiPaneInfo().
@@ -62,8 +64,6 @@ class MainFrame(wx.Frame):
 
 
 
-        # make messages available for subscribers
-        self.registerMessages()
         # bind this frame events
         self.binEvents()
 
@@ -125,8 +125,8 @@ class MainFrame(wx.Frame):
                           LeftDockable(True).RightDockable(True))
 
     def registerMessages(self):
-        pmsg.register("ADD_CONTACT")
-        pmsg.register("DEL_CONTACT")
+        pmsg.register("ADD_CONTACT") # request to add a contact
+        pmsg.register("DEL_CONTACT") # request to delete a contact
         pmsg.register("PUB_CONTACT")
         pmsg.register("SEARCH")
 

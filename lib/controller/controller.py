@@ -43,6 +43,7 @@ class Controller(object):
         self.downloadContacts()
 
         observer.subscribe(self.pubContacts, pmsg.PUB_CONTACT)
+        observer.subscribe(self.addContact, pmsg.ADD_CONTACT)
 
 
     def login(self):
@@ -166,7 +167,7 @@ class Controller(object):
     def addContact(self, event):
         logging.debug("Controller: Add contact")
         contact = domaindata.add_contact()
-        observer.send_message(pmsg.DD_ADDED_CONTACT, contact)
+        observer.send_message(pmsg.CONTACT_ADDED, contact)
         
         
 

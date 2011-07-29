@@ -127,6 +127,12 @@ def load_contacts_store():
         log.debug("Reset Contacts")
         _domainContacts = DomainContacts()
     
+def add_contact(c=None):
+    logging.debug("In append_contact")
+    if c == None:
+        c = DomainContact()
+    _domainContacts.append(c)
+    return c
 
 def get_contacts():
     """Used to return the current DomainContacts list.

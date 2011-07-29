@@ -22,6 +22,9 @@ import wx.grid
 from domaindata import ContactDataTable
 from domaindata import metadata
 
+import observer
+from observer import *
+
 from emaileditor import EmailEditDialog
 from emailcellrenderer import EmailCellRenderer
 from addresseditor import AddressEditDialog
@@ -42,10 +45,23 @@ class GridView(wx.grid.Grid):
         self.setRenderer()
         self.setEditors()
         self.bind()
+        self.subscribe()
 
 
     def bind(self):
         self.Bind(wx.grid.EVT_GRID_EDITOR_SHOWN, self.gridEditorRequest, self)
+
+    def subscribe(self):
+        observer.subscribe(self.appendRow, pmsg.CONTACT_ADDED) # interested if contact added
+        
+    def appendRow(self, event):
+        id = event.data.getUid()
+        logging.debug("Contact added with id %d" % event.data.getUid())
+        self.table.appendRow(c=event.data)
+        self.ProcessTableMessage(wx.grid.GridTableMessage(self.table,
+                                                         wx.grid.GRIDTABLE_NOTIFY_ROWS_APPENDED, 1)
+                                )
+
 
     def gridEditorRequest(self, evt):
         """Used when others than PyGridCellEditors have to be used.
