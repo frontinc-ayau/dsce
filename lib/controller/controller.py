@@ -141,10 +141,10 @@ class Controller(object):
     def downloadContacts(self):
         try:
             dlg = self.app.inProgressDialog("Download contacts...")
-
+ 
             domaindata.download_contacts()
             observer.send_message(pmsg.DATA_DOWNLOADED)
-
+ 
             dlg.Destroy() # contacts downloaded
         except Exception, e:
             dlg.Destroy()

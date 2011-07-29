@@ -158,10 +158,10 @@ def get_action_summary():
     return _domainContacts.getActionSummary()
 
 
-def get_contactDataTable(self, grit=None):
+def get_contactDataTable(grid=None):
     """grit can be None as it makes the table requestable more than once"""
     global _contactDataTable
     if _contactDataTable == None:
-        _contactDataTable = ContactDataTable(grit)
+        _contactDataTable = ContactDataTable(grid)
     return _contactDataTable
 

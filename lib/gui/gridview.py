@@ -40,7 +40,7 @@ class GridView(wx.grid.Grid):
 
         wx.grid.Grid.__init__(self,parent,id, wx.Point(0, 0), wx.DefaultSize,
                               wx.NO_BORDER | wx.WANTS_CHARS)
-        self.table = get_contactDataTable(self)
+        self.table = domaindata.get_contactDataTable(self)
         self.SetTable(self.table, True)
         self.setRenderer()
         self.setEditors()

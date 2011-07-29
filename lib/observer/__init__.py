@@ -53,7 +53,6 @@ pmsg.register("DATA_UPLOADED")
 pmsg.register("CONTACT_ADDED") 
 pmsg.register("CONTACT_DELETED")
 
-# contactdatatable messages
 
 def send_message(*args, **kwargs):
     Publisher.sendMessage(*args, **kwargs)
