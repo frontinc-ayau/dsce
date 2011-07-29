@@ -19,7 +19,7 @@
 import wx
 import wx.grid
 
-from domaindata import ContactDataTable
+import domaindata 
 from domaindata import metadata
 
 import observer
@@ -40,7 +40,7 @@ class GridView(wx.grid.Grid):
 
         wx.grid.Grid.__init__(self,parent,id, wx.Point(0, 0), wx.DefaultSize,
                               wx.NO_BORDER | wx.WANTS_CHARS)
-        self.table = ContactDataTable(self) # just for convenience
+        self.table = get_contactDataTable(self)
         self.SetTable(self.table, True)
         self.setRenderer()
         self.setEditors()
@@ -55,9 +55,6 @@ class GridView(wx.grid.Grid):
         observer.subscribe(self.appendRow, pmsg.CONTACT_ADDED) # interested if contact added
         
     def appendRow(self, event):
-        id = event.data.getUid()
-        logging.debug("Contact added with id %d" % event.data.getUid())
-        self.table.appendRow(c=event.data)
         self.ProcessTableMessage(wx.grid.GridTableMessage(self.table,
                                                          wx.grid.GRIDTABLE_NOTIFY_ROWS_APPENDED, 1)
                                 )

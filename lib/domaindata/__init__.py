@@ -46,6 +46,9 @@ _loginUser = None
 _proxySettings = None
 _initialized = False # will be set to True at the end of the init() procedure.
 
+# Will be initialized during runtime as an existing wx.Grit is needed
+_contactDataTable = None
+
 
 def init():
     """Initializes all domaindata objects needed by the application.
@@ -128,11 +131,12 @@ def load_contacts_store():
         _domainContacts = DomainContacts()
     
 def add_contact(c=None):
+    global _domainContacts, _contactDataTable
     logging.debug("In append_contact")
     if c == None:
         c = DomainContact()
     _domainContacts.append(c)
-    return c
+    _contactDataTable.appendRow(c)
 
 def get_contacts():
     """Used to return the current DomainContacts list.
@@ -152,3 +156,12 @@ def publish_changes():
 
 def get_action_summary():
     return _domainContacts.getActionSummary()
+
+
+def get_contactDataTable(self, grit=None):
+    """grit can be None as it makes the table requestable more than once"""
+    global _contactDataTable
+    if _contactDataTable == None:
+        _contactDataTable = ContactDataTable(grit)
+    return _contactDataTable
+
