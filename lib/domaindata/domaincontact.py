@@ -66,6 +66,9 @@ class DomainContact(object):
     def getEntry(self):
         return self.entry
 
+    def setEntry(self, entry):
+        self.entry = entry
+
     def setNamePrefix(self, text):
         self.setName(prefix=text)
 

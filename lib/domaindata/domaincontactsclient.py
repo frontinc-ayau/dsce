@@ -45,7 +45,9 @@ class DomainContactsClient(gdata.contacts.client.ContactsClient):
         import logging
         entry = contact.getEntry()
         logging.debug("Update contact %s" % contact.getFamilyName())
-        self.Update(entry)
+        entry = self.Update(entry)
+        contact.setEntry(entry)
+        
 
 
     def deleteContact(self, contact):
