@@ -39,12 +39,12 @@ class DomainContactsClient(gdata.contacts.client.ContactsClient):
                       account_type=self.user.account_type)
 
     def addContact(self, contact):
-        pass
+        entry = contact.getEntry()
+        entry = self.CreateContact(entry)
+        contact.setEntry(entry)
 
     def updateContact(self, contact):
-        import logging
         entry = contact.getEntry()
-        logging.debug("Update contact %s" % contact.getFamilyName())
         entry = self.Update(entry)
         contact.setEntry(entry)
         

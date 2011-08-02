@@ -147,11 +147,15 @@ def publish_changes():
     """Publish changes made to the contact
     """
     for c in _domainContacts.getChangedContacts():
-        if c.getAction() == ACTION.UPDATE:
+        action = c.getAction()
+        if action == ACTION.UPDATE:
             logging.debug("Updated contact %s" % c.getFamilyName())
             _domainContactsClient.updateContact(c)
             # clear the action flag
-            c.clearAction()
+        elif action == ACTION.ADD:
+            logging.debug("Add contact %s" % c.getFamilyName())
+            _domainContactsClient.addContact(c)
+        c.clearAction()
 
 
 def get_action_summary():
