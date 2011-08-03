@@ -22,6 +22,8 @@ import metadata
 import domaindata
 import logging
 
+from domaincontact import ACTION # need for label
+
 import observer 
 from observer import pmsg
 
@@ -44,6 +46,10 @@ class ContactDataTable(wx.grid.PyGridTableBase):
 
         self.dc = None
         self.rowLabels = []
+        self.rowActionLabels = { ACTION.ADD:"Added", 
+                                 ACTION.UPDATE:"Updated",
+                                 ACTION.DELETE:"Deleted"
+                               }
 
         logging.debug("Create ContactDataTable")
         logging.debug("Domain Contacts = %s" % self.dc)
@@ -91,7 +97,12 @@ class ContactDataTable(wx.grid.PyGridTableBase):
         return self.colLabels[col]
        
     def GetRowLabelValue(self, row):
-        return self.rowLabels[row]
+        a = self.getContact(row).getAction()
+       
+        if not a:
+            return self.rowLabels[row]
+        else:
+            return self.rowActionLabels[a]
 
     def appendRow(self, c):
             """c ... DomainContact object"""

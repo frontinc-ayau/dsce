@@ -50,6 +50,7 @@ class GridView(wx.grid.Grid):
 
     def bind(self):
         self.Bind(wx.grid.EVT_GRID_EDITOR_SHOWN, self.gridEditorRequest, self)
+        self.Bind(wx.grid.EVT_GRID_CELL_CHANGE, self.gridCellChanged, self)
 
     def subscribe(self):
         observer.subscribe(self.appendRow, pmsg.CONTACT_ADDED) # interested if contact added
@@ -59,6 +60,10 @@ class GridView(wx.grid.Grid):
                                                          wx.grid.GRIDTABLE_NOTIFY_ROWS_APPENDED, 1)
                                 )
 
+
+    def gridCellChanged(self, evt):
+        logging.debug("Cell changed")
+        self.forceRefresh()
 
     def gridEditorRequest(self, evt):
         """Used when others than PyGridCellEditors have to be used.
@@ -75,7 +80,7 @@ class GridView(wx.grid.Grid):
             evt.Veto()
         evt.Skip()
 
-    def forceRefresh(self, event):
+    def forceRefresh(self):
         logging.debug("Force Refresh()")
         self.ForceRefresh()
 
