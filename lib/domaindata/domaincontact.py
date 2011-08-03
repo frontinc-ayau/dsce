@@ -63,6 +63,14 @@ class DomainContact(object):
             self.entry = gdata.contacts.data.ContactEntry()
             self.setActionAdd()
 
+    def isEmpty(self):
+        """This function assumes that if an empty ContactEntry has no attributes. 
+        This might be after adding a contact without filling it with content."""
+        if len(self.entry.attributes) == 0:
+            return True
+        else:
+            return False
+
     def getEntry(self):
         return self.entry
 

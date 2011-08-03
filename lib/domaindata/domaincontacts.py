@@ -49,7 +49,7 @@ class DomainContacts(list):
         """
         s = { ACTION.ADD:0, ACTION.UPDATE:0, ACTION.DELETE:0 }
         for c in self:
-            if c.getAction() == ACTION.ADD: s[ACTION.ADD] += 1
+            if (c.getAction() == ACTION.ADD) and (c.isEmpty() != True): s[ACTION.ADD] += 1
             elif c.getAction() == ACTION.UPDATE: s[ACTION.UPDATE] += 1
             elif c.getAction() == ACTION.DELETE: s[ACTION.DELETE] += 1
 
