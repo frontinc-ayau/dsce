@@ -197,6 +197,8 @@ class Controller(object):
                 dlg.Destroy()
                 self.alert(str(e), title="Publish Error")
 
+            observer.send_message(pmsg.DATA_UPLOADED) # do it anyway because of possible partial upload
+
             
         else:
             logging.debug("Cancel the publishing of changes")

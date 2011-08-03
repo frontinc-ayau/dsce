@@ -54,6 +54,7 @@ class GridView(wx.grid.Grid):
 
     def subscribe(self):
         observer.subscribe(self.appendRow, pmsg.CONTACT_ADDED) # interested if contact added
+        observer.subscribe(self.forceRefresh, pmsg.DATA_UPLOADED) # because of label changes
         
     def appendRow(self, event):
         self.ProcessTableMessage(wx.grid.GridTableMessage(self.table,
@@ -63,7 +64,7 @@ class GridView(wx.grid.Grid):
 
     def gridCellChanged(self, evt):
         logging.debug("Cell changed")
-        self.forceRefresh()
+        self.forceRefresh(None)
 
     def gridEditorRequest(self, evt):
         """Used when others than PyGridCellEditors have to be used.
@@ -80,7 +81,7 @@ class GridView(wx.grid.Grid):
             evt.Veto()
         evt.Skip()
 
-    def forceRefresh(self):
+    def forceRefresh(self, evt):
         logging.debug("Force Refresh()")
         self.ForceRefresh()
 
