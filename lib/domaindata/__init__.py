@@ -153,8 +153,11 @@ def publish_changes():
             _domainContactsClient.updateContact(c)
             # clear the action flag
         elif action == ACTION.ADD:
-            logging.debug("Add contact %s" % c.getFamilyName())
-            _domainContactsClient.addContact(c)
+            if c.isEmpty:
+                logging.warning("Ignore empty contact when publishing %d" % c.getUid())
+            else:
+                logging.debug("Add contact %s" % c.getFamilyName())
+                _domainContactsClient.addContact(c)
         c.clearAction()
 
 
