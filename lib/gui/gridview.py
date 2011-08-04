@@ -60,6 +60,11 @@ class GridView(wx.grid.Grid):
         self.ProcessTableMessage(wx.grid.GridTableMessage(self.table,
                                                          wx.grid.GRIDTABLE_NOTIFY_ROWS_APPENDED, 1)
                                 )
+        logging.debug(self.table.GetNumberRows())
+        # position the cursor and scroll to the end of the grid
+        self.SetFocus()
+        self.SetGridCursor((self.table.GetNumberRows()-1),0)
+        self.scrollToBottom()
 
 
     def gridCellChanged(self, evt):
@@ -80,6 +85,11 @@ class GridView(wx.grid.Grid):
             PhoneEditDialog(self, -1, self.table, evt.GetRow(), c)
             evt.Veto()
         evt.Skip()
+
+    def scrollToBottom(self):
+        r = self.GetScrollRange(wx.VERTICAL) 
+        self.Scroll(0, r) 
+
 
     def forceRefresh(self, evt):
         logging.debug("Force Refresh()")
