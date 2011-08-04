@@ -55,6 +55,7 @@ class GridView(wx.grid.Grid):
     def subscribe(self):
         observer.subscribe(self.appendRow, pmsg.CONTACT_ADDED) # interested if contact added
         observer.subscribe(self.forceRefresh, pmsg.DATA_UPLOADED) # because of label changes
+        observer.subscribe(self.forceRefresh, pmsg.CONTACT_DELETED) # because of label changes
         
     def appendRow(self, event):
         self.ProcessTableMessage(wx.grid.GridTableMessage(self.table,
@@ -66,6 +67,18 @@ class GridView(wx.grid.Grid):
         self.SetGridCursor((self.table.GetNumberRows()-1),0)
         self.scrollToBottom()
 
+    def getActiveRows(self):
+        """Returns the first row where any kind of selection or cursor is found
+        """
+        rows = []
+        if self.IsSelection():
+            rows = self.GetSelectedRows()
+            logging.debug("Rows Sel %s" % str(rows))
+        else:
+            rows.append(self.GetGridCursorRow())
+            logging.debug("Rows Cur %s" % str(rows))
+
+        return rows
 
     def gridCellChanged(self, evt):
         logging.debug("Cell changed")

@@ -58,7 +58,8 @@ class MainFrame(wx.Frame):
         self.registerMessages()
 
         # Each supported pane has to be put here
-        self._mgr.AddPane(GridView(self), wx.aui.AuiPaneInfo().
+        self.grid = GridView(self)
+        self._mgr.AddPane(self.grid, wx.aui.AuiPaneInfo().
                           Name("ContactsTable").Caption("Contacts Table View").CenterPane().
                           CloseButton(False).MaximizeButton(False))
 
@@ -146,7 +147,7 @@ class MainFrame(wx.Frame):
             observer.send_message(pmsg.ADD_CONTACT, event)
 
         elif event.GetId() == self.DEL_ID:
-            observer.send_message(pmsg.DEL_CONTACT, event)
+            observer.send_message(pmsg.DEL_CONTACT, data=self.grid.getActiveRows())
 
         elif event.GetId() == self.PUB_ID:
             observer.send_message(pmsg.PUB_CONTACT, event)

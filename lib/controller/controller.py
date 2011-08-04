@@ -44,6 +44,7 @@ class Controller(object):
 
         observer.subscribe(self.pubContacts, pmsg.PUB_CONTACT)
         observer.subscribe(self.addContact, pmsg.ADD_CONTACT)
+        observer.subscribe(self.delContact, pmsg.DEL_CONTACT)
 
 
     def login(self):
@@ -169,11 +170,13 @@ class Controller(object):
         domaindata.add_contact()
         observer.send_message(pmsg.CONTACT_ADDED)
         
-        
-
-    def delContact(self, event):
-        logging.debug("Controller: Delete contact")
-        observer.send_message(pmsg.DD_DELETE_CONTACT)
+    def delContact(self, msg):
+        logging.debug("Controller: Delete contact %s" % str(msg))
+        for row in msg.data:
+            if row >= 0:
+                logging.debug("Mark row %d as deleted" % row)
+                domaindata.del_contact_from_row(row)
+        observer.send_message(pmsg.CONTACT_DELETED)
 
 
     def pubContacts(self, event):

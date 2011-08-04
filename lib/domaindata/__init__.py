@@ -132,11 +132,17 @@ def load_contacts_store():
     
 def add_contact(c=None):
     global _domainContacts, _contactDataTable
-    logging.debug("In append_contact")
+    logging.debug("In add_contact")
     if c == None:
         c = DomainContact()
     _domainContacts.append(c)
     _contactDataTable.appendRow(c)
+
+def del_contact_from_row(row):
+    """Deletes the contact which is in the passed row of the grid."""
+    global _contactDataTable
+    logging.debug("In del_contact")
+    _contactDataTable.getContact(row).setActionDelete()
 
 def get_contacts():
     """Used to return the current DomainContacts list.
