@@ -153,13 +153,14 @@ def publish_changes():
     """Publish changes made to the contact
     """
     for c in _domainContacts.getChangedContacts():
+        logging.debug("Contact changed: uid %d" % c.getUid())
         action = c.getAction()
         if action == ACTION.UPDATE:
             logging.debug("Updated contact %s" % c.getFamilyName())
             _domainContactsClient.updateContact(c)
             c.clearAction()
         elif action == ACTION.ADD:
-            if c.isEmpty:
+            if c.isEmpty():
                 logging.warning("Ignore empty contact when publishing %d" % c.getUid())
             else:
                 logging.debug("Add contact %s" % c.getFamilyName())

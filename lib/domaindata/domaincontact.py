@@ -64,12 +64,22 @@ class DomainContact(object):
             self.setActionAdd()
 
     def isEmpty(self):
-        """This function assumes that if an empty ContactEntry has no attributes. 
-        This might be after adding a contact without filling it with content."""
-        if len(self.entry.attributes) == 0:
-            return True
-        else:
+        """It is assumed that at least one of the following attributes has to be set 
+        be accepted as a contact entry.
+            - at least one part of the name or, except prefix and suffix
+            - an email address
+        As at the moment I do not know any other main identification- or reference point
+        of a contact no further tests are implemented until someone comes up with other
+        possibilities. 
+        """
+        if len(self.getEmail()) > 0:
+            logging.debug("Email %d" % len(self.getEmail()))
             return False
+        elif self.getGivenName() or self.getFamilyName() or self.getAdditionalName():
+            logging.debug("Found a name")
+            return False
+        else:
+            return True
 
     def getEntry(self):
         return self.entry
