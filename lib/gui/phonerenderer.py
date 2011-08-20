@@ -94,7 +94,6 @@ class PhoneCellRenderer(wx.grid.PyGridCellRenderer):
         # XXX 
         w = 140
         h = h*self.entryCount(grid, row, col)
-        logging.debug("Best Size (%d, %d)" % (w,h))
         return wx.Size(w,h)
 
     def Clone(self):

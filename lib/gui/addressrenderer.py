@@ -90,7 +90,6 @@ class AddressCellRenderer(wx.grid.PyGridCellRenderer):
         # XXX 
         w = 300
         h = h*self.addressCount(grid, row, col)
-        logging.debug("Best Size (%d, %d)" % (w,h))
         return wx.Size(w,h)
 
     def Clone(self):
