@@ -70,7 +70,6 @@ class ContactDataTable(wx.grid.PyGridTableBase):
     def getUidFromRow(self, row):
         """Wrapper to the fact that uid = row+1, at the moment
         """
-        # return row+1
         return self.dc[row].getUid()
 
     def getRowFromUid(self, uid):
@@ -83,7 +82,7 @@ class ContactDataTable(wx.grid.PyGridTableBase):
         return r
 
     def getContact(self, row):
-        return self.dc.getContact(self.getUidFromRow(row))# XXX ERROR Uid is does not fit any more!!!
+        return self.dc.getContact(self.getUidFromRow(row))
 
     def GetValue(self, row, col):
         c = self.getContact(row)
@@ -139,12 +138,7 @@ class ContactDataTable(wx.grid.PyGridTableBase):
             msg = wx.grid.GridTableMessage(self,
                     wx.grid.GRIDTABLE_NOTIFY_ROWS_DELETED,row,1)
             self.grid.ProcessTableMessage(msg) 
-#           logging.debug("GRIDTABLE_REQUEST_VIEW_GET_VALUES")
-#           msg = wx.grid.GridTableMessage(self,
-#                   wx.grid.GRIDTABLE_REQUEST_VIEW_GET_VALUES,1)
-#           self.grid.ProcessTableMessage(msg) 
-#           self.grid.AutoSize()
-#
+
 
     def rebuildTableIndex(self):
         logging.debug("Start to rebuild ContactDataTable index...")

@@ -56,7 +56,7 @@ class DomainContacts(list):
         """Removes the passed contact from the list."""
         logging.debug("Delete contact on index %d" % self.index(c))
         self.pop(self.index(c))
-        logging.debug("Contact deleted....") # make a real compy, no only a reference!!
+        logging.debug("Contact deleted....") 
         
 
     def getChangedContacts(self):
