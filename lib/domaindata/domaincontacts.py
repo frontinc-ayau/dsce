@@ -38,9 +38,6 @@ class DomainContacts(list):
         # for contact in self:
             # of.write("Search uid = %d vs. getUid = %d\n " % (uid, contact.getUid()))
             
-            
-        logging.debug("No contact match at uid-1.getUid()=%d and uid=%d" % (self[uid-1].getUid(), uid))
-        sys.exit(20)
         return None
     
     def getActionSummary(self):
@@ -54,6 +51,12 @@ class DomainContacts(list):
             elif c.getAction() == ACTION.DELETE: s[ACTION.DELETE] += 1
 
         return s
+        
+    def delete(self, c):
+        """Removes the passed contact from the list."""
+        logging.debug("Delete contact on index %d" % self.index(c))
+        self.pop(self.index(c))
+        logging.debug("Contact deleted....") # make a real compy, no only a reference!!
         
 
     def getChangedContacts(self):

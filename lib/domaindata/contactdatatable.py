@@ -70,10 +70,20 @@ class ContactDataTable(wx.grid.PyGridTableBase):
     def getUidFromRow(self, row):
         """Wrapper to the fact that uid = row+1, at the moment
         """
-        return row+1
+        # return row+1
+        return self.dc[row].getUid()
+
+    def getRowFromUid(self, uid):
+        """Well, the oposit from above"""
+        r = -1
+        for c in self.dc:
+            r += 1
+            if c.getUid() == uid:
+                return r
+        return r
 
     def getContact(self, row):
-        return self.dc.getContact(self.getUidFromRow(row))
+        return self.dc.getContact(self.getUidFromRow(row))# XXX ERROR Uid is does not fit any more!!!
 
     def GetValue(self, row, col):
         c = self.getContact(row)
@@ -97,7 +107,14 @@ class ContactDataTable(wx.grid.PyGridTableBase):
         return self.colLabels[col]
        
     def GetRowLabelValue(self, row):
-        a = self.getContact(row).getAction()
+        logging.debug("GetRowLabelValue: row = %d" % row)
+        try:
+            a = self.getContact(row).getAction()
+        except Exception, e:
+            import sys
+            logging.fatal("This should never happen %s" % str(e))
+            sys.exit(200)
+        
        
         if not a:
             return self.rowLabels[row]
@@ -109,6 +126,39 @@ class ContactDataTable(wx.grid.PyGridTableBase):
             self.rowLabels.append(c.getUid())
             return True
 
+    def DeleteRows(self, row, numRows=1):
+            logging.debug("bd %s" % str(self.rowLabels))
+            self.rowLabels.pop(row)
+            logging.debug("ad %s" % str(self.rowLabels))
+            return True
+
+    def deleteRow(self, c):
+            row = self.getRowFromUid(c.getUid())
+            self.DeleteRows(row)
+            logging.debug("GRIDTABLE_NOTIFY_ROWS_DELETED")
+            msg = wx.grid.GridTableMessage(self,
+                    wx.grid.GRIDTABLE_NOTIFY_ROWS_DELETED,row,1)
+            self.grid.ProcessTableMessage(msg) 
+#           logging.debug("GRIDTABLE_REQUEST_VIEW_GET_VALUES")
+#           msg = wx.grid.GridTableMessage(self,
+#                   wx.grid.GRIDTABLE_REQUEST_VIEW_GET_VALUES,1)
+#           self.grid.ProcessTableMessage(msg) 
+#           self.grid.AutoSize()
+#
+
+    def rebuildTableIndex(self):
+        logging.debug("Start to rebuild ContactDataTable index...")
+        rowCount=0
+
+        self.rowLabels=[]
+        for c in self.dc:
+            self.rowLabels.append(c.getUid())
+            rowCount += 1
+        logging.debug("Rebuild of %d rows done..." % rowCount)
+
+        return rowCount
+
+
     def _populateTable(self, event):
         """Fills all necessary attributes by using the information 
         found in DomainContacts.
@@ -117,10 +167,7 @@ class ContactDataTable(wx.grid.PyGridTableBase):
         self.dc = domaindata.get_contacts()
         logging.debug("Number of contacts %s" % len(self.dc))
 
-        rowCount=0
-        for c in self.dc:
-            self.rowLabels.append(c.getUid())
-            rowCount += 1
+        rowCount = self.rebuildTableIndex()
 
         if rowCount > 0:
             msg = wx.grid.GridTableMessage(self,

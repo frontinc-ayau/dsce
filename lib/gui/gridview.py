@@ -58,6 +58,7 @@ class GridView(wx.grid.Grid):
         observer.subscribe(self.forceRefresh, pmsg.CONTACT_DELETED) # because of label changes
         
     def appendRow(self, event):
+        logging.debug("In Grid.appendRow())")
         self.ProcessTableMessage(wx.grid.GridTableMessage(self.table,
                                                          wx.grid.GRIDTABLE_NOTIFY_ROWS_APPENDED, 1)
                                 )
@@ -105,7 +106,7 @@ class GridView(wx.grid.Grid):
 
 
     def forceRefresh(self, evt):
-        logging.debug("Force Refresh()")
+        logging.debug("Force Refresh() number of rows %d", self.GetNumberRows())
         self.ForceRefresh()
 
     def setRenderer(self):

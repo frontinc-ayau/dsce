@@ -152,6 +152,7 @@ def get_contacts():
 def publish_changes():
     """Publish changes made to the contact
     """
+    global _domainContacts, _contactDataTable
     for c in _domainContacts.getChangedContacts():
         logging.debug("Contact changed: uid %d" % c.getUid())
         action = c.getAction()
@@ -166,6 +167,16 @@ def publish_changes():
                 logging.debug("Add contact %s" % c.getFamilyName())
                 _domainContactsClient.addContact(c)
                 c.clearAction()
+        elif action == ACTION.DELETE:
+            logging.debug("Delete contact uid=%d" % c.getUid())
+            _domainContacts.delete(c)
+            _contactDataTable.deleteRow(c)
+            del(c)
+            logging.debug("Start delete contact in _domainContacts")
+            logging.debug("deletion finished")
+    # rebuild the table index is absolute necessary
+    _contactDataTable.rebuildTableIndex()
+
 
 
 def get_action_summary():
