@@ -51,7 +51,6 @@ class DomainContactsClient(gdata.contacts.client.ContactsClient):
     def deleteContact(self, contact):
         entry = contact.getEntry()
         self.Delete(entry)
-        contact.setEntry(entry)
 
 
 if __name__ == "__main__":
