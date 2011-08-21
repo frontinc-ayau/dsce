@@ -168,11 +168,15 @@ def publish_changes():
                 _domainContactsClient.addContact(c)
                 c.clearAction()
         elif action == ACTION.DELETE:
-            logging.debug("Delete contact uid=%d" % c.getUid())
+            if c.isEmpty():
+                logging.warning("Do not publish the deletion of an empty contact %d" % c.getUid())
+            else:
+                logging.debug("Delete contact %s" % c.getFamilyName())
+                _domainContactsClient.deleteContact(c)
+            
             _domainContacts.delete(c)
             _contactDataTable.deleteRow(c)
             del(c)
-            logging.debug("Start delete contact in _domainContacts")
             logging.debug("deletion finished")
     # rebuild the table index is absolute necessary
     _contactDataTable.rebuildTableIndex()

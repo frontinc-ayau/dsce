@@ -21,6 +21,7 @@ import wx.grid
 import metadata
 import domaindata
 import logging
+import sys
 
 from domaincontact import ACTION # need for label
 
@@ -110,7 +111,6 @@ class ContactDataTable(wx.grid.PyGridTableBase):
         try:
             a = self.getContact(row).getAction()
         except Exception, e:
-            import sys
             logging.fatal("This should never happen %s" % str(e))
             sys.exit(200)
         
@@ -126,9 +126,7 @@ class ContactDataTable(wx.grid.PyGridTableBase):
             return True
 
     def DeleteRows(self, row, numRows=1):
-            logging.debug("bd %s" % str(self.rowLabels))
             self.rowLabels.pop(row)
-            logging.debug("ad %s" % str(self.rowLabels))
             return True
 
     def deleteRow(self, c):
