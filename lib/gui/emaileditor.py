@@ -153,6 +153,7 @@ class EmailEditor(wx.Panel):
         
         et = wx.StaticText(self, -1, "Email Address")
         self.ec = wx.TextCtrl(self, -1, address, size=(200, -1))
+        self.ec.SetFocus()
         tt = wx.StaticText(self, -1, "Type")
         self.tc = wx.Choice(self, -1, (-1, -1), choices = self.types)
         lt = wx.StaticText(self, -1, "Label")

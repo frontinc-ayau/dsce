@@ -125,6 +125,7 @@ class PhoneForm(wx.Panel):
         nr = wx.StaticText(self, -1, PMI.getLabel(PID_NUMBER))
         self.nr = wx.TextCtrl(self, -1, size=(150, -1))
         self.nr.SetToolTipString(PMI.getHelp(PID_NUMBER))
+        self.nr.SetFocus()
         
         la = wx.StaticText(self, -1, PMI.getLabel(PID_LABEL))
         self.la = wx.TextCtrl(self, -1, size=(150, -1))

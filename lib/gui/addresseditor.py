@@ -134,6 +134,7 @@ class AddressForm(wx.Panel):
         pa = wx.StaticText(self, -1, AMI.getLabel("PA"))
         self.pa = wx.TextCtrl(self, -1, size=(200, -1), style=wx.TE_MULTILINE|wx.TE_PROCESS_ENTER) 
         self.pa.SetToolTipString(AMI.getHelp("PA"))
+        self.pa.SetFocus()
 
         ty = wx.StaticText(self, -1, AMI.getLabel("TY"))
         self.ty = wx.Choice(self, -1, (-1, -1), choices = self.types)
