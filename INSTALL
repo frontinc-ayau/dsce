@@ -41,7 +41,7 @@ meet the following requirements.
 
  - Python 2.6 has to be installed on your system.
 
- - The script further requires the GData Python client library version 2.0.6 or higher 
+ - The script further requires the GData Python client library version 2.0.14 or higher 
    which you can download from 
         http://code.google.com/p/gdata-python-client/downloads/list
    and install by following the Installation procedure described at

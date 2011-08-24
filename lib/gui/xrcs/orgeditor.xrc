@@ -1,0 +1,189 @@
+<?xml version="1.0" ?>
+<resource>
+  <object class="wxPanel" name="orgeditor">
+    <object class="wxBoxSizer">
+      <orient>wxHORIZONTAL</orient>
+      <object class="spacer">
+        <size>6</size>
+      </object>
+      <object class="sizeritem">
+        <object class="wxBoxSizer">
+          <orient>wxVERTICAL</orient>
+          <object class="spacer">
+            <size>6</size>
+          </object>
+          <object class="sizeritem">
+            <object class="wxFlexGridSizer">
+              <object class="sizeritem">
+                <object class="wxStaticText" name="ln">
+                  <label>Company name:</label>
+                </object>
+              </object>
+              <object class="sizeritem">
+                <object class="wxTextCtrl" name="cn">
+                  <size>400,-1</size>
+                  <tooltip>The name of the organization.</tooltip>
+                </object>
+              </object>
+              <object class="sizeritem">
+                <object class="wxStaticText" name="ld">
+                  <label>Department:</label>
+                </object>
+              </object>
+              <object class="sizeritem">
+                <object class="wxTextCtrl" name="cd">
+                  <size>400,-1</size>
+                  <tooltip>Specifies a department within the organization.</tooltip>
+                </object>
+              </object>
+              <object class="sizeritem">
+                <object class="wxStaticText" name="lt">
+                  <label>Title:</label>
+                </object>
+              </object>
+              <object class="sizeritem">
+                <object class="wxTextCtrl" name="ct">
+                  <size>400,-1</size>
+                  <tooltip>The title of a person within the organization.</tooltip>
+                </object>
+              </object>
+              <object class="sizeritem">
+                <object class="wxStaticText" name="tj">
+                  <label>Job description:</label>
+                </object>
+              </object>
+              <object class="sizeritem">
+                <object class="wxTextCtrl" name="cj">
+                  <size>400,-1</size>
+                  <tooltip>Description of a job within the organization.</tooltip>
+                </object>
+              </object>
+              <object class="sizeritem">
+                <object class="wxStaticText" name="lw">
+                  <label>Where:</label>
+                </object>
+              </object>
+              <object class="sizeritem">
+                <object class="wxTextCtrl" name="cw">
+                  <size>400,-1</size>
+                  <tooltip>A place associated with the organization, e.g. office location.</tooltip>
+                </object>
+              </object>
+              <object class="sizeritem">
+                <object class="wxStaticText" name="ll">
+                  <label>Label:</label>
+                </object>
+              </object>
+              <cols>2</cols>
+              <object class="sizeritem">
+                <object class="wxBoxSizer">
+                  <orient>wxHORIZONTAL</orient>
+                  <object class="sizeritem">
+                    <object class="wxTextCtrl" name="cl">
+                      <size>200,-1</size>
+                      <tooltip>A simple string value used to name this organization. It allows UIs to display a label such as &quot;Work&quot;, &quot;Volunteer&quot;, &quot;Professional Society&quot;, etc.</tooltip>
+                    </object>
+                  </object>
+                  <object class="spacer">
+                    <size>6</size>
+                  </object>
+                  <object class="sizeritem">
+                    <object class="wxChoice" name="cr">
+                      <content>
+                        <item></item>
+                        <item>work</item>
+                        <item>other</item>
+                      </content>
+                      <tooltip>Type of organization. Label can be used instead.</tooltip>
+                    </object>
+                  </object>
+                  <object class="spacer">
+                    <size>6</size>
+                  </object>
+                  <object class="sizeritem">
+                    <object class="wxStaticText" name="lr">
+                      <label>Type</label>
+                      <style>wxALIGN_LEFT</style>
+                    </object>
+                  </object>
+                </object>
+              </object>
+              <rows>7</rows>
+              <vgap>6</vgap>
+              <hgap>6</hgap>
+              <object class="sizeritem">
+                <object class="wxStaticText" name="ls">
+                  <label>Symbol:</label>
+                </object>
+              </object>
+              <object class="sizeritem">
+                <object class="wxFlexGridSizer">
+                  <object class="sizeritem">
+                    <object class="wxTextCtrl" name="cs">
+                      <size>200,-1</size>
+                    </object>
+                    <flag>wxALIGN_LEFT</flag>
+                  </object>
+                  <object class="spacer">
+                    <size>6</size>
+                    <flag>wxALL|wxEXPAND</flag>
+                  </object>
+                  <object class="sizeritem">
+                    <object class="wxCheckBox" name="cp">
+                      <label>Primary</label>
+                    </object>
+                    <flag>wxALL|wxEXPAND|wxALIGN_RIGHT</flag>
+                    <minsize>200,-1</minsize>
+                  </object>
+                  <cols>3</cols>
+                  <rows>1</rows>
+                  <growablecols>1</growablecols>
+                </object>
+                <flag>wxEXPAND</flag>
+              </object>
+            </object>
+            <flag>wxEXPAND</flag>
+          </object>
+          <object class="spacer">
+            <size>6</size>
+          </object>
+          <object class="sizeritem">
+            <object class="wxStaticLine">
+              <style>wxLI_VERTICAL</style>
+            </object>
+            <flag>wxEXPAND</flag>
+          </object>
+          <object class="spacer">
+            <size>6</size>
+          </object>
+          <object class="sizeritem">
+            <object class="wxFlexGridSizer">
+              <object class="spacer">
+                <flag>wxALL|wxEXPAND</flag>
+              </object>
+              <object class="sizeritem">
+                <object class="wxButton" name="wxID_CANCEL">
+                  <tooltip>Cancel editor without saving</tooltip>
+                </object>
+                <flag>wxRIGHT</flag>
+              </object>
+              <object class="sizeritem">
+                <object class="wxButton" name="wxID_OK">
+                  <tooltip>Save changes and close the editor</tooltip>
+                </object>
+                <flag>wxRIGHT</flag>
+              </object>
+              <cols>3</cols>
+              <rows>1</rows>
+              <growablecols>0</growablecols>
+            </object>
+            <flag>wxALL|wxEXPAND</flag>
+          </object>
+        </object>
+      </object>
+      <object class="spacer">
+        <size>6</size>
+      </object>
+    </object>
+  </object>
+</resource>

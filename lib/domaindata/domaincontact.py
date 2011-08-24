@@ -348,6 +348,13 @@ class DomainContact(object):
             self.entry.phone_number = value
         self.setActionUpdate()
 
+    def getOrganization(self):
+        return self.entry.organization
+
+    def setOrganization(self, org):
+        """@param: org = gdata.data.Organization"""
+        self.entry.organization = org
+
 
 # Tests
 if __name__ == "__main__":
