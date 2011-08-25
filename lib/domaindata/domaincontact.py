@@ -354,6 +354,7 @@ class DomainContact(object):
     def setOrganization(self, org):
         """@param: org = gdata.data.Organization"""
         self.entry.organization = org
+        self.setActionUpdate()
 
 
 # Tests

@@ -57,7 +57,10 @@ class OrgEditDialog(wx.Dialog):
         self.cpri = xrcl.getControl(self.panel, "cp")
         
         # Setup/customize form
-        self.ctyp.SetItems(items=self.types)
+        if not orgf.hasWhere(): # disable if not present
+            self.ctyp.SetItems(items=self.types)
+            xrcl.getControl(self.panel, "lw").Hide()
+        self.cwhe.Hide()
         xrcl.getControl(self.panel, "wxID_OK").Bind(wx.EVT_BUTTON, self.onOk)
 
         self.populateForm()

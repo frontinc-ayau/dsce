@@ -143,4 +143,15 @@ def getOrganization(label=None, department=None, description=None, name=None,
     if where:       setWhere(o, where)
     return o
 
-
+def hasWhere(o=None):
+    """This needs to be done because of a kind of lack in the gdata 
+    python implementation of google (see issue 28 for details)"""
+    if not o:
+        o = gdata.data.Organization()
+    try:
+        o.where
+        return True
+    except AttributeError, e:
+        logging.warning("Your Google library does not support where: %s" % str(e))
+        return False
+    
