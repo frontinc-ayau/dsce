@@ -20,9 +20,9 @@ import wx
 import wx.xrc as xrc
 
 import os
+import configuration
 
-_RESPATH_ = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                         "xrcs")
+_RESPATH_ = configuration.getConfiguration().xrcDir
 
 def _getXrcsAbsPath(fn):
     ap = os.path.join(_RESPATH_,fn)

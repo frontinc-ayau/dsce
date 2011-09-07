@@ -13,6 +13,7 @@
     ["data/images/logo.ico", true, true],
     ["data/images/pub.png", true, true],
     ["data/images/pub.svg", true, true],
+    ["data/xrcs/orgeditor.xrc", true, true],
     ["doc/logo", false, false],
     ["doc/logo/logo.svg", false, false],
     ["etc/noproxy.dsce.json.example", true, true],
@@ -50,15 +51,16 @@
     ["lib/gui/phonerenderer.py", true, false],
     ["lib/gui/proxysettings.py", true, false],
     ["lib/gui/orgeditor.py", true, false],
+    ["lib/gui/orgrenderer.py", true, false],
     ["lib/gui/xrcl.py", true, false],
     ["lib/gui/simplesearchctrl.py", true, false],
     ["lib/gui/__init__.py", true, false],
-    ["lib/gui/xrcs/orgeditor.xrc", true, false],
     ["lib/observer/__init__.py", true, false],
     ["lib/resources/__init__.py", true, false],
     ["lib/storage/__init__.py", true, false],
     ["manifest.json", false, false],
     ["README", true, true],
     ["INSTALL", true, true],
-    ["release.py", false, false]
+    ["release.py", false, false],
+    ["runXRC.py", false, false]
 ]

@@ -32,6 +32,7 @@ from addressrenderer import AddressCellRenderer
 from phonerenderer import PhoneCellRenderer
 from phoneeditor import PhoneEditDialog
 from orgeditor import OrgEditDialog
+from orgrenderer import OrgCellRenderer
 
 import logging
 
@@ -125,6 +126,10 @@ class GridView(wx.grid.Grid):
         attr = wx.grid.GridCellAttr()
         attr.SetRenderer(PhoneCellRenderer())
         self.SetColAttr(metadata.get_col_idx("phone"), attr)
+
+        attr = wx.grid.GridCellAttr()
+        attr.SetRenderer(OrgCellRenderer())
+        self.SetColAttr(metadata.get_col_idx("organization"), attr)
 
     def setEditors(self):
         attr = wx.grid.GridCellAttr()

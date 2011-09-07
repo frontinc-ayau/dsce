@@ -73,6 +73,8 @@ class DSCEConfiguation(Configuration):
             self.set("varDir", os.path.join(self.installDir, "data", "var"))
         if (not self.hasKey("contactsDB")) or (self.hasKey("contactsDB") and self.contactsDB == None):
             self.set("contactsDB", os.path.join(self.varDir, "dsce_contacts.db"))
+        if (not self.hasKey("xrcDir")) or (self.hasKey("xrcDir") and self.xrcDir == None):
+            self.set("xrcDir", os.path.join(self.installDir, "data", "xrcs"))
 
     def _createDeafaultConfigFile(self, filename):
         srcfile = os.path.join(os.path.dirname(filename), "noproxy.dsce.json.example")

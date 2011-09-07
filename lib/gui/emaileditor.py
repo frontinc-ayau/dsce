@@ -16,7 +16,7 @@
 # Copyright (c) 2010 Klaus Melcher (melcher.kla@gmail.com)
 
 import wx
-import  wx.lib.mixins.listctrl  as  listmix
+import wx.lib.mixins.listctrl  as  listmix
 import logging as log
 import sys 
 

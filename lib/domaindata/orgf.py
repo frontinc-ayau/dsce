@@ -143,6 +143,33 @@ def getOrganization(label=None, department=None, description=None, name=None,
     if where:       setWhere(o, where)
     return o
 
+def getOrgAsStringList(o):
+    """Used to return organization data as a list of string values. The list
+    will not contain null values"""
+    d=[]
+    if type(o) != gdata.data.Organization:
+        return d
+    v=getName(o)
+    if v: d.append(v)
+    v=getDepartment(o)
+    if v: d.append(v)
+    v=getTitle(o)
+    if v: d.append(v)
+    v=getDescription(o)
+    if v: d.append(v)
+    v=getLabel(o)
+    if v: d.append(v)
+    v=getType(o)
+    if v: d.append(v)
+    v=getSymbol(o)
+    if v: d.append(v)
+    v=getPrimary(o)
+    if v: d.append("Primary")
+    v=getWhere(o)
+    if v: d.append(v)
+    return d
+
+
 def hasWhere(o=None):
     """This needs to be done because of a kind of lack in the gdata 
     python implementation of google (see issue 28 for details)"""
