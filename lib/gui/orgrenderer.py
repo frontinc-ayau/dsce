@@ -32,7 +32,6 @@ class OrgCellRenderer(wx.grid.PyGridCellRenderer):
     def Draw(self, grid, attr, dc, rect, row, col, isSelected):
         dc.SetClippingRect(rect)
 
-        org = self.getValueAsString(grid, row, col)
         
         hAlign, vAlign = attr.GetAlignment()
         dc.SetFont ( attr.GetFont() )
@@ -49,20 +48,44 @@ class OrgCellRenderer(wx.grid.PyGridCellRenderer):
         dc.SetBrush(wx.Brush(bg, wx.SOLID))
         dc.SetPen(wx.TRANSPARENT_PEN)
 
-        self.drawOrg(dc, rect, org)
+        org = self.getValueAsString(grid, row, col)
+
+        self.drawOrg(grid, row, col, dc, rect, org)
         
+    def getRowHeight(self, org, h):
+        """Provides a unifified calculation of the 
+        heigth needed for the row"""
+        rh = 0
+        nrOfLines = len(org.split(self._DELIMITER))-1
+        rh = nrOfLines*(h+1)
+        return rh+2
 
-    def drawOrg(self, dc, rect, org):
+    def drawOrg(self, grid, row, col, dc, rect, org):
 
-        dc.DrawRectangleRect(rect)
-        w, h = dc.GetTextExtent(org)
         x = rect.x+1
         y = rect.y+1
+
+        dc.DrawRectangleRect(rect)
+        ss = grid.GetCellValue(row, col)
+        w, h = dc.GetTextExtent(u" ")
+
+        sh = grid.GetRowSize(row) # current height
+        eh = self.getRowHeight(org, h) # expected height
+
+        logging.debug("sh %d - eh %d" % (sh,eh))
+
         for a in org.split(self._DELIMITER):
             dc.DrawText(a, x, y)
+            logging.debug("Draw %s" % a)
             y = y+h+1
 
+        
         dc.DestroyClippingRegion()
+
+        if eh > sh:
+            logging.debug("Set row size to %d" % (eh))
+            grid.SetRowSize(row, eh)
+            grid.ForceRefresh()
 
 
     def getValueAsString(self, grid, row, col):
@@ -86,18 +109,8 @@ class OrgCellRenderer(wx.grid.PyGridCellRenderer):
     def orgCount(self, grid, row, col):
         return len(orgf.getOrgAsStringList(grid.GetTable().GetValue(row, col)))
 
-    def GetBestSize(self, grid, attr, dc, row, col):
-        text = self.getValueAsString(grid, row, col)
-        dc.SetFont(attr.GetFont())
-        w,h = dc.GetTextExtent(text)
-        # XXX 
-        w = 300
-        h = h*self.orgCount(grid, row, col)
-        # logging.debug("XXXX height %d" % h)
-        return wx.Size(w,h)
-
     def Clone(self):
-        return EmailCellRenderer()
+        return OrgCellRenderer()
 
 
     def cleanup(self):
