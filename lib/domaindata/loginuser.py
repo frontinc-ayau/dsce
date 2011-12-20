@@ -34,9 +34,9 @@ class LoginUser(object):
             self.domain = None
         else:
             self.domain = domain
-        self._setAddountType()
+        self._setAccountType()
 
-    def _setAddountType(self):
+    def _setAccountType(self):
         """If self.domain is None it is not a google apps account and
         therefore the account_type has to be set to GOOGLE, else to 
         HOSTED"""

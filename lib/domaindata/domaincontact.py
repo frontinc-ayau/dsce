@@ -131,6 +131,12 @@ class DomainContact(object):
         else:
             return unicode("")
 
+    def getGroups(self):
+        return str(self.entry.group_membership_info)
+
+    def setGroups(self, groups=[]):
+        pass
+
     def getAdditionalName(self):
         if self.entry.name and self.entry.name.additional_name:
             return self.entry.name.additional_name.text

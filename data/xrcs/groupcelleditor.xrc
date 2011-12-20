@@ -1,0 +1,77 @@
+<?xml version="1.0" ?>
+<resource>
+  <object class="wxPanel" name="groupcelleditor">
+    <object class="wxBoxSizer">
+      <orient>wxHORIZONTAL</orient>
+      <object class="spacer">
+        <size>6</size>
+      </object>
+      <object class="sizeritem">
+        <object class="wxBoxSizer">
+          <orient>wxVERTICAL</orient>
+          <object class="spacer">
+            <size>6</size>
+          </object>
+          <object class="sizeritem">
+            <object class="wxStaticText">
+              <label>By checking or unchecking the group below you </label>
+            </object>
+          </object>
+          <object class="sizeritem">
+            <object class="wxStaticText">
+              <label>declare the group membership of the contact.</label>
+            </object>
+          </object>
+          <object class="spacer">
+            <size>6</size>
+          </object>
+          <object class="sizeritem">
+            <object class="wxCheckListBox" name="chkgroupbox">
+              <content/>
+              <tooltip>Check the group where the contact should be member of.</tooltip>
+            </object>
+            <flag>wxALL|wxEXPAND</flag>
+          </object>
+          <object class="spacer">
+            <size>6</size>
+          </object>
+          <object class="sizeritem">
+            <object class="wxStaticLine">
+              <style>wxLI_VERTICAL</style>
+            </object>
+            <flag>wxEXPAND</flag>
+          </object>
+          <object class="spacer">
+            <size>6</size>
+          </object>
+          <object class="sizeritem">
+            <object class="wxFlexGridSizer">
+              <object class="spacer">
+                <flag>wxALL|wxEXPAND</flag>
+              </object>
+              <object class="sizeritem">
+                <object class="wxButton" name="wxID_CANCEL">
+                  <tooltip>Cancel editor without saving</tooltip>
+                </object>
+                <flag>wxRIGHT</flag>
+              </object>
+              <object class="sizeritem">
+                <object class="wxButton" name="wxID_OK">
+                  <tooltip>Save changes and close the editor</tooltip>
+                </object>
+                <flag>wxRIGHT</flag>
+              </object>
+              <cols>3</cols>
+              <rows>1</rows>
+              <growablecols>0</growablecols>
+            </object>
+            <flag>wxALL|wxEXPAND</flag>
+          </object>
+        </object>
+      </object>
+      <object class="spacer">
+        <size>6</size>
+      </object>
+    </object>
+  </object>
+</resource>

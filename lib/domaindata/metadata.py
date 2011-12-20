@@ -24,6 +24,7 @@ labels to display a.s.o.
 # [ (attributeName, attributeLabel, getterMethod, setterMethod, editable, visible) ]
 _META_DATA_=[ ( "uid", "UID", "getUid()", None, False, False),
               ( "prefix", "Prefix", "c.getNamePrefix()", "c.setNamePrefix(value)", True, True),
+              ( "groups", "Groups", "c.getGroups()", "c.setGroups(value)", False, True),
               ( "family_name","Family Name", "c.getFamilyName()", "c.setFamilyName(value)", True, True),
               ( "given_name", "Given Name", "c.getGivenName()", "c.setGivenName(value)", True, True),
               ( "additional_name", "Additional Name", "c.getAdditionalName()", "c.setAdditionalName(value)", True, True),
