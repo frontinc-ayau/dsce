@@ -52,6 +52,7 @@ pmsg.register("DATA_DOWNLOADED")
 pmsg.register("DATA_UPLOADED")
 pmsg.register("CONTACT_ADDED") 
 pmsg.register("CONTACT_DELETED")
+pmsg.register("GROUPS_DOWNLOADED")
 
 
 def send_message(*args, **kwargs):

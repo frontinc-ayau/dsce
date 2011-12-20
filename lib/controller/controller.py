@@ -41,6 +41,7 @@ class Controller(object):
 
         self.login()
         self.downloadContacts()
+        self.downloadGroups()
 
         observer.subscribe(self.pubContacts, pmsg.PUB_CONTACT)
         observer.subscribe(self.addContact, pmsg.ADD_CONTACT)
@@ -152,6 +153,18 @@ class Controller(object):
             self.alert(str(e), title="Download Error")
             return False
 
+    def downloadGroups(self):
+        try:
+            dlg = self.app.inProgressDialog("Download groups...")
+ 
+            domaindata.download_groups()
+            observer.send_message(pmsg.GROUPS_DOWNLOADED)
+ 
+            dlg.Destroy() 
+        except Exception, e:
+            dlg.Destroy()
+            self.alert(str(e), title="Download Error")
+            return False
 
     def alert(self, msg, title=None):
 

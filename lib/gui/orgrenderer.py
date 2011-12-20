@@ -45,13 +45,9 @@ class OrgCellRenderer(crr.CellRootRenderer):
                 org +=  unicode(l).replace("\n"," ")+u" "
                 org += self._DELIMITER
 
-        logging.debug("org: %s" % str(org))
         return org
 
 
     def Clone(self):
         return OrgCellRenderer()
-
-    # def orgCount(self, grid, row, col):
-        # return len(orgf.getOrgAsStringList(grid.GetTable().GetValue(row, col)))
 

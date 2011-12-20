@@ -49,5 +49,3 @@ class DSCEGroupsFeed(gdata.contacts.data.GroupsFeed):
                     return e.system_group.id
                 else:
                     return e.title.text
-
-        raise BaseException("No group with id %s found!" % gid)

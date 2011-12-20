@@ -33,6 +33,7 @@ from domaincontactsclient import *
 from domaincontact import DomainContact
 from domaincontact import ACTION
 from domaincontacts import DomainContacts
+from dscegroups import *
 from contactdatatable import *
 
 import storage
@@ -45,6 +46,7 @@ _domainContacts = None
 _loginUser = None
 _proxySettings = None
 _initialized = False # will be set to True at the end of the init() procedure.
+_contactGroups = None
 
 # Will be initialized during runtime as an existing wx.Grit is needed
 _contactDataTable = None
@@ -120,6 +122,16 @@ def download_contacts():
         # pickle.dump(_domainContacts, db)
         # db.close()
 
+
+def download_groups():
+    global _contactGroups
+    if _domainContactsClient:
+        _contactGroups = _domainContactsClient.get_groups(desired_class=DSCEGroupsFeed)
+    else:
+        logging.fatal("Not logged on!")
+        
+
+
 def load_contacts_store(): 
     _domainContacts = DomainContacts()
     for e in storage.get(storage.SID_CONTACTS):
@@ -182,7 +194,6 @@ def publish_changes():
     _contactDataTable.rebuildTableIndex()
 
 
-
 def get_action_summary():
     return _domainContacts.getActionSummary()
 
@@ -194,3 +205,10 @@ def get_grid_table(grid=None):
         _contactDataTable = ContactDataTable(grid)
     return _contactDataTable
 
+def get_group_name(gid=None):
+    global _contactGroups
+    if gid:
+        return _contactGroups.getNameById(gid)
+    else:
+        return None
+    

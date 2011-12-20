@@ -132,7 +132,7 @@ class DomainContact(object):
             return unicode("")
 
     def getGroups(self):
-        return str(self.entry.group_membership_info)
+        return self.entry.group_membership_info
 
     def setGroups(self, groups=[]):
         pass
