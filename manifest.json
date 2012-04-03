@@ -4,6 +4,8 @@
     ["data/images/add.svg", true, true],
     ["data/images/del.png", true, true],
     ["data/images/del.svg", true, true],
+    ["data/images/grp.png", true, true],
+    ["data/images/grp.svg", true, true],
     ["data/images/exit.png", true, true],
     ["data/images/exit.svg", true, true],
     ["data/images/get.png", true, true],
