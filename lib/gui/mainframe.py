@@ -81,6 +81,7 @@ class MainFrame(wx.Frame):
         exit_bmp = resources.getasbitmap(resources.R_EXIT)
         add_bmp = resources.getasbitmap(resources.R_ADD)
         del_bmp = resources.getasbitmap(resources.R_DEL)
+        grp_bmp = resources.getasbitmap(resources.R_GRP)
         pub_bmp = resources.getasbitmap(resources.R_PUB)
         get_bmp = resources.getasbitmap(resources.R_GET)
 
@@ -93,8 +94,9 @@ class MainFrame(wx.Frame):
         self.EXIT_ID = 10
         self.ADD_ID  = 20
         self.DEL_ID  = 30
-        self.GET_ID  = 40
-        self.PUB_ID  = 50
+        self.GRP_ID  = 40
+        self.GET_ID  = 50
+        self.PUB_ID  = 60
 
 
         # tools
@@ -106,6 +108,8 @@ class MainFrame(wx.Frame):
                                                           longHelp="Add contact")
         self.tb.AddLabelTool(self.DEL_ID, "Del", del_bmp, shortHelp="Delete contact", 
                                                           longHelp="Delete contact")
+        self.tb.AddLabelTool(self.GRP_ID, "Grp", grp_bmp, shortHelp="Manage groups", 
+                                                          longHelp="Add, update and delete groups")
         self.tb.AddSeparator()
         self.tb.AddLabelTool(self.GET_ID, "Get", get_bmp, shortHelp="Get contact", 
                                                           longHelp="Get contact")
@@ -128,6 +132,7 @@ class MainFrame(wx.Frame):
     def registerMessages(self):
         pmsg.register("ADD_CONTACT") # request to add a contact
         pmsg.register("DEL_CONTACT") # request to delete a contact
+        pmsg.register("MAN_GROUPS")  # request to globally manage groups
         pmsg.register("PUB_CONTACT")
         pmsg.register("SEARCH")
 
@@ -136,6 +141,7 @@ class MainFrame(wx.Frame):
         self.tb.Bind(wx.EVT_TOOL, self.publishEvent, id=self.EXIT_ID)
         self.tb.Bind(wx.EVT_TOOL, self.publishEvent, id=self.ADD_ID)
         self.tb.Bind(wx.EVT_TOOL, self.publishEvent, id=self.DEL_ID)
+        self.tb.Bind(wx.EVT_TOOL, self.publishEvent, id=self.GRP_ID)
         self.tb.Bind(wx.EVT_TOOL, self.publishEvent, id=self.GET_ID)
         self.tb.Bind(wx.EVT_TOOL, self.publishEvent, id=self.PUB_ID)
 
@@ -148,6 +154,9 @@ class MainFrame(wx.Frame):
 
         elif event.GetId() == self.DEL_ID:
             observer.send_message(pmsg.DEL_CONTACT, data=self.grid.getActiveRows())
+
+        elif event.GetId() == self.GRP_ID:
+            observer.send_message(pmsg.MAN_GROUPS, event)
 
         elif event.GetId() == self.PUB_ID:
             observer.send_message(pmsg.PUB_CONTACT, event)

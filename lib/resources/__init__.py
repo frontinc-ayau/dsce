@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with DSCE.  If not, see <http://www.gnu.org/licenses/>.
 #
-# Copyright (c) 2010 Klaus Melcher (melcher.kla@gmail.com)
+# Copyright (c) 2010, 2011, 2012 Klaus Melcher (melcher.kla@gmail.com)
 
 
 #FI XXX: Try to use ArtProvider
@@ -33,6 +33,7 @@ R_LOGO = "TMTLogo.png"
 R_EXIT = "exit.png"
 R_ADD = "add.png"
 R_DEL = "del.png"
+R_GRP = "grp.png"
 R_PUB = "pub.png"
 R_GET = "get.png"
 R_HELP = "help.png"
