@@ -46,6 +46,7 @@ class Controller(object):
         observer.subscribe(self.pubContacts, pmsg.PUB_CONTACT)
         observer.subscribe(self.addContact, pmsg.ADD_CONTACT)
         observer.subscribe(self.delContact, pmsg.DEL_CONTACT)
+        observer.subscribe(self.manageGroups, pmsg.MAN_GROUPS)
 
 
     def login(self):
@@ -165,6 +166,9 @@ class Controller(object):
             dlg.Destroy()
             self.alert(str(e), title="Download Error")
             return False
+
+    def manageGroups(self, event):
+        self.app.displayDialog(gui.GroupEditDialog)
 
     def alert(self, msg, title=None):
 

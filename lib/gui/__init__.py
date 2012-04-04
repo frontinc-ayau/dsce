@@ -18,5 +18,6 @@
 from mainframe import MainFrame
 from loginview import LoginView
 from proxysettings import SetProxyView
+from groupeditor import GroupEditDialog
 from inprogress import InProgressDialog
 from gridview import GridView
