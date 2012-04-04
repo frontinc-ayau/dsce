@@ -37,7 +37,7 @@ class Controller(object):
     def enterApp(self):
         observer.subscribe(self.app.doExit, pmsg.EXIT_APP)
         observer.subscribe(self.setProxy, pmsg.SET_PROXY)
-        observer.subscribe(self.alert, pmsg.ALERT)
+        observer.subscribe(self.alertUser, pmsg.ALERT)
 
         self.login()
         self.downloadContacts()
@@ -169,6 +169,9 @@ class Controller(object):
 
     def manageGroups(self, event):
         self.app.displayDialog(gui.GroupEditDialog)
+
+    def alertUser(self, event):
+        self.app.displayAlert("Error", event.data)
 
     def alert(self, msg, title=None):
 

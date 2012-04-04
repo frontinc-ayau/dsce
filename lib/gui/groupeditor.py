@@ -23,6 +23,9 @@ import sys
 
 import domaindata
 
+import observer
+from observer import pmsg 
+
 # list control configuration
 COLIDX_NAME = 0
 COLIDX_TYPE = 1
@@ -45,6 +48,7 @@ class GroupEditDialog(wx.Dialog):
                                  #| wx.RESIZE_BORDER
                            )
         self.idx = -1
+        self.isSystemGroup = False
         self.haveChanges=False
 
         # sg = system groups, pg = private groups
@@ -123,6 +127,7 @@ class GroupEditDialog(wx.Dialog):
             self.glc.DeleteItem(self.idx)
             self.clearForm()
 
+
     def onAddOrUpdate(self, event):
         name = self.gnc.GetValue().strip()
         gtype= TYPE_ARR[self.gtc.GetSelection()]
@@ -140,7 +145,7 @@ class GroupEditDialog(wx.Dialog):
         self.clearForm()
 
     def _setDelButton(self):
-        if self.idx < 0:
+        if self.idx < 0 or TYPE_ARR[self.gtc.GetSelection()] == TYPE_TXT_SYS:
             self.deb.Disable()
         else:
             self.deb.Enable()
