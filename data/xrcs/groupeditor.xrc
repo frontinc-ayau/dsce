@@ -42,7 +42,7 @@
             <object class="wxFlexGridSizer">
               <object class="sizeritem">
                 <object class="wxStaticText" name="grplabel">
-                  <label>Groupname</label>
+                  <label>Groupname:</label>
                 </object>
               </object>
               <object class="sizeritem">
@@ -52,7 +52,7 @@
                 <flag>wxALL|wxEXPAND</flag>
               </object>
               <object class="sizeritem">
-                <object class="wxButton" name="updateaddbutton">
+                <object class="wxButton" name="upaddbutton">
                   <label>Add</label>
                 </object>
                 <flag>wxALL|wxEXPAND</flag>
@@ -60,12 +60,30 @@
               <object class="spacer">
                 <size>6</size>
               </object>
-              <object class="spacer">
-                <size>6</size>
+              <object class="sizeritem">
+                <object class="wxFlexGridSizer">
+                  <cols>2</cols>
+                  <rows>1</rows>
+                  <growablecols>0</growablecols>
+                  <object class="sizeritem">
+                    <object class="wxStaticText" name="tlabel">
+                      <label>Type:</label>
+                    </object>
+                    <flag>wxALL|wxEXPAND</flag>
+                  </object>
+                  <object class="sizeritem">
+                    <object class="wxChoice" name="typechoice"/>
+                    <flag>wxLEFT|wxALL|wxEXPAND</flag>
+                  </object>
+                </object>
+                <flag>wxALL|wxEXPAND</flag>
               </object>
+              
+              
               <object class="sizeritem">
                 <object class="wxButton" name="delbutton">
                   <label>Delete</label>
+                  <enabled>0</enabled>
                 </object>
                 <flag>wxALL|wxEXPAND</flag>
               </object>

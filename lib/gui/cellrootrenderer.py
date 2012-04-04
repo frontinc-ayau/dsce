@@ -71,18 +71,15 @@ class CellRootRenderer(wx.grid.PyGridCellRenderer):
         sh = grid.GetRowSize(row) # current height
         eh = self.getRowHeight(content, h) # expected height
 
-        logging.debug("sh %d - eh %d" % (sh,eh))
 
         for a in content.split(self._DELIMITER):
             dc.DrawText(a, x, y)
-            logging.debug("Draw %s" % a)
             y = y+h+1
 
         
         dc.DestroyClippingRegion()
 
         if eh > sh:
-            logging.debug("Set row size to %d" % (eh))
             grid.SetRowSize(row, eh)
             grid.ForceRefresh()
 

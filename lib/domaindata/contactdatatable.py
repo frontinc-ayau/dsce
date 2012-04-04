@@ -59,7 +59,6 @@ class ContactDataTable(wx.grid.PyGridTableBase):
 
 
     def GetNumberRows(self):
-        logging.debug("GetNumberRows requested %d" % len(self.rowLabels))
         return len(self.rowLabels)
 
     def GetNumberCols(self):
@@ -107,7 +106,6 @@ class ContactDataTable(wx.grid.PyGridTableBase):
         return self.colLabels[col]
        
     def GetRowLabelValue(self, row):
-        logging.debug("GetRowLabelValue: row = %d" % row)
         try:
             a = self.getContact(row).getAction()
         except Exception, e:
@@ -155,9 +153,7 @@ class ContactDataTable(wx.grid.PyGridTableBase):
         """Fills all necessary attributes by using the information 
         found in DomainContacts.
         """
-        logging.debug("Data available")
         self.dc = domaindata.get_contacts()
-        logging.debug("Number of contacts %s" % len(self.dc))
 
         rowCount = self.rebuildTableIndex()
 

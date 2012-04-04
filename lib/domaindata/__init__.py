@@ -131,6 +131,13 @@ def download_groups():
         logging.fatal("Not logged on!")
         
 
+def get_group_names():
+    global _contactGroups
+    if not _contactGroups:
+        return ([], [])
+    else:
+        return _contactGroups.getGroupNames()
+
 
 def load_contacts_store(): 
     _domainContacts = DomainContacts()
