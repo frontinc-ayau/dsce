@@ -130,7 +130,6 @@ def download_groups():
     else:
         logging.fatal("Not logged on!")
         
-
 def get_group_names():
     global _contactGroups
     if not _contactGroups:
@@ -138,6 +137,15 @@ def get_group_names():
     else:
         return _contactGroups.getGroupNames()
 
+def get_group_name(gid=None):
+    global _contactGroups
+    if gid:
+        return _contactGroups.getNameById(gid)
+    else:
+        return None
+
+def update_groups(sg, pg):
+    pass
 
 def load_contacts_store(): 
     _domainContacts = DomainContacts()
@@ -212,10 +220,4 @@ def get_grid_table(grid=None):
         _contactDataTable = ContactDataTable(grid)
     return _contactDataTable
 
-def get_group_name(gid=None):
-    global _contactGroups
-    if gid:
-        return _contactGroups.getNameById(gid)
-    else:
-        return None
     

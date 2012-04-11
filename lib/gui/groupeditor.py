@@ -23,17 +23,13 @@ import sys
 
 import domaindata
 
-import observer
-from observer import pmsg 
-
 # list control configuration
 COLIDX_NAME = 0
 COLIDX_TYPE = 1
 LABEL_NAME = "Group Name"
-LABEL_TYPE = "Type"
-TYPE_TXT_PRI = "Private"
-TYPE_TXT_SYS = "System"
-TYPE_ARR = [TYPE_TXT_PRI, TYPE_TXT_SYS]
+LABEL_TYPE = "Editable"
+TYPE_TXT_PRI = "Yes"
+TYPE_TXT_SYS = "No"
 
 LABEL_ADD = "Add"
 LABEL_UPD = "Update"
@@ -48,7 +44,6 @@ class GroupEditDialog(wx.Dialog):
                                  #| wx.RESIZE_BORDER
                            )
         self.idx = -1
-        self.isSystemGroup = False
         self.haveChanges=False
 
         # sg = system groups, pg = private groups
@@ -59,7 +54,6 @@ class GroupEditDialog(wx.Dialog):
 
         self.gnc = xrcl.getControl(self.panel, "grpname")
 
-        self.gtc = xrcl.getControl(self.panel, "typechoice")
 
         self.uab = xrcl.getControl(self.panel, "upaddbutton")
         self.uab.SetLabel(LABEL_ADD)
@@ -89,8 +83,6 @@ class GroupEditDialog(wx.Dialog):
         for g in self.pg:
             self.appendGroup(g, TYPE_TXT_PRI)
 
-        self.gtc.SetItems(TYPE_ARR)
-        self.setFormType()
 
     def binEvents(self):
         xrcl.getControl(self.panel, "wxID_OK").Bind(wx.EVT_BUTTON, self.onOk)
@@ -99,26 +91,23 @@ class GroupEditDialog(wx.Dialog):
         self.Bind(wx.EVT_BUTTON, self.onAddOrUpdate, self.uab)
         self.Bind(wx.EVT_BUTTON, self.onDelete, self.deb)
 
-    def setFormType(self, t=None):
-        if t:
-            try:
-                self.gtc.SetSelection(TYPE_ARR.index(t))
-            except:
-                self.gtc.SetSelection(0)
+
+    def isSystemGroup(self, idx):
+        if idx < 0 or (self.glc.GetItem(idx, COLIDX_TYPE).GetText() != TYPE_TXT_SYS):
+            return False
         else:
-            self.gtc.SetSelection(0)
+            return True
 
     def onItemSelected(self, event):
         self.idx = event.GetIndex()
-        self.gnc.SetValue(self.glc.GetItem(self.idx, COLIDX_NAME).GetText())
-        self.setFormType(self.glc.GetItem(self.idx, COLIDX_TYPE).GetText())
         self._setDelButton()
-        self._setUAButton()
+        if self.isSystemGroup(self.idx) == False:
+            self.gnc.SetValue(self.glc.GetItem(self.idx, COLIDX_NAME).GetText())
+            self._setUAButton()
 
     def clearForm(self):
         self.idx = -1
         self.gnc.SetValue("")
-        self.setFormType()
         self._setDelButton()
         self._setUAButton()
 
@@ -130,25 +119,24 @@ class GroupEditDialog(wx.Dialog):
 
     def onAddOrUpdate(self, event):
         name = self.gnc.GetValue().strip()
-        gtype= TYPE_ARR[self.gtc.GetSelection()]
 
         if len(name) == 0: return
 
         if self.idx < 0:
-            self.appendGroup( name, gtype)
+            self.appendGroup( name, TYPE_TXT_PRI)
             self.clearForm()
         else:
-            self.updateGroup( self.idx, name, gtype)
+            self.updateGroup( self.idx, name, TYPE_TXT_PRI)
 
 
     def onItemDeselected(self, event):
         self.clearForm()
 
     def _setDelButton(self):
-        if self.idx < 0 or TYPE_ARR[self.gtc.GetSelection()] == TYPE_TXT_SYS:
-            self.deb.Disable()
-        else:
+        if self.idx >= 0 and self.isSystemGroup(self.idx) == False:
             self.deb.Enable()
+        else:
+            self.deb.Disable()
 
     def _setUAButton(self):
         if self.idx < 0:
@@ -158,15 +146,17 @@ class GroupEditDialog(wx.Dialog):
 
 
     def saveChanges(self):
-        """Saves if anything (except primary or type) has been set."""
-        pass
+        if self.haveChanges:
+            log.debug("Save changes in group")
+        else:
+            log.debug("Nothing changed")
 
     def appendGroup(self, name, gtype=TYPE_TXT_PRI):
         idx = self.glc.InsertStringItem(sys.maxint, name)
         self.glc.SetStringItem(idx, COLIDX_TYPE, gtype)
         self.haveChanges = True
 
-    def updateGroup(self, idx, name, gtype):
+    def updateGroup(self, idx, name, gtype=TYPE_TXT_PRI):
         self.glc.SetStringItem(idx, COLIDX_NAME, name)
         self.glc.SetStringItem(idx, COLIDX_TYPE, gtype)
         self.haveChanges = True
