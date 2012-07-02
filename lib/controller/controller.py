@@ -17,6 +17,7 @@
 
 import wx, gui, domaindata, configuration, logging
 from domaindata.domaincontact import ACTION 
+from domaindata.dscegroups import GRP
 
 import observer
 from observer import pmsg 
@@ -47,6 +48,8 @@ class Controller(object):
         observer.subscribe(self.addContact, pmsg.ADD_CONTACT)
         observer.subscribe(self.delContact, pmsg.DEL_CONTACT)
         observer.subscribe(self.manageGroups, pmsg.MAN_GROUPS)
+
+        observer.subscribe(self.addGroup, pmsg.GROUP_ADDED)
 
 
     def login(self):
@@ -201,10 +204,13 @@ class Controller(object):
 
     def pubContacts(self, event):
         s = domaindata.get_action_summary()
-        txt = "Do you really want to %s %d, %s %d and %s %d contacts?" % ( 
+        txt = "Do you really want to %s %d, %s %d and %s %d contacts, and add %d update %d and delete %d groups?" % ( 
                         ACTION.ADD, s[ACTION.ADD], 
                         ACTION.UPDATE, s[ACTION.UPDATE], 
-                        ACTION.DELETE, s[ACTION.DELETE] 
+                        ACTION.DELETE, s[ACTION.DELETE],
+                        s[GRP.ADD],
+                        s[GRP.UPDATE],
+                        s[GRP.DELETE]
                         )
 
         dlg = self.app.displayDialog(wx.MessageDialog, txt, 'Question?', wx.YES_NO | wx.ICON_QUESTION)
@@ -228,4 +234,6 @@ class Controller(object):
             dlg.Destroy()
 
 
+    def addGroup(self, event):
+        domaindata.add_group(event.data)
 

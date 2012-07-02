@@ -23,6 +23,9 @@ import sys
 
 import domaindata
 
+import observer
+from observer import pmsg
+
 # list control configuration
 COLIDX_NAME = 0
 COLIDX_TYPE = 1
@@ -35,6 +38,35 @@ LABEL_ADD = "Add"
 LABEL_UPD = "Update"
 LABEL_DEL = "Delete"
 
+class ChangedGroups(object):
+    def __init__(self):
+        self.addedGroups = []
+        self.deletedGroups = []
+        self.updatedGroups = []
+
+    def add(self, gname):
+        log.debug("Add group %s" % gname)
+        if self.addedGroups.count(gname.strip()) == 0:
+            self.addedGroups.append(gname.strip())
+        else:
+            raise Exception("%s already exists!" % gname.strip())
+
+    def delete(self, gname): 
+        self.deletedGroups.append(gname.strip())
+
+    def update(self, src, dest):
+        self.updatedGroups.append((src.strip(), dest.strip()))
+
+    def publishChanges(self):
+        """Publishes changes, if any, so they can be handled properly by
+        observers who are interested (mainly domaindata)
+        """
+        if len(self.addedGroups) > 0:
+            for g in self.addedGroups:
+                log.debug("Published GROUP_ADDED %s" % g)
+                observer.send_message(pmsg.GROUP_ADDED, data=g)
+
+
 class GroupEditDialog(wx.Dialog):
 
     def __init__(self, parent, ID=-1, title="Manage Groups"):
@@ -44,7 +76,7 @@ class GroupEditDialog(wx.Dialog):
                                  #| wx.RESIZE_BORDER
                            )
         self.idx = -1
-        self.haveChanges=False
+        self.changedGroups = ChangedGroups()
 
         # sg = system groups, pg = private groups
         self.sg, self.pg = domaindata.get_group_names()
@@ -123,6 +155,7 @@ class GroupEditDialog(wx.Dialog):
         if len(name) == 0: return
 
         if self.idx < 0:
+            self.changedGroups.add(name)
             self.appendGroup( name, TYPE_TXT_PRI)
             self.clearForm()
         else:
@@ -146,20 +179,15 @@ class GroupEditDialog(wx.Dialog):
 
 
     def saveChanges(self):
-        if self.haveChanges:
-            log.debug("Save changes in group")
-        else:
-            log.debug("Nothing changed")
+        self.changedGroups.publishChanges()
 
     def appendGroup(self, name, gtype=TYPE_TXT_PRI):
         idx = self.glc.InsertStringItem(sys.maxint, name)
         self.glc.SetStringItem(idx, COLIDX_TYPE, gtype)
-        self.haveChanges = True
 
     def updateGroup(self, idx, name, gtype=TYPE_TXT_PRI):
         self.glc.SetStringItem(idx, COLIDX_NAME, name)
         self.glc.SetStringItem(idx, COLIDX_TYPE, gtype)
-        self.haveChanges = True
 
 
     def onOk(self, event):

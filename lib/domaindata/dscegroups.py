@@ -21,16 +21,25 @@ application.
 """
 
 import gdata.contacts.data
+import atom.data
 
 # Index of the group lists tuple returned
 # by DSCEGroupsFeed.getGroupNames()
 SYSTEM_GROUPS = 0
 PRIVATE_GROUPS = 1
 
+class _GLOBAL_(object):
+    pass
+GRP = _GLOBAL_()
+GRP.ADD = "a"
+GRP.UPDATE = "u"
+GRP.DELETE = "d"
+
 class DSCEGroupsFeed(gdata.contacts.data.GroupsFeed):
 
     def __init__(self, *args, **kwargs):
         gdata.contacts.data.GroupsFeed.__init__(self, *args, **kwargs)
+        self.ng = []
 
     def getGroupNames(self):
         sg = []
@@ -40,6 +49,8 @@ class DSCEGroupsFeed(gdata.contacts.data.GroupsFeed):
                 sg.append(e.system_group.id)
             else:
                 pg.append(e.title.text)
+        for e in self.ng: # in case we already have added some groups
+            pg.append(e.title.text)
         return (sg, pg)
 
     def getNameById(self,gid):
@@ -49,3 +60,15 @@ class DSCEGroupsFeed(gdata.contacts.data.GroupsFeed):
                     return e.system_group.id
                 else:
                     return e.title.text
+
+    def addGroup(self, name):
+        self.ng.append(gdata.contacts.data.GroupEntry(title=atom.data.Title(text=name)))
+
+    def getSumOfGroupChanges(self):
+        """return (nrNew, nrUpdate, neDelete)"""
+        s = {}
+        s[GRP.ADD] = len(self.ng)
+        s[GRP.UPDATE] = 0
+        s[GRP.DELETE] = 0
+        return s
+

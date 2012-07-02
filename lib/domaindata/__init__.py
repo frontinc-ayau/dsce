@@ -129,6 +129,11 @@ def download_groups():
         _contactGroups = _domainContactsClient.get_groups(desired_class=DSCEGroupsFeed)
     else:
         logging.fatal("Not logged on!")
+
+def publish_group_changes():
+    global _contactGroups, _domainContactsClient
+    for g in _contactGroups.ng:
+        _domainContactsClient.CreateGroup(g)
         
 def get_group_names():
     global _contactGroups
@@ -144,8 +149,13 @@ def get_group_name(gid=None):
     else:
         return None
 
-def update_groups(sg, pg):
-    pass
+def add_group(gname):
+    global _contactGroups
+    if not _contactGroups:
+        return
+    logging.debug("Add group %s" %gname)
+    _contactGroups.addGroup(gname)
+    
 
 def load_contacts_store(): 
     _domainContacts = DomainContacts()
@@ -179,7 +189,10 @@ def get_contacts():
 def publish_changes():
     """Publish changes made to the contact
     """
-    global _domainContacts, _contactDataTable
+    global _domainContacts, _contactDataTable 
+
+    publish_group_changes()
+
     for c in _domainContacts.getChangedContacts():
         logging.debug("Contact changed: uid %d" % c.getUid())
         action = c.getAction()
@@ -210,7 +223,11 @@ def publish_changes():
 
 
 def get_action_summary():
-    return _domainContacts.getActionSummary()
+    global _contactGroups
+    s = _domainContacts.getActionSummary() # contacts
+    # append groups changes (add, update, delete)
+    s.update(_contactGroups.getSumOfGroupChanges())
+    return s
 
 
 def get_grid_table(grid=None):
