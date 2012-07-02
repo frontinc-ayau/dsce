@@ -49,7 +49,7 @@ class ChangedGroups(object):
         if self.addedGroups.count(gname.strip()) == 0:
             self.addedGroups.append(gname.strip())
         else:
-            raise Exception("%s already exists!" % gname.strip())
+            observer.send_message(pmsg.ALERT, data=("Group %s already exists!" % gname.strip()))
 
     def delete(self, gname): 
         self.deletedGroups.append(gname.strip())
