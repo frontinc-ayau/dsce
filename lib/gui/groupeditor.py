@@ -61,11 +61,15 @@ class ChangedGroups(object):
         """Publishes changes, if any, so they can be handled properly by
         observers who are interested (mainly domaindata)
         """
-        if len(self.addedGroups) > 0:
-            for g in self.addedGroups:
-                log.debug("Published GROUP_ADDED %s" % g)
-                observer.send_message(pmsg.GROUP_ADDED, data=g)
+        for g in self.addedGroups:
+            log.debug("Published GROUP_ADDED %s" % g)
+            observer.send_message(pmsg.GROUP_ADDED, data=g)
+        self.addedGroups = []
 
+        for g in self.deletedGroups:
+            log.debug("Published GROUP_DELETED %s" % g)
+            observer.send_message(pmsg.GROUP_DELETED, data=g)
+        self.deletedGroups = []
 
 class GroupEditDialog(wx.Dialog):
 
@@ -145,6 +149,8 @@ class GroupEditDialog(wx.Dialog):
 
     def onDelete(self, event):
         if self.idx >= 0:
+            name = self.gnc.GetValue().strip()
+            self.changedGroups.delete(name)
             self.glc.DeleteItem(self.idx)
             self.clearForm()
 

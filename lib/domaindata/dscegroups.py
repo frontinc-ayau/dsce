@@ -40,6 +40,7 @@ class DSCEGroupsFeed(gdata.contacts.data.GroupsFeed):
     def __init__(self, *args, **kwargs):
         gdata.contacts.data.GroupsFeed.__init__(self, *args, **kwargs)
         self.ng = []
+        self.dg = []
 
     def getGroupNames(self):
         sg = []
@@ -53,6 +54,7 @@ class DSCEGroupsFeed(gdata.contacts.data.GroupsFeed):
             pg.append(e.title.text)
         return (sg, pg)
 
+
     def getNameById(self,gid):
         for e in self.entry:
             if e.id.text == gid:
@@ -64,11 +66,26 @@ class DSCEGroupsFeed(gdata.contacts.data.GroupsFeed):
     def addGroup(self, name):
         self.ng.append(gdata.contacts.data.GroupEntry(title=atom.data.Title(text=name)))
 
+    def delGroup(self, name):
+        for e in self.entry:
+            if e.system_group:
+                pass
+            else:
+                if e.title.text == name:
+                    self.dg.append(e)
+                    self.entry.remove(e)
+                    break
+
+        for e in self.ng: # in case it is a new group
+            if e.title.text == name:
+               self.ng.remove(e)
+               break
+
     def getSumOfGroupChanges(self):
         """return (nrNew, nrUpdate, neDelete)"""
         s = {}
         s[GRP.ADD] = len(self.ng)
         s[GRP.UPDATE] = 0
-        s[GRP.DELETE] = 0
+        s[GRP.DELETE] = len(self.dg)
         return s
 

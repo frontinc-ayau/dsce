@@ -130,10 +130,17 @@ def download_groups():
     else:
         logging.fatal("Not logged on!")
 
+def refresh_groups(): # XXX Does not work as all actions are done on a copy of DSCEGroupsFeed
+    global _contactGroups
+    _contactGroups = None
+    download_groups()
+
 def publish_group_changes():
     global _contactGroups, _domainContactsClient
     for g in _contactGroups.ng:
         _domainContactsClient.CreateGroup(g)
+    for g in _contactGroups.dg:
+        _domainContactsClient.Delete(g)
         
 def get_group_names():
     global _contactGroups
@@ -155,6 +162,13 @@ def add_group(gname):
         return
     logging.debug("Add group %s" %gname)
     _contactGroups.addGroup(gname)
+
+def del_group(gname):
+    global _contactGroups
+    if not _contactGroups:
+        return
+    logging.debug("Delete group %s" %gname)
+    _contactGroups.delGroup(gname)
     
 
 def load_contacts_store(): 
@@ -192,6 +206,7 @@ def publish_changes():
     global _domainContacts, _contactDataTable 
 
     publish_group_changes()
+    refresh_groups()
 
     for c in _domainContacts.getChangedContacts():
         logging.debug("Contact changed: uid %d" % c.getUid())

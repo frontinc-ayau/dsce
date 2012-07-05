@@ -50,6 +50,7 @@ class Controller(object):
         observer.subscribe(self.manageGroups, pmsg.MAN_GROUPS)
 
         observer.subscribe(self.addGroup, pmsg.GROUP_ADDED)
+        observer.subscribe(self.delGroup, pmsg.GROUP_DELETED)
 
 
     def login(self):
@@ -237,3 +238,5 @@ class Controller(object):
     def addGroup(self, event):
         domaindata.add_group(event.data)
 
+    def delGroup(self, event):
+        domaindata.del_group(event.data)
