@@ -124,26 +124,34 @@ def download_contacts():
 
 
 def download_groups():
-    global _contactGroups
+    global _contactGroups, _domainContactsClient
     if _domainContactsClient:
         _contactGroups = _domainContactsClient.get_groups(desired_class=DSCEGroupsFeed)
+        logging.debug("Groups downloaded. Group count: %d" % len(_contactGroups.entry))
     else:
         logging.fatal("Not logged on!")
 
-def refresh_groups(): # XXX Does not work as all actions are done on a copy of DSCEGroupsFeed
+def reload_groups(delay=0):
+    import time
     global _contactGroups
+    logging.debug("Reload: delay: %d grops: %d" % (delay, len(_contactGroups.entry)))
     _contactGroups = None
+    time.sleep(delay)
     download_groups()
+    logging.debug("Groups reloaded. Group count: %d" % len(_contactGroups.entry))
 
 def publish_group_changes():
     global _contactGroups, _domainContactsClient
     for g in _contactGroups.ng:
         _domainContactsClient.CreateGroup(g)
+    _contactGroups.ng = []
     for g in _contactGroups.dg:
         _domainContactsClient.Delete(g)
+    _contactGroups.dg = []
+    logging.debug("Groups published. Group count: %d" % len(_contactGroups.entry))
+    reload_groups(delay=4) # XXX Need a better solution to handle the delay of the google backend
         
 def get_group_names():
-    global _contactGroups
     if not _contactGroups:
         return ([], [])
     else:
@@ -151,7 +159,7 @@ def get_group_names():
 
 def get_group_name(gid=None):
     global _contactGroups
-    if gid:
+    if _contactGroups and gid:
         return _contactGroups.getNameById(gid)
     else:
         return None
@@ -206,7 +214,6 @@ def publish_changes():
     global _domainContacts, _contactDataTable 
 
     publish_group_changes()
-    refresh_groups()
 
     for c in _domainContacts.getChangedContacts():
         logging.debug("Contact changed: uid %d" % c.getUid())

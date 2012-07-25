@@ -54,8 +54,8 @@ class ChangedGroups(object):
     def delete(self, gname): 
         self.deletedGroups.append(gname.strip())
 
-    def update(self, src, dest):
-        self.updatedGroups.append((src.strip(), dest.strip()))
+    def update(self, oldname, newname):
+        self.updatedGroups.append((oldname.strip(), newname.strip()))
 
     def publishChanges(self):
         """Publishes changes, if any, so they can be handled properly by
@@ -192,8 +192,10 @@ class GroupEditDialog(wx.Dialog):
         self.glc.SetStringItem(idx, COLIDX_TYPE, gtype)
 
     def updateGroup(self, idx, name, gtype=TYPE_TXT_PRI):
+        oldname = self.glc.GetItem(idx, COLIDX_NAME).GetText()
         self.glc.SetStringItem(idx, COLIDX_NAME, name)
         self.glc.SetStringItem(idx, COLIDX_TYPE, gtype)
+        self.changedGroups.updateGroup(oldname, name)
 
 
     def onOk(self, event):
