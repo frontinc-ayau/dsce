@@ -63,7 +63,6 @@ if __name__ == "__main__":
     loginUser = LoginUser()
     # loginUser.setFromEmail("melcher.kla@gmail.com")
     loginUser.setFromEmail("klaus@themobileterminal.com")
-    loginUser.password = "vlgschneeweiss"
     dc = DomainContactsClient(loginUser)
     print "Login at google..."
     dc.loginAtSource()

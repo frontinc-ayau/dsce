@@ -38,39 +38,91 @@ LABEL_ADD = "Add"
 LABEL_UPD = "Update"
 LABEL_DEL = "Delete"
 
-class ChangedGroups(object):
-    def __init__(self):
-        self.addedGroups = []
-        self.deletedGroups = []
-        self.updatedGroups = []
+class GroupName(object):
+    def __init__(self, name):
+        self.current = name
+        self.previous = None
+        self.flag = None # pmsg.GROUP_UPDATED, pmsg.GROUP_ADDED, pmsg.GROUP_DELETED or None
 
-    def add(self, gname):
-        log.debug("Add group %s" % gname)
-        if self.addedGroups.count(gname.strip()) == 0:
-            self.addedGroups.append(gname.strip())
+    def update(self, new_name):
+        if self.current == new_name:
+            return
+
+        if not self.flag:
+            self.previous = self.current
+            self.current = new_name
+            self.flag = pmsg.GROUP_UPDATED
         else:
-            observer.send_message(pmsg.ALERT, data=("Group %s already exists!" % gname.strip()))
+            if self.previous == new_name: # means step back to previous name
+                self.current = self.previous
+                self.previous = None
+                if self.flag != pmsg.GROUP_ADDED:
+                    self.clearFlag()
+            else:
+                self.previous = self.current
+                self.current = new_name
+                if self.flag != pmsg.GROUP_ADDED: # added should remain added
+                    self.flag = pmsg.GROUP_UPDATED
 
-    def delete(self, gname): 
-        self.deletedGroups.append(gname.strip())
 
-    def update(self, oldname, newname):
-        self.updatedGroups.append((oldname.strip(), newname.strip()))
+    def delete(self):
+        self.flag = pmsg.GROUP_DELETED
+    
+    def new(self):
+        self.flag = pmsg.GROUP_ADDED
+
+    def clearFlag(self):
+        self.flag = None
+
+
+class Groups(object):
+    def __init__(self, names):
+        self.groups = []
+        if type(names) != list:
+            raise Exception("Groups needs a list to initialize!")
+        for n in names:
+            if type(n) == str or type(n) == unicode:
+                self.groups.append(GroupName(n))
+            else:
+                raise Exception("Cannot initialize GroupName from type %s" % str(type(n)))
+
+    def groupExists(self, name):
+        for g in self.groups:
+            if g.current == name:
+                return True
+        return False
+
+    def add(self, name):
+        if self.groupExists(name):
+            raise Exception("Group %s already exists" % name)
+        else:
+            g=GroupName(name)
+            g.new()
+            self.groups.append(g)
+
+    def delete(self, name):
+        for g in self.groups:
+            if g.current == name:
+                g.delete()
+                return
+        raise Exception("Cannot delete private group '%s' because it does not exist" % name)
+        
+
+    def update(self, old, new):
+        for g in self.groups:
+            if g.current == old:
+                g.update(new)
+
+    def get(self):
+        return self.groups
 
     def publishChanges(self):
-        """Publishes changes, if any, so they can be handled properly by
-        observers who are interested (mainly domaindata)
-        """
-        for g in self.addedGroups:
-            log.debug("Published GROUP_ADDED %s" % g)
-            observer.send_message(pmsg.GROUP_ADDED, data=g)
-        self.addedGroups = []
-
-        for g in self.deletedGroups:
-            log.debug("Published GROUP_DELETED %s" % g)
-            observer.send_message(pmsg.GROUP_DELETED, data=g)
-        self.deletedGroups = []
-
+        for g in self.groups:
+            if g.flag:
+                observer.send_message(g.flag, data=g)
+                g.clearFlag()
+                log.debug("Published %s %s" % (str(g.flag), g.current))
+        
 class GroupEditDialog(wx.Dialog):
 
     def __init__(self, parent, ID=-1, title="Manage Groups"):
@@ -80,10 +132,12 @@ class GroupEditDialog(wx.Dialog):
                                  #| wx.RESIZE_BORDER
                            )
         self.idx = -1
-        self.changedGroups = ChangedGroups()
 
-        # sg = system groups, pg = private groups
-        self.sg, self.pg = domaindata.get_group_names()
+        # s = system groups, p = private groups
+        s, p = domaindata.get_group_names()
+        self.sg = Groups(s)
+        self.pg = Groups(p)
+        
 
         self.panel = xrcl.loadPanel(self, "groupeditor.xrc", "groupeditor")
         self.glc = xrcl.getControl(self.panel, "grplstctrl")
@@ -114,10 +168,10 @@ class GroupEditDialog(wx.Dialog):
 
         self.glc.InsertColumn(COLIDX_NAME, LABEL_NAME)
         self.glc.InsertColumn(COLIDX_TYPE, LABEL_TYPE)
-        for g in self.sg:
-            self.appendGroup(g, TYPE_TXT_SYS)
-        for g in self.pg:
-            self.appendGroup(g, TYPE_TXT_PRI)
+        for g in self.sg.get():
+            self.appendGroup(g.current, TYPE_TXT_SYS)
+        for g in self.pg.get():
+            self.appendGroup(g.current, TYPE_TXT_PRI)
 
 
     def binEvents(self):
@@ -150,8 +204,12 @@ class GroupEditDialog(wx.Dialog):
     def onDelete(self, event):
         if self.idx >= 0:
             name = self.gnc.GetValue().strip()
-            self.changedGroups.delete(name)
-            self.glc.DeleteItem(self.idx)
+            try:
+                self.pg.delete(name)
+                self.glc.DeleteItem(self.idx)
+            except Exception, e:
+                observer.send_message(pmsg.ALERT, data=str(e))
+
             self.clearForm()
 
 
@@ -161,8 +219,11 @@ class GroupEditDialog(wx.Dialog):
         if len(name) == 0: return
 
         if self.idx < 0:
-            self.changedGroups.add(name)
-            self.appendGroup( name, TYPE_TXT_PRI)
+            try:
+                self.pg.add(name)
+                self.appendGroup( name, TYPE_TXT_PRI)
+            except Exception, e:
+                observer.send_message(pmsg.ALERT, data=str(e))
             self.clearForm()
         else:
             self.updateGroup( self.idx, name, TYPE_TXT_PRI)
@@ -185,7 +246,7 @@ class GroupEditDialog(wx.Dialog):
 
 
     def saveChanges(self):
-        self.changedGroups.publishChanges()
+        self.pg.publishChanges()
 
     def appendGroup(self, name, gtype=TYPE_TXT_PRI):
         idx = self.glc.InsertStringItem(sys.maxint, name)
@@ -195,7 +256,7 @@ class GroupEditDialog(wx.Dialog):
         oldname = self.glc.GetItem(idx, COLIDX_NAME).GetText()
         self.glc.SetStringItem(idx, COLIDX_NAME, name)
         self.glc.SetStringItem(idx, COLIDX_TYPE, gtype)
-        self.changedGroups.updateGroup(oldname, name)
+        self.pg.update(oldname, name)
 
 
     def onOk(self, event):

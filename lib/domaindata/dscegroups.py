@@ -41,6 +41,7 @@ class DSCEGroupsFeed(gdata.contacts.data.GroupsFeed):
         gdata.contacts.data.GroupsFeed.__init__(self, *args, **kwargs)
         self.ng = []
         self.dg = []
+        self.ug = []
 
     def getGroupNames(self):
         sg = []
@@ -50,7 +51,7 @@ class DSCEGroupsFeed(gdata.contacts.data.GroupsFeed):
                 sg.append(e.system_group.id)
             else:
                 pg.append(e.title.text)
-        for e in self.ng: # in case we already have added some groups
+        for e in self.ng+self.ug: # in case we already have added some groups
             pg.append(e.title.text)
         return (sg, pg)
 
@@ -80,12 +81,29 @@ class DSCEGroupsFeed(gdata.contacts.data.GroupsFeed):
             if e.title.text == name:
                self.ng.remove(e)
                break
+        # XXX what if group had been first updated and then deleted befor publishing?
+
+    def updateGroup(self, oldname, newname):
+        for e in self.entry:
+            if e.system_group:
+                pass
+            else:
+                if e.title.text == oldname:
+                    e.title.text = newname
+                    self.ug.append(e)
+                    self.entry.remove(e)
+                    break
+        for e in self.ng: # in case it is a new group
+            if e.title.text == oldname:
+               e.title.text = newname
+               break
+        
 
     def getSumOfGroupChanges(self):
         """return (nrNew, nrUpdate, neDelete)"""
         s = {}
         s[GRP.ADD] = len(self.ng)
-        s[GRP.UPDATE] = 0
+        s[GRP.UPDATE] = len(self.ug)
         s[GRP.DELETE] = len(self.dg)
         return s
 

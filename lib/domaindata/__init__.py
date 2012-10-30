@@ -164,20 +164,24 @@ def get_group_name(gid=None):
     else:
         return None
 
-def add_group(gname):
+def add_group(group):
     global _contactGroups
     if not _contactGroups:
         return
-    logging.debug("Add group %s" %gname)
-    _contactGroups.addGroup(gname)
+    logging.debug("Add group %s" %group.current)
+    _contactGroups.addGroup(group.current)
 
-def del_group(gname):
+def del_group(group):
     global _contactGroups
     if not _contactGroups:
         return
-    logging.debug("Delete group %s" %gname)
-    _contactGroups.delGroup(gname)
+    logging.debug("Delete group %s" %group.current)
+    _contactGroups.delGroup(group.current)
     
+def update_group(group):
+    global _contactGroups
+    logging.debug("Update group %s to %s" % (group.previous, group.current))
+    _contactGroups.updateGroup(group.previous, group.current)
 
 def load_contacts_store(): 
     _domainContacts = DomainContacts()
