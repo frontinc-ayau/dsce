@@ -34,6 +34,7 @@ from phoneeditor import PhoneEditDialog
 from orgeditor import OrgEditDialog
 from orgrenderer import OrgCellRenderer
 from grouprenderer import GroupCellRenderer
+from groupcelleditor import GroupCellEditDialog
 
 import logging
 
@@ -104,7 +105,11 @@ class GridView(wx.grid.Grid):
         elif c == metadata.get_col_idx("organization"):
             OrgEditDialog(self, -1, self.table, evt.GetRow(), c)
             evt.Veto()
-        evt.Skip()
+        elif c == metadata.get_col_idx("groups"):
+            GroupCellEditDialog(self, -1, self.table, evt.GetRow(), c)
+            evt.Veto()
+        else:
+            evt.Skip()
 
     def scrollToBottom(self):
         r = self.GetScrollRange(wx.VERTICAL) 

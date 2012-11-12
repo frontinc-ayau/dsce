@@ -164,6 +164,13 @@ def get_group_name(gid=None):
     else:
         return None
 
+def get_group_id(name=None):
+    global _contactGroups
+    if _contactGroups and name:
+        return _contactGroups.getGroupIDbyName(name)
+    else:
+        return None
+
 def add_group(group):
     global _contactGroups
     if not _contactGroups:

@@ -63,7 +63,21 @@ class DSCEGroupsFeed(gdata.contacts.data.GroupsFeed):
                     return e.system_group.id
                 else:
                     return e.title.text
+        # XXX What about new groups...
 
+
+    def getGroupIDbyName(self, name):
+        for e in self.entry:
+            if e.system_group:
+                if e.system_group.id == name:
+                    return e.id.text
+            else:
+                if e.title.text == name:
+                    return e.id.text
+        for e in self.ng+self.ug: # in case we already have added some groups
+            if e.title.text == name:
+                return e.id.text
+            
     def addGroup(self, name):
         self.ng.append(gdata.contacts.data.GroupEntry(title=atom.data.Title(text=name)))
 

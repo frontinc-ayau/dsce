@@ -135,7 +135,12 @@ class DomainContact(object):
         return self.entry.group_membership_info
 
     def setGroups(self, groups=[]):
-        pass
+        self.entry.group_membership_info = []
+        for i in groups:
+            mi=gdata.contacts.data.GroupMembershipInfo()
+            mi.href=i
+            self.entry.group_membership_info.append(mi) 
+        self.setActionUpdate()
 
     def getAdditionalName(self):
         if self.entry.name and self.entry.name.additional_name:
