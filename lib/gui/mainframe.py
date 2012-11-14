@@ -31,7 +31,6 @@ import resources
 from observer import *
 from gridview import GridView
 
-from simplesearchctrl import SimpleSearchCtrl
 
 
 class MainFrame(wx.Frame):
@@ -117,8 +116,10 @@ class MainFrame(wx.Frame):
                                                           longHelp="Publish contact")
 
         self.tb.AddSeparator()
-        search = SimpleSearchCtrl(self.tb, size=(150,-1), doSearch=self.doSearch)
-        self.tb.AddControl(search)
+        self.search = wx.SearchCtrl(self.tb, size=(150,-1), style=wx.TE_PROCESS_ENTER)
+        self.search.SetMenu(None)
+        
+        self.tb.AddControl(self.search)
 
         self.tb.Realize()
 
@@ -168,8 +169,3 @@ class MainFrame(wx.Frame):
             observer.send_message(pmsg.EXIT_APP, event)
 
 
-    def doSearch(self, text):
-        observer.send_message(pmsg.SEARCH, text)
-        # To tell the SearchCtrl to remember
-        return True
-   

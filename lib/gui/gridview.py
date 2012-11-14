@@ -55,11 +55,18 @@ class GridView(wx.grid.Grid):
     def bind(self):
         self.Bind(wx.grid.EVT_GRID_EDITOR_SHOWN, self.gridEditorRequest, self)
         self.Bind(wx.grid.EVT_GRID_CELL_CHANGE, self.gridCellChanged, self)
+        # search events
+        self.Bind(wx.EVT_TEXT_ENTER, self.onSearch)
+        self.Bind(EVT_SEARCHCTRL_SEARCH_BTN, self.onSearch)
 
     def subscribe(self):
         observer.subscribe(self.appendRow, pmsg.CONTACT_ADDED) # interested if contact added
         observer.subscribe(self.forceRefresh, pmsg.DATA_UPLOADED) # because of label changes
         observer.subscribe(self.forceRefresh, pmsg.CONTACT_DELETED) # because of label changes
+        
+
+    def onSearch(self, evt):
+        logging.debug("Searching for %s" % (str(evt)))
         
     def appendRow(self, event):
         logging.debug("In Grid.appendRow())")
