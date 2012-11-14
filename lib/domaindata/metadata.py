@@ -22,19 +22,19 @@ labels to display a.s.o.
 # Use 'c' instead of DomainContact and self, where it has to be implemented by the 
 # class that uses this information (see ContactDataTable as an example)
 # [ (attributeName, attributeLabel, getterMethod, setterMethod, editable, visible) ]
-_META_DATA_=[ ( "uid", "UID", "getUid()", None, False, False),
-              ( "prefix", "Prefix", "c.getNamePrefix()", "c.setNamePrefix(value)", True, True),
-              ( "groups", "Groups", "c.getGroups()", "c.setGroups(value)", False, True),
-              ( "family_name","Family Name", "c.getFamilyName()", "c.setFamilyName(value)", True, True),
-              ( "given_name", "Given Name", "c.getGivenName()", "c.setGivenName(value)", True, True),
-              ( "additional_name", "Additional Name", "c.getAdditionalName()", "c.setAdditionalName(value)", True, True),
-              ( "suffix", "Suffix", "c.getNameSuffix()", "c.setNameSuffix(value)", True, True),
-              ( "full_name", "Full Name", "c.getFullName()", "c.setFullName(value)", True, True),
-              ( "email", "Email", "c.getEmail()", "c.setEmails(value)", True, True),
-              ( "phone", "Phone", "c.getPhoneNumber()", "c.setPhoneNumber(value)", True, True),
-              ( "postal_address", "Address", "c.getPostalAddress()", "c.setPostalAddress(value)", True, True),
-              ( "organization", "Organization", "c.getOrganization()", "c.setOrganization(value)", True, True),
-              ( "action", "Action", "c.getAction()", "c.setActionUpdate()", False, False)
+_META_DATA_=[ [ "uid", "UID", "getUid()", None, False, False],
+              [ "prefix", "Prefix", "c.getNamePrefix()", "c.setNamePrefix(value)", True, True],
+              [ "family_name","Family Name", "c.getFamilyName()", "c.setFamilyName(value)", True, True],
+              [ "given_name", "Given Name", "c.getGivenName()", "c.setGivenName(value)", True, True],
+              [ "additional_name", "Additional Name", "c.getAdditionalName()", "c.setAdditionalName(value)", True, True],
+              [ "email", "Email", "c.getEmail()", "c.setEmails(value)", True, True],
+              [ "phone", "Phone", "c.getPhoneNumber()", "c.setPhoneNumber(value)", True, True],
+              [ "postal_address", "Address", "c.getPostalAddress()", "c.setPostalAddress(value)", True, True],
+              [ "organization", "Organization", "c.getOrganization()", "c.setOrganization(value)", True, True],
+              [ "groups", "Groups", "c.getGroups()", "c.setGroups(value)", True, True],
+              [ "full_name", "Full Name", "c.getFullName()", "c.setFullName(value)", True, True],
+              [ "suffix", "Suffix", "c.getNameSuffix()", "c.setNameSuffix(value)", True, True],
+              [ "action", "Action", "c.getAction()", "c.setActionUpdate()", False, False]
             ]
               
 IDX_ATTRIBUTE   = 0
@@ -44,7 +44,13 @@ IDX_SETTER      = 3
 IDX_EDITABLE    = 4
 IDX_VISIBLE     = 5
 
-
+def hide_column(attributeName):
+    for item in _META_DATA_:
+        if item[IDX_ATTRIBUTE] is attributeName:
+            item[IDX_VISIBLE] = False
+            break
+            
+    
 # For all get* it is important that when returning a list the order of
 # _META_DATA_ must not be changed.
 # XXX but still should be changed in the future... ;-)

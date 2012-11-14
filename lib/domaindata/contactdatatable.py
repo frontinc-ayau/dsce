@@ -119,21 +119,24 @@ class ContactDataTable(wx.grid.PyGridTableBase):
             return self.rowActionLabels[a]
 
     def appendRow(self, c):
-            """c ... DomainContact object"""
-            self.rowLabels.append(c.getUid())
-            return True
+        """c ... DomainContact object"""
+        self.rowLabels.append(c.getUid())
+        return True
 
     def DeleteRows(self, row, numRows=1):
-            self.rowLabels.pop(row)
-            return True
+        self.rowLabels.pop(row)
+        return True
+
+    def DeleteCols(self, pos, numRows=1):
+        return True
 
     def deleteRow(self, c):
-            row = self.getRowFromUid(c.getUid())
-            self.DeleteRows(row)
-            logging.debug("GRIDTABLE_NOTIFY_ROWS_DELETED")
-            msg = wx.grid.GridTableMessage(self,
-                    wx.grid.GRIDTABLE_NOTIFY_ROWS_DELETED,row,1)
-            self.grid.ProcessTableMessage(msg) 
+        row = self.getRowFromUid(c.getUid())
+        self.DeleteRows(row)
+        logging.debug("GRIDTABLE_NOTIFY_ROWS_DELETED")
+        msg = wx.grid.GridTableMessage(self,
+                wx.grid.GRIDTABLE_NOTIFY_ROWS_DELETED,row,1)
+        self.grid.ProcessTableMessage(msg) 
 
 
     def rebuildTableIndex(self):

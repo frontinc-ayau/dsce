@@ -57,6 +57,7 @@ pmsg.register("GROUPS_DOWNLOADED")
 pmsg.register("GROUP_ADDED")
 pmsg.register("GROUP_DELETED")
 pmsg.register("GROUP_UPDATED")
+pmsg.register("GROUP_DELETION_DONE")
 
 def send_message(*args, **kwargs):
     Publisher.sendMessage(*args, **kwargs)

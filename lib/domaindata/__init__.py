@@ -142,14 +142,22 @@ def reload_groups(delay=0):
 
 def publish_group_changes():
     global _contactGroups, _domainContactsClient
+    publish_added_groups()
+    publish_deleted_groups()
+    logging.debug("Groups published. Group count: %d" % len(_contactGroups.entry))
+    reload_groups(delay=4) # XXX Need a better solution to handle the delay of the google backend
+
+def publish_added_groups():
+    global _contactGroups, _domainContactsClient
     for g in _contactGroups.ng:
         _domainContactsClient.CreateGroup(g)
     _contactGroups.ng = []
+
+def publish_deleted_groups():
+    global _contactGroups, _domainContactsClient
     for g in _contactGroups.dg:
         _domainContactsClient.Delete(g)
     _contactGroups.dg = []
-    logging.debug("Groups published. Group count: %d" % len(_contactGroups.entry))
-    reload_groups(delay=4) # XXX Need a better solution to handle the delay of the google backend
         
 def get_group_names():
     if not _contactGroups:
@@ -177,12 +185,15 @@ def add_group(group):
         return
     logging.debug("Add group %s" %group.current)
     _contactGroups.addGroup(group.current)
+    # make added groups immediate visible
+    publish_added_groups()
+    reload_groups(delay=4)
 
 def del_group(group):
     global _contactGroups
     if not _contactGroups:
         return
-    logging.debug("Delete group %s" %group.current)
+    logging.debug("Delete group %s" % group.current)
     _contactGroups.delGroup(group.current)
     
 def update_group(group):
@@ -264,7 +275,7 @@ def get_action_summary():
 
 
 def get_grid_table(grid=None):
-    """grit can be None as it makes the table requestable more than once"""
+    """grid can be None as it makes the table requestable more than once"""
     global _contactDataTable
     if _contactDataTable == None:
         _contactDataTable = ContactDataTable(grid)

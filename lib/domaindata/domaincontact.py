@@ -22,6 +22,9 @@ import gdata.contacts.data
 import gdata.data
 import logging
 
+import observer
+from observer import pmsg
+
 class _GOBAL_(object):
     pass
 
@@ -62,6 +65,10 @@ class DomainContact(object):
         else: # must be a new contact
             self.entry = gdata.contacts.data.ContactEntry()
             self.setActionAdd()
+        self.__subscirbeEvents__()
+
+    def __subscirbeEvents__(self):
+        observer.subscribe(self.onGroupDeletEvent, pmsg.GROUP_DELETION_DONE)
 
     def isEmpty(self):
         """It is assumed that at least one of the following attributes has to be set 
@@ -141,6 +148,15 @@ class DomainContact(object):
             mi.href=i
             self.entry.group_membership_info.append(mi) 
         self.setActionUpdate()
+
+    def onGroupDeletEvent(self, event):
+        for mi in self.getGroups():
+            if mi.href == event.data['id']:
+                self.entry.group_membership_info.remove(mi)
+                logging.debug("Removed group %s from %s" % (self.getFamilyName(), event.data['name']))
+                del(mi)
+                break
+        
 
     def getAdditionalName(self):
         if self.entry.name and self.entry.name.additional_name:

@@ -23,6 +23,9 @@ application.
 import gdata.contacts.data
 import atom.data
 
+import observer
+from observer import pmsg
+
 # Index of the group lists tuple returned
 # by DSCEGroupsFeed.getGroupNames()
 SYSTEM_GROUPS = 0
@@ -81,6 +84,10 @@ class DSCEGroupsFeed(gdata.contacts.data.GroupsFeed):
     def addGroup(self, name):
         self.ng.append(gdata.contacts.data.GroupEntry(title=atom.data.Title(text=name)))
 
+    def __delitionDone__(self, e):
+        d={'id':e.id.text, 'name':e.title.text}
+        observer.send_message(pmsg.GROUP_DELETION_DONE, data=d)
+
     def delGroup(self, name):
         for e in self.entry:
             if e.system_group:
@@ -89,11 +96,13 @@ class DSCEGroupsFeed(gdata.contacts.data.GroupsFeed):
                 if e.title.text == name:
                     self.dg.append(e)
                     self.entry.remove(e)
+                    self.__delitionDone__(e)
                     break
 
         for e in self.ng: # in case it is a new group
             if e.title.text == name:
                self.ng.remove(e)
+               self.__delitionDone__(e)
                break
         # XXX what if group had been first updated and then deleted befor publishing?
 
