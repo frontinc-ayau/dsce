@@ -118,6 +118,7 @@ class MainFrame(wx.Frame):
         self.tb.AddSeparator()
         self.search = wx.SearchCtrl(self.tb, size=(150,-1), style=wx.TE_PROCESS_ENTER)
         self.search.SetMenu(None)
+        self.search.ShowCancelButton(1)
         
         self.tb.AddControl(self.search)
 
@@ -136,6 +137,7 @@ class MainFrame(wx.Frame):
         pmsg.register("MAN_GROUPS")  # request to globally manage groups
         pmsg.register("PUB_CONTACT")
         pmsg.register("SEARCH")
+        pmsg.register("CANCEL_SEARCH")
 
     def binEvents(self):
         # toolbar events
@@ -145,6 +147,10 @@ class MainFrame(wx.Frame):
         self.tb.Bind(wx.EVT_TOOL, self.publishEvent, id=self.GRP_ID)
         self.tb.Bind(wx.EVT_TOOL, self.publishEvent, id=self.GET_ID)
         self.tb.Bind(wx.EVT_TOOL, self.publishEvent, id=self.PUB_ID)
+        self.tb.Bind(wx.EVT_TEXT, self.onSearch)
+        self.tb.Bind(wx.EVT_TEXT_ENTER, self.onSearch)
+        self.tb.Bind(wx.EVT_SEARCHCTRL_SEARCH_BTN, self.onSearch)
+        self.tb.Bind(wx.EVT_SEARCHCTRL_CANCEL_BTN, self.resetSearch)
 
     def publishEvent(self, event):
         """Depending on the id the event with the appropriate message 
@@ -169,3 +175,13 @@ class MainFrame(wx.Frame):
             observer.send_message(pmsg.EXIT_APP, event)
 
 
+    def onSearch(self, evt):
+        s = self.search.GetValue()
+        if len(s) > 0:
+            observer.send_message(pmsg.SEARCH, data=s)
+        else:
+            observer.send_message(pmsg.CANCEL_SEARCH, data=s)
+
+    def resetSearch(self, evt):
+        self.search.Clear()
+        observer.send_message(pmsg.CANCEL_SEARCH)

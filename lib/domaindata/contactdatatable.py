@@ -57,7 +57,6 @@ class ContactDataTable(wx.grid.PyGridTableBase):
         
         observer.subscribe(self._populateTable, pmsg.DATA_DOWNLOADED)
 
-
     def GetNumberRows(self):
         return len(self.rowLabels)
 

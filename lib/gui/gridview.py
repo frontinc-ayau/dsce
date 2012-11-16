@@ -44,7 +44,9 @@ class GridView(wx.grid.Grid):
 
         wx.grid.Grid.__init__(self,parent,id, wx.Point(0, 0), wx.DefaultSize,
                               wx.NO_BORDER | wx.WANTS_CHARS)
+        self.SetRowMinimalAcceptableHeight(0)
         self.table = domaindata.get_grid_table(self)
+        self.hiddenRows = []
         self.SetTable(self.table, True)
         self.setRenderer()
         self.setEditors()
@@ -55,18 +57,14 @@ class GridView(wx.grid.Grid):
     def bind(self):
         self.Bind(wx.grid.EVT_GRID_EDITOR_SHOWN, self.gridEditorRequest, self)
         self.Bind(wx.grid.EVT_GRID_CELL_CHANGE, self.gridCellChanged, self)
-        # search events
-        self.Bind(wx.EVT_TEXT_ENTER, self.onSearch)
-        self.Bind(EVT_SEARCHCTRL_SEARCH_BTN, self.onSearch)
 
     def subscribe(self):
         observer.subscribe(self.appendRow, pmsg.CONTACT_ADDED) # interested if contact added
         observer.subscribe(self.forceRefresh, pmsg.DATA_UPLOADED) # because of label changes
         observer.subscribe(self.forceRefresh, pmsg.CONTACT_DELETED) # because of label changes
-        
+        observer.subscribe(self.hideRows, pmsg.HIDE_ROWS) # used by search
+        observer.subscribe(self.unhideAll, pmsg.UNHIDE_ROWS) # used by search
 
-    def onSearch(self, evt):
-        logging.debug("Searching for %s" % (str(evt)))
         
     def appendRow(self, event):
         logging.debug("In Grid.appendRow())")
@@ -78,6 +76,31 @@ class GridView(wx.grid.Grid):
         self.SetFocus()
         self.SetGridCursor((self.table.GetNumberRows()-1),0)
         self.scrollToBottom()
+
+    def hideRows(self, event):
+        self.unhideRows()
+        self.SetRowLabelSize(0)
+        self.SetColLabelSize(0)
+        for r in event.data:
+            self.HideRow(r)
+        self.hiddenRows += event.data
+
+    def HideRow(self, row):
+        self.SetRowSize(row, 0)
+
+    def unhideRows(self):
+        for i in self.hiddenRows:
+            self.SetRowSize(i, self.GetDefaultRowSize())
+        self.hiddenRows = []
+
+    def unhideLabels(self):
+        self.SetRowLabelSize(self.GetDefaultRowLabelSize())
+        self.SetColLabelSize(self.GetDefaultColLabelSize())
+
+    def unhideAll(self, event):
+        self.unhideLabels()
+        self.unhideRows()
+
 
     def getActiveRows(self):
         """Returns the first row where any kind of selection or cursor is found

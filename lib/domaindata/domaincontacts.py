@@ -20,11 +20,14 @@ import logging, sys
 from domaincontact import ACTION
 from domaincontact import DomainContact
 
+import sfilter
+
 class DomainContacts(list):
     """Container for all downloaded domain contacts.
     """
     def __init__(self, *args, **kw):
         list.__init__(self, *args, **kw)
+        self.hiddenContacts = []
 
     def getContact(self, uid):
         """Returns the contact with the appropriate UID, else None
@@ -70,40 +73,14 @@ class DomainContacts(list):
 
         return cc
 
+    def getSearchHits(self, s):
+        """Return indices of contacts that apply to the 
+        search filter as list"""
+        i = 0
+        rl = []
+        for c in self:
+            if sfilter.contact_has_string(c, s) == False:
+                rl.append(i)
+            i += 1
+        return rl
 
-# Tests
-if __name__ == "__main__":
-
-    import unittest, sys
-    class TestDomainContact(unittest.TestCase):
-        def testListFunctionality(self):
-            d = DomainContacts()
-            d.append("c1")
-            d.append("c2")
-            d.append("c3")
-            d.append("c4")
-            d.append("c5")
-            expect="['c1', 'c2', 'c3', 'c4', 'c5']"
-            self.assertEqual(str(d), expect, msg="List does not initialize correct")
-            
-            d.remove("c3")
-            expect="['c1', 'c2', 'c4', 'c5']"
-            self.assertEqual(str(d), expect, msg="List.remove() does not work like expected")
-
-            self.assertEqual(d.index("c2"), 1, msg="List.index() does not work like expected")
-
-        def testGetContact(self):
-            from domaincontact import DomainContact
-            dc = DomainContact()
-            dc.setFamilyName("Test")
-
-            d = DomainContacts()
-            d.append(dc)
-            self.assertEqual(d.getContact(1).getFamilyName(), "Test", 
-                             msg="List.getContact(1) does not work like expected")
-
-
-    unittest.main(argv = unittest.sys.argv + ['--verbose'])
-    # unittest.main()
-    sys.exit(0)
-    

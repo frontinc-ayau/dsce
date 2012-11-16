@@ -43,6 +43,7 @@
     ["lib/domaindata/pnf.py", true, false],
     ["lib/domaindata/spaf.py", true, false],
     ["lib/domaindata/__init__.py", true, false],
+    ["lib/sfilter/__init__.py", true, false],
     ["lib/gui/addresseditor.py", true, false],
     ["lib/gui/addressrenderer.py", true, false],
     ["lib/gui/countrychoice.py", true, false],

@@ -72,7 +72,7 @@ class DomainContact(object):
 
     def isEmpty(self):
         """It is assumed that at least one of the following attributes has to be set 
-        be accepted as a contact entry.
+        to be accepted as a contact entry.
             - at least one part of the name or, except prefix and suffix
             - an email address
         As at the moment I do not know any other main identification- or reference point

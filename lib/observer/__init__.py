@@ -59,6 +59,9 @@ pmsg.register("GROUP_DELETED")
 pmsg.register("GROUP_UPDATED")
 pmsg.register("GROUP_DELETION_DONE")
 
+pmsg.register("HIDE_ROWS")
+pmsg.register("UNHIDE_ROWS")
+
 def send_message(*args, **kwargs):
     Publisher.sendMessage(*args, **kwargs)
 

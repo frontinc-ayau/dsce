@@ -53,6 +53,9 @@ class Controller(object):
         observer.subscribe(self.delGroup, pmsg.GROUP_DELETED)
         observer.subscribe(self.updGroup, pmsg.GROUP_UPDATED)
 
+        observer.subscribe(self.doSearch, pmsg.SEARCH)
+        observer.subscribe(self.cancelSearch, pmsg.CANCEL_SEARCH)
+
 
     def login(self):
         """Get login information and logon at the account
@@ -244,3 +247,11 @@ class Controller(object):
 
     def updGroup(self, event):
         domaindata.update_group(event.data)
+
+    def doSearch(self, evt):
+        domaindata.do_search(str(evt.data))
+
+    def cancelSearch(self, evt):
+        logging.debug("Controller search canceled")
+        domaindata.cancel_search()
+

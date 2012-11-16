@@ -36,6 +36,9 @@ from domaincontacts import DomainContacts
 from dscegroups import *
 from contactdatatable import *
 
+import observer
+from observer import pmsg
+
 import storage
 
 """The following objects will be initialized by init()
@@ -281,4 +284,12 @@ def get_grid_table(grid=None):
         _contactDataTable = ContactDataTable(grid)
     return _contactDataTable
 
+def do_search(sf):  # sf: search filter as string
+    global _domainContacts
+    if _domainContacts:
+        cidx = _domainContacts.getSearchHits(sf)
+        observer.send_message(pmsg.HIDE_ROWS, data=cidx)
+
     
+def cancel_search(): # just for consitency it is done here
+    observer.send_message(pmsg.UNHIDE_ROWS)
