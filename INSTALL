@@ -28,7 +28,7 @@ or '0.0.0dev'.
           +---+-----------------------+-----------------------------+
           | A | source package        | dsce-[VERSION].tar.gz       |
           | B | full developer source | dsce-dev-[VERSION].tar.gz   |
-          | C | windows executable    | dsce-[VERSION]-Win32bit.zip |
+          | C | windows executable    | dsce-[VERSION]-Windows.zip |
           +---+-----------------------+-----------------------------+
 
   Please follow the appropriate installation instructions according your package.
