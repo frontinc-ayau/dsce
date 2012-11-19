@@ -132,7 +132,7 @@ def download_groups():
         _contactGroups = _domainContactsClient.get_groups(desired_class=DSCEGroupsFeed)
         logging.debug("Groups downloaded. Group count: %d" % len(_contactGroups.entry))
     else:
-        logging.fatal("Not logged on!")
+        logging.debug("Not logged on!")
 
 def reload_groups(delay=0):
     import time
