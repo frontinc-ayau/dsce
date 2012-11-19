@@ -195,7 +195,7 @@ def compile():
     sys.argv.append("py2exe")
 
     rs = """setup(
-        console=['bin/DomainSharedContactsEditor.py'],
+        windows=['bin/DomainSharedContactsEditor.py'],
         options={
             "py2exe":{ 
                 "packages": ['wx.lib.pubsub', 'gdata']
