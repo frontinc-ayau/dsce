@@ -215,11 +215,14 @@ def build_exe_package(pf, vn, mf):
     if OS != "Windows":
         exit_on_error("Cannot build executable on %s" % OS)
 
-    ARCH = platform.architecture()[0]
-    log.info("Create %s executable for %s" % (ARCH, OS))
+    # ARCH = platform.architecture()[0]
+    OS = platform.uname()[0]
+    # log.info("Create %s executable for %s" % (ARCH, OS))
+    log.info("Create %s executable for %s" % (OS, OS))
 
     pr = get_pkg_root(pf, vn)
-    pr = "%s-Win%s" % (pr, ARCH)
+    # pr = "%s-Win%s" % (pr, ARCH)
+    pr = "%s-%s" % (pr, OS)
     log.info("pkg name %s" % pr)
 
     log.info("Remove old directories")
