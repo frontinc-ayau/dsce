@@ -64,7 +64,6 @@
     ["lib/gui/groupeditor.py", true, false],
     ["lib/gui/orgrenderer.py", true, false],
     ["lib/gui/xrcl.py", true, false],
-    ["lib/gui/simplesearchctrl.py", true, false],
     ["lib/gui/__init__.py", true, false],
     ["lib/observer/__init__.py", true, false],
     ["lib/resources/__init__.py", true, false],
