@@ -18,32 +18,37 @@
 in searching.""" 
 import logging
 
-def find_string_in_emails(c, s):
-    """c = contact
-    s = string to search for"""
-    return ( s in str(c.getEmailAddresses()).upper())
-
 def contact_has_string(contact, s):
     """Returns True, if any contact data contains
     the passed string s. This function works NOT case
     sensitive."""
     S=s.upper()
-    if contact.getFamilyName().upper().find(S) >= 0:
-        return True
-    elif contact.getGivenName().upper().find(S) >= 0:
-        return True
-    elif contact.getFullName().upper().find(S) >= 0:
-        return True
-    elif contact.getNamePrefix().upper().find(S) >= 0:
-        return True
-    elif contact.getNameSuffix().upper().find(S) >= 0:
-        return True
-    elif contact.getAdditionalName().upper().find(S) >= 0:
-        return True
-    elif find_string_in_emails(contact, S): 
+    if (S in contact.getFamilyName().upper()) ||
+       (S in contact.getGivenName().upper()) ||
+       (S in contact.getFullName().upper()) ||
+       (S in contact.getNamePrefix().upper()) ||
+       (S in contact.getNameSuffix().upper()) ||
+       (S in contact.getAdditionalName().upper()) ||
+       (S in str(c.getEmailAddresses()).upper()):
         return True
     else:
         return False
+#   if S in contact.getFamilyName().upper():
+#       return True
+#   elif S in contact.getGivenName().upper():
+#       return True
+#   elif S in contact.getFullName().upper():
+#       return True
+#   elif S in contact.getNamePrefix().upper():
+#       return True
+#   elif S in contact.getNameSuffix().upper():
+#       return True
+#   elif S in contact.getAdditionalName().upper():
+#       return True
+#   elif find_string_in_emails(contact, S): 
+#       return True
+#   else:
+#       return False
     # def getGroups(self):
     # def getPostalAddress(self, idx=-1):
     # def getPhoneNumber(self,idx=-1):
