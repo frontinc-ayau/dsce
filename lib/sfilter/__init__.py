@@ -18,6 +18,11 @@
 in searching.""" 
 import logging
 
+def find_string_in_emails(c, s):
+    """c = contact
+    s = string to search for"""
+    return ( s in str(c.getEmailAddresses()).upper())
+
 def contact_has_string(contact, s):
     """Returns True, if any contact data contains
     the passed string s. This function works NOT case
@@ -35,10 +40,12 @@ def contact_has_string(contact, s):
         return True
     elif contact.getAdditionalName().upper().find(S) >= 0:
         return True
+    elif find_string_in_emails(contact, S): 
+        return True
     else:
         return False
-    # def getEmailAddresses(self):
     # def getGroups(self):
     # def getPostalAddress(self, idx=-1):
     # def getPhoneNumber(self,idx=-1):
     # def getOrganization(self):
+
