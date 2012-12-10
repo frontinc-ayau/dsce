@@ -18,19 +18,31 @@
 in searching.""" 
 import logging
 
+from domaindata import spaf
+
+def in_address(contact, S):
+    pa=contact.getPostalAddress()
+    if pa:
+        for a in pa:
+            if S in spaf.getPA(a).upper():
+                return True
+    return False 
+
 def contact_has_string(contact, s):
     """Returns True, if any contact data contains
     the passed string s. This function works NOT case
     sensitive."""
     S=s.upper()
-    if ((S in contact.getFamilyName().upper()) or
+    if (
+        (S in contact.getFamilyName().upper()) or
         (S in contact.getGivenName().upper()) or
         (S in contact.getFullName().upper()) or
         (S in contact.getNamePrefix().upper()) or
         (S in contact.getNameSuffix().upper()) or
         (S in contact.getAdditionalName().upper()) or
-        (S in str(contact.getEmailAddresses()).upper())):
-        return True
+        (S in str(contact.getEmailAddresses()).upper()) or
+        (in_address(contact, S))
+        ): return True
     else:
         return False
     # def getGroups(self):
