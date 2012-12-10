@@ -15,7 +15,7 @@
 #
 # Copyright (c) 2010 Klaus Melcher (melcher.kla@gmail.com)
 
-import wx, gui, domaindata, configuration, logging
+import wx, gui, domaindata, configuration, logging, threading
 from domaindata.domaincontact import ACTION 
 from domaindata.dscegroups import GRP
 
@@ -28,6 +28,7 @@ class Controller(object):
 
     def __init__(self, app):
         self.app = app
+        self.timer = None
         self.retisterMessages() 
         self.enterApp()
         
@@ -190,9 +191,6 @@ class Controller(object):
         else:
             self.app.displayAlert("Error", str(msg))
 
-    def doSearch(self, event):
-        logging.debug("Controller: Search for %s" % unicode(event.data))
-
     def addContact(self, event):
         logging.debug("Controller: Add contact")
         domaindata.add_contact()
@@ -249,7 +247,10 @@ class Controller(object):
         domaindata.update_group(event.data)
 
     def doSearch(self, evt):
-        domaindata.do_search(str(evt.data))
+        if self.timer:
+            self.timer.cancel()
+        self.timer = threading.Timer(0.2, domaindata.do_search, [str(evt.data)])
+        self.timer.start()
 
     def cancelSearch(self, evt):
         logging.debug("Controller search canceled")
