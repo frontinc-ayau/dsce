@@ -78,12 +78,14 @@ class GridView(wx.grid.Grid):
         self.scrollToBottom()
 
     def hideRows(self, event):
+        self.BeginBatch()
         self.unhideRows()
         self.SetRowLabelSize(0)
         self.SetColLabelSize(0)
         for r in event.data:
             self.HideRow(r)
         self.hiddenRows += event.data
+        self.EndBatch()
 
     def HideRow(self, row):
         self.SetRowSize(row, 0)
@@ -98,8 +100,10 @@ class GridView(wx.grid.Grid):
         self.SetColLabelSize(self.GetDefaultColLabelSize())
 
     def unhideAll(self, event):
+        self.BeginBatch()
         self.unhideLabels()
         self.unhideRows()
+        self.EndBatch()
 
 
     def getActiveRows(self):
