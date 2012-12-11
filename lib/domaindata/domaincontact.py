@@ -357,7 +357,7 @@ class DomainContact(object):
 
 
     def getPhoneNumber(self,idx=-1):
-        """Returns either the email at the position of idx or default
+        """Returns either the phone number at the position of idx or default
         the entry.phone_number list.
         """
         if idx >= 0:
