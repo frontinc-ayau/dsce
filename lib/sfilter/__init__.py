@@ -19,7 +19,12 @@ in searching."""
 import logging
 
 from domaindata import spaf
+from domaindata import pnf
 
+# To do the search within each address allows us to 
+# return a possible result immideate, when it occures and
+# ther is no need to parse possible additional addresses
+# of the contact.
 def in_address(contact, S):
     pa=contact.getPostalAddress()
     if pa:
@@ -27,6 +32,14 @@ def in_address(contact, S):
             if S in spaf.getPA(a).upper():
                 return True
     return False 
+
+def in_phone_number(contact, S):
+    pn = contact.getPhoneNumber()
+    if pn:
+        for n in pn:
+            if S in pnf.getPhoneNumber(n):
+                return True
+    return False
 
 def contact_has_string(contact, s):
     """Returns True, if any contact data contains
@@ -41,12 +54,12 @@ def contact_has_string(contact, s):
         (S in contact.getNameSuffix().upper()) or
         (S in contact.getAdditionalName().upper()) or
         (S in str(contact.getEmailAddresses()).upper()) or
-        (in_address(contact, S))
+        (in_address(contact, S)) or
+        (in_phone_number(contact, S))
         ): return True
     else:
         return False
     # def getGroups(self):
-    # def getPostalAddress(self, idx=-1):
     # def getPhoneNumber(self,idx=-1):
     # def getOrganization(self):
 
