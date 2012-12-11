@@ -18,6 +18,7 @@
 in searching.""" 
 import logging
 
+import domaindata
 from domaindata import spaf
 from domaindata import pnf
 from domaindata import orgf
@@ -50,6 +51,14 @@ def in_organization(contact, S):
                 return True 
     return False
 
+def in_group(contact, S):
+    grps = contact.getGroups()
+    if grps:
+        for g in grps:
+            if S in domaindata.get_group_name(g.href).upper():
+                return True
+    return False
+
 def contact_has_string(contact, s):
     """Returns True, if any contact data contains
     the passed string s. This function works NOT case
@@ -65,7 +74,8 @@ def contact_has_string(contact, s):
         (S in str(contact.getEmailAddresses()).upper()) or
         (in_address(contact, S)) or
         (in_phone_number(contact, S)) or
-        (in_organization(contact, S))
+        (in_organization(contact, S)) or
+        (in_group(contact, S))
         ): return True
     else:
         return False
