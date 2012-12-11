@@ -20,6 +20,7 @@ import logging
 
 from domaindata import spaf
 from domaindata import pnf
+from domaindata import orgf
 
 # To do the search within each address allows us to 
 # return a possible result immideate, when it occures and
@@ -41,6 +42,14 @@ def in_phone_number(contact, S):
                 return True
     return False
 
+def in_organization(contact, S):
+    org = contact.getOrganization()
+    if org:
+        for oe in orgf.getOrgAsStringList(org):
+            if S in oe.upper():
+                return True 
+    return False
+
 def contact_has_string(contact, s):
     """Returns True, if any contact data contains
     the passed string s. This function works NOT case
@@ -55,11 +64,10 @@ def contact_has_string(contact, s):
         (S in contact.getAdditionalName().upper()) or
         (S in str(contact.getEmailAddresses()).upper()) or
         (in_address(contact, S)) or
-        (in_phone_number(contact, S))
+        (in_phone_number(contact, S)) or
+        (in_organization(contact, S))
         ): return True
     else:
         return False
     # def getGroups(self):
-    # def getPhoneNumber(self,idx=-1):
-    # def getOrganization(self):
 
