@@ -39,7 +39,8 @@ Installation of A,B and D
   If you want to use one of the source package variants (A,B,D) your system has to 
 meet the following requirements.
 
- - Python 2.6 has to be installed on your system.
+ - Python 2.6 or 2.7 has to be installed on your system. Python 3 is not supported at the 
+   moment.
 
  - The script further requires the GData Python client library version 2.0.14 or higher 
    which you can download from 
@@ -51,8 +52,8 @@ meet the following requirements.
    please follow the instructions on 
         http://www.wxpython.org/download.php
 
- - As for the operating system any can be used as long as it can fulfill the requirements 
-   which means that BSD, Linux, MaxOS X, and MSW should work fine.
+ - As for the operating system any can be used as long as it can fulfill the requirements.
+   This means that BSD, Linux, MaxOS X, and MSW should work fine.
 
 
   To install the package just extract the package in a preferred directory on your system and 
